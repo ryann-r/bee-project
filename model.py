@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 # classes here
+# note: errors re: SQLAlchemy, check about SSL linking issue
 
 class User(db.Model):
     """A user."""
