@@ -14,10 +14,10 @@ class User(db.Model):
     zipcode = db.Column(db.Integer) #foreign key
     #favorite_plants = db.Column(db.String)
 
-    
 
     def __repr__(self):
         return f'<User user_id={self.user_id} email={self.email}>'
+
 
 class Plant(db.Model):
     """A plant."""

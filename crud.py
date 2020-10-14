@@ -4,6 +4,7 @@ from model import db, User
 # functions to add stuff to the db
 
 def create_user(fname, email, password, zipcode):
+    """Create a new user and add to database."""
 
     user = User(fname=fname, email=email, password=password, zipcode=zipcode)
 
@@ -11,6 +12,8 @@ def create_user(fname, email, password, zipcode):
     db.session.commit()
 
     return user
+
+    # need to create component for this, links to create_account page (on server.py)
 
 
 if __name__ == '__main__':
