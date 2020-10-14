@@ -1,4 +1,4 @@
-from model import db
+from model import db, User
 #also import classes from model.py
 
 # functions to add stuff to the db

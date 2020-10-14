@@ -35,10 +35,13 @@ class Plant(db.Model):
     bloom_period = db.Column(db.String)
     life_cycle = db.Column(db.String)
     flower_color = db.Column(db.String)
-    max_height = db.Column(db.Integer)
+    max_height = db.Column(db.String)   # made this a string because issue with ints and floats due to ranges
     water_needs = db.Column(db.String)
     notes = db.Column(db.String)
     # pollinators = db.Column(db.String)
+
+    def __repr__(self):
+        return f'<plant_id={self.plant_id} common_name={self.common_name}>'
 
     # foreign key: location
 
@@ -47,12 +50,17 @@ class Plant(db.Model):
 
 
 # edit to match your db
-#def connect_to_db(flask_app, db_uri='postgresql:///ratings', echo=True):
-    #flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-    #flask_app.config['SQLALCHEMY_ECHO'] = echo
-    #flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+def connect_to_db(flask_app, db_uri='postgresql:///plantsdb', echo=True):
+    flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    flask_app.config['SQLALCHEMY_ECHO'] = echo
+    flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    #db.app = flask_app
-    #db.init_app(flask_app)
+    db.app = flask_app
+    db.init_app(flask_app)
 
-    #print('Connected to the db!')
+    print('Connected to the db!')
+
+if __name__ == '__main__':
+    from server import app
+
+    connect_to_db(app)
