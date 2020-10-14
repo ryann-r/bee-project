@@ -2,9 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-# classes here
-# note: errors re: SQLAlchemy, check about SSL linking issue
-
 class User(db.Model):
     """A user."""
 
@@ -49,7 +46,6 @@ class Plant(db.Model):
 # randomizing data is an option
 
 
-# edit to match your db
 def connect_to_db(flask_app, db_uri='postgresql:///plantsdb', echo=True):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     flask_app.config['SQLALCHEMY_ECHO'] = echo

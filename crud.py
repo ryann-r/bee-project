@@ -7,10 +7,10 @@ def create_user(fname, email, password, zipcode):
 
     user = User(fname=fname, email=email, password=password, zipcode=zipcode)
 
-    #db.session.add(user)
-    #db.session.commit()
+    db.session.add(user)
+    db.session.commit()
 
-    #return user
+    return user
 
 
 if __name__ == '__main__':

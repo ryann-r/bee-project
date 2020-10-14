@@ -5,9 +5,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    """View homepage."""
     return render_template('main.html')
-
-
 
 
 if __name__ == '__main__':
