@@ -1,11 +1,11 @@
-from flask_sqlalchemy import SQLAlchemy
+"""Script to seed database."""
 
 import os
 import json
 
-import crud
+#import crud
 #import model
-from model import Plant, User, db, connect_to_db
+from model import Plant, db, connect_to_db  #User
 import server
 from parsing import parse_file
 
@@ -16,13 +16,14 @@ connect_to_db(server.app)
 db.create_all()
 
 # to get parsing.py data into table, use SQLAlchemy
-import pdb
+#import pdb
 def load_plants():
     """Loads plants from plants into database."""
 
     for d in parse_file('pollinator-plants.txt'):
-        if d.get('notes') == None:
-            pdb.set_trace()
+        # for debugging (may need this later)
+        #if d.get('notes') == None:
+            #pdb.set_trace()
         #print(d['common_name'])
         plant = Plant(
             region=d['region'],
@@ -37,7 +38,6 @@ def load_plants():
             notes=d['notes'],
         )
 
-        #print(plant)
         db.session.add(plant)
 
     db.session.commit()

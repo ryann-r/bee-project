@@ -32,7 +32,7 @@ class Plant(db.Model):
     bloom_period = db.Column(db.String)
     life_cycle = db.Column(db.String)
     flower_color = db.Column(db.String)
-    max_height = db.Column(db.String)   # made this a string because issue with ints and floats due to ranges
+    max_height = db.Column(db.String)   # made this a string because issue with ints and floats due to ranges -- check if issue for searching later
     water_needs = db.Column(db.String)
     notes = db.Column(db.String)
     # pollinators = db.Column(db.String)

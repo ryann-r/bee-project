@@ -1,7 +1,12 @@
-import json
-my_list = []
+"""Parse file of data."""
 
 def parse_file(filepath):
+    """Parse file, first line is column names,
+
+    remaining lines are data. Returns a list of key-value pairs."""
+
+    my_list = []
+
     with open(filepath) as f:
         lines = f.readlines()
         columns = []
