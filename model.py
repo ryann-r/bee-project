@@ -18,8 +18,8 @@ class Plant(db.Model):
     bloom_period = db.Column(db.String)
     life_cycle = db.Column(db.String)
     flower_color = db.Column(db.String)
-    max_height = db.Column(db.String)   
-    # made this a string because issue with ints and floats due to ranges -- 
+    max_height = db.Column(db.String)
+    # made this a string because issue with ints and floats due to ranges
     # check if issue for searching later
     water_needs = db.Column(db.String)
     notes = db.Column(db.String)
@@ -33,22 +33,6 @@ class Plant(db.Model):
 # native bee table -- implement later (location)
 # randomizing data is an option
 
-
-class User(db.Model):
-    """A user."""
-
-    __tablename__ = 'users'
-
-    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    fname = db.Column(db.String)
-    email = db.Column(db.String, unique=True)
-    password = db.Column(db.String)
-    zipcode = db.Column(db.Integer) #foreign key
-    #favorite_plants = db.Column(db.String)
-
-
-    def __repr__(self):
-        return f'<User user_id={self.user_id} email={self.email}>'
 
 
 def connect_to_db(flask_app, db_uri='postgresql:///plantsdb', echo=True):

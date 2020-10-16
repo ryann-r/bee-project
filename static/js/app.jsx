@@ -1,8 +1,5 @@
 
 function App() {
-        //<nav> // navigation bar that users can click to go to other links on server.py
-        //<p><a href='/routename'>Word</a></p> (wrap in p to put links on a different line)
-        //</nav>
     return (
         <React.Fragment>
         <div>Buzz buzz buzz.</div>
@@ -31,6 +28,7 @@ function App() {
 }
 
 // dynamic routes -- look at docs, make request for plant_id from db using useeffect
+// wrap everything in React.Fragment; otherwise can't have <div> and <nav> right next to each other
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -50,14 +48,14 @@ function Region() {
 };
 
 
-// give to /plant/<plant_id>
-// add plant_type, bloom_period, etc later after component is tested
-// because getting data from db, use db id instead of plant so {plantdb.common_name} ??
+// use regional plants; display plants on regional plants page
+// make individual components clickable to see more info (/plants/<plant_id>)
 function Plant(props) {
-    const { common_name, scientific_name, region } = props; //destructuring
+    const { common_name, scientific_name, region, plant_id} = props; //destructuring
     return (
         <div className="plant">
             <h1>Common Name: {common_name}</h1>
+            <p>Key: {plant_id}</p>
             <p>Scientific Name: {scientific_name}</p>
             <p>Region: {region}</p>
             {/* include image -- to fetch from api */}
@@ -65,27 +63,39 @@ function Plant(props) {
     )
 }
 
-// starting with hard coded test data; need to get data from db eventually
-
-ReactDOM.render(
-    <Plant common_name='Baby blue eyes' scientific_name='Nemophilia menziesii' region='California'/>,
-    document.getElementById('root')
-);
+// test Plant component with hard-coded data
+// ReactDOM.render(
+//     <Plant common_name='Baby blue eyes' scientific_name='Nemophilia menziesii' region='California'/>,
+//     document.getElementById('root')
+// );
 
 
 
 // possible pass in a plant as a prop instead of listing all props (common_name, etc) ? look up syntax
-// connect to database plantdb for data
+// optional: change empty list in useState([]) to a loading variable / loading part of state.
 function PlantContainer(props) {
+
+    const [plantData, setPlantData] = React.useState([]);
+
+    React.useEffect(() => {
+        fetch('/api/plants')
+        .then((response) => response.json())
+        .then((data) => setPlantData(data))
+    }, [])
+
     const plants = [];
+
+    if (plantData.length === 0) {
+        return <div>Loading...</div>;
+    }
     for (const plant in plantData) {
-        console.log(plant)
         plants.push(
             <Plant
             key={plant.plant_id}
             common_name={plant.common_name} 
             scientific_name={plant.scientific_name}
-            region={plant.region}/>
+            region={plant.region}
+            />
         );
     }
 
@@ -96,7 +106,8 @@ function PlantContainer(props) {
     )
 }
 
-// ReactDOM.render(props) {
-//     <PlantContainer plantData={Plants}/>,
-//     document.getElementById('root')
-// };
+// in return statement above can use Array.map and object destructuring, look at docs
+
+ReactDOM.render(
+    <PlantContainer />,
+    document.getElementById('root'));

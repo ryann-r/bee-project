@@ -1,0 +1,109 @@
+To do, issues to resolve, notes, and questions.
+
+
+-Get plant data from database:
+    -create functions in crud.py to query the database 
+    -create routes in server.py to give a JSON object of the data
+        using crud.py functions
+    -call that from app.jsx file
+    -send plant id to front end because unique react key
+    -use state to update a plant component in app.jsx
+        -variable to save it to (e.g.tradingCardData; so plantData)
+        -function to set the state data (e.g. setTradingCardData; so setPlantData)
+
+-CRUD.PY:
+    -for searching by common/scientific name: only by name AND region,
+    or combine common plants and list multiple regions?
+    -or keep it simple by only doing regional plants
+
+-Connect google search API for images
+-Routes for each region within the region route
+    -Select plants from region for plantContainer to render
+
+
+-server.py routes that need thinking out/work
+@app.route('/region/plants')
+def list_of_regional_plants(region):
+    regional_plants = []
+    for plant in crud.get_plants_by_region(region):
+        regional_plants.append({'region': plant.region,
+        'common_name': plant.common_name,
+        'scientific_name': plant.scientific_name})
+
+
+@app.route('/region/plants/<common_name>')
+def plant():
+    plant = crud.get_regional_plant
+    return jsonify({'region': {'region': plant.region,
+    'common_name': plant.common_name,
+    'scientific_name': plant.scientific_name}})
+
+
+-Crud.py functions to consider:
+def get_regional_plant(region, common_name):
+    """Returns a plant of a particular region."""
+
+    return Plant.query.filter(Plant.region == region,
+        Plant.common_name == common_name).first()
+
+
+def get_regional_plant_by_common_name(region, common_name):
+    """Return plants by region and common name."""
+
+    return Plant.query.filter(Plant.region == region, Plant.common_name == common_name).first()
+
+
+def get_regional_plant_by_scientific_name(region, scientific_name):
+    """Return plants by region and scientific name."""
+
+    return Plant.query.filter(Plant.region == region,
+        Plant.scientific_name == scientific_name).first()
+
+
+REACT useEffect:
+
+function PlantContainer(props) {
+
+    const [plantData, setPlantData] = React.useState([]);
+        // does it just know how to update plantData despite not defining the function anywhere?
+        // does plantData need to match a variable in the Plant component, or is it purely
+        // for reference in plantContainer ?
+
+    React.useEffect(() => {
+        fetch('/api/plants')                        // api route to fetch data from
+        .then((response) => response.json())        // take response, convert it into json
+        .then((data) => setPlantData(data))         // set response to data, pass in to function
+    }, [])                                          // why empty list?
+
+
+
+
+
+USER STUFF (implement later?)
+CRUD.PY#implement user later
+def create_user(fname, email, password, zipcode):
+    """Create a new user and add to database."""
+
+    user = User(fname=fname, email=email, password=password, zipcode=zipcode)
+
+    db.session.add(user)
+    db.session.commit()
+
+    return user
+
+MODEL.PY
+class User(db.Model):
+    """A user."""
+
+    __tablename__ = 'users'
+
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    fname = db.Column(db.String)
+    email = db.Column(db.String, unique=True)
+    password = db.Column(db.String)
+    zipcode = db.Column(db.Integer) #foreign key
+    #favorite_plants = db.Column(db.String)
+
+
+    def __repr__(self):
+        return f'<User user_id={self.user_id} email={self.email}>'
