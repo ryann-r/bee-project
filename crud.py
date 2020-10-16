@@ -1,18 +1,43 @@
 """CRUD operations."""
 
-#from model import db, User
-#also import classes from model.py
-
-# functions to add stuff to the db
+from model import Plant #User #db
 
 
-# create a function to search for plants by region
+def get_all_plants():
+    """Return all plants."""
 
-# create further functions to search for plants by other features
+    return Plant.query.all()
+
+
+def get_plants_by_region(region):
+    """Return plants by region."""
+
+    return Plant.query.filter(Plant.region == region).all()
+
+
+def get_regional_plant(region, common_name):
+    """Returns a plant of a particular region."""
+
+    return Plant.query.filter(Plant.region == region,
+        Plant.common_name == common_name)
+
+
+def get_regional_plants_by_common_name(region, common_name):
+    """Return plants by region and common name."""
+
+    return Plant.query.filter(Plant.region == region, Plant.common_name == common_name).first()
+
+
+def get_regional_plants_by_scientific_name(region, scientific_name):
+    """Return plants by region and scientific name."""
+
+    return Plant.query.filter(Plant.region == region,
+        Plant.scientific_name == scientific_name).first()
 
 
 
 
+#implement user later
 #def create_user(fname, email, password, zipcode):
     #"""Create a new user and add to database."""
 
@@ -23,9 +48,8 @@
 
     #return user
 
-    # do this later, if time
 
 
-#if __name__ == '__main__':
-    #from server import app
-    #connect_to_db(app)
+# if __name__ == '__main__':
+#     from server import app
+#     connect_to_db(app)
