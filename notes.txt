@@ -2,7 +2,7 @@ To do, issues to resolve, notes, and questions.
 
 
 -Get plant data from database:
-    -create functions in crud.py to query the database 
+    -create MORE functions in crud.py to query the database 
     -create routes in server.py to give a JSON object of the data
         using crud.py functions
     -call that from app.jsx file
@@ -10,6 +10,14 @@ To do, issues to resolve, notes, and questions.
     -use state to update a plant component in app.jsx
         -variable to save it to (e.g.tradingCardData; so plantData)
         -function to set the state data (e.g. setTradingCardData; so setPlantData)
+
+-Database & APIs:
+    x add image_url column to Plants table
+    -add pollinators column if data available (add querying by pollinators)
+    -get images -- USDA NRCS Plants Database
+    -add google maps api to server
+    -ADD MAP: google map REGION GEOCHART
+    -add search for native plant nurseries using google map api
 
 -CRUD.PY:
     -for searching by common/scientific name: only by name AND region,

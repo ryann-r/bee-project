@@ -38,11 +38,29 @@ def load_plants():
             notes=d['notes'],
         )
 
+    
+
         db.session.add(plant)
 
     db.session.commit()
 
 load_plants()
+
+def generate_img_urls():
+    """Add img_url to Plant table."""
+
+    plants = Plant.query.all()
+
+    for plant in plants:
+        plant.image_url = 'static/img/' + str(plant.plant_id)
+        # possibly change file names
+
+        db.session.add(plant)
+
+    db.session.commit()
+
+generate_img_urls()
+
 
 #def load_users():
     #"""Load users into database."""

@@ -11,18 +11,19 @@ class Plant(db.Model):
     __tablename__ = 'plants'
 
     plant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    common_name = db.Column(db.String)
-    scientific_name = db.Column(db.String)
-    plant_type = db.Column(db.String)
-    region = db.Column(db.String)
-    bloom_period = db.Column(db.String)
-    life_cycle = db.Column(db.String)
-    flower_color = db.Column(db.String)
-    max_height = db.Column(db.String)
+    common_name = db.Column(db.String, nullable=False)
+    scientific_name = db.Column(db.String, nullable=False)
+    plant_type = db.Column(db.String, nullable=False)
+    region = db.Column(db.String, nullable=False)
+    bloom_period = db.Column(db.String, nullable=False)
+    life_cycle = db.Column(db.String, nullable=False)
+    flower_color = db.Column(db.String, nullable=False)
+    max_height = db.Column(db.String, nullable=False)
     # made this a string because issue with ints and floats due to ranges
     # check if issue for searching later
-    water_needs = db.Column(db.String)
-    notes = db.Column(db.String)
+    water_needs = db.Column(db.String, nullable=False)
+    notes = db.Column(db.String, nullable=False)
+    image_url = db.Column(db.String(250), nullable=True)
     # pollinators = db.Column(db.String)
 
     def __repr__(self):

@@ -51,15 +51,15 @@ function Region() {
 // use regional plants; display plants on regional plants page
 // make individual components clickable to see more info (/plants/<plant_id>)
 function Plant(props) {
-    const { common_name, scientific_name, region, plant_id} = props; //destructuring
+    const {common_name, scientific_name, region, plant_id} = props; //destructuring
     return (
-        <div className="plant">
+        <React.Fragment>
             <h1>Common Name: {common_name}</h1>
             <p>Key: {plant_id}</p>
             <p>Scientific Name: {scientific_name}</p>
             <p>Region: {region}</p>
-            {/* include image -- to fetch from api */}
-        </div>
+            {/* include image -- from table */}
+        </React.Fragment>
     )
 }
 
@@ -90,12 +90,13 @@ function PlantContainer(props) {
     }
     for (const plant in plantData) {
         plants.push(
+            <div key={plant.plant_id}>
             <Plant
-            key={plant.plant_id}
+            plant_id={plant.plant_id}
             common_name={plant.common_name} 
             scientific_name={plant.scientific_name}
-            region={plant.region}
-            />
+            region={plant.region}/>
+            </div>
         );
     }
 

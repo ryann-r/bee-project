@@ -1,5 +1,5 @@
 region; plant_type; bloom_period; common_name; scientific_name; life_cycle; flower_color; max_height; water_needs; notes
-California; Forbs; Early; Baby blue eyes; Nemophilia menziesii; A; blue; 0.25; L; Stunning sky blue flowers attract native bees, including mason bees (Osmia spp.), tolerates moderate shade and moisture.
+California; Forbs; Early; Baby blue eyes; Nemophila menziesii; A; blue; 0.25; L; Stunning sky blue flowers attract native bees, including mason bees (Osmia spp.), tolerates moderate shade and moisture.
 California; Forbs; Early; Common tidytips; Layia platyglossa; A; yellow; 0.25; L; Sunny yellow and white flowers are very attractive to butterflies and native bees. Tolerates clay soils.
 California; Forbs; Early; Lacy phacelia; Phacelia tanacetifolia; A; purple; 3; L; Easy to establish, with prolific, showy blooms. Tolerates clay soils.
 California; Forbs; Early-Mid; California poppy; Eschscholzia californica; A, P; orange; 0.5; L; Easy to establish and long blooming. Attracts a diversity of bees, bumble bees in particular.
