@@ -1,35 +1,38 @@
 To do, issues to resolve, notes, and questions.
 
+*secrets.sh in .gitignore file for api key
+
 
 -Get plant data from database:
     -create MORE functions in crud.py to query the database 
     -create routes in server.py to give a JSON object of the data
         using crud.py functions
     -call that from app.jsx file
-    -send plant id to front end because unique react key
+    -send plant id to front end as unique react key
     -use state to update a plant component in app.jsx
-        -variable to save it to (e.g.tradingCardData; so plantData)
-        -function to set the state data (e.g. setTradingCardData; so setPlantData)
+        -variable to save it to (plantData)
+        -function to set the state data (setPlantData)
 
 -Database & APIs:
     x add image_url column to Plants table
     -add pollinators column if data available (add querying by pollinators)
-    -get images -- USDA NRCS Plants Database
-    -add google maps api to server
-    -ADD MAP: google map REGION GEOCHART
-    -add search for native plant nurseries using google map api
+    -get images -- USDA NRCS Plants Database, static/img/plant/<plant_id>
+    x add google maps api -- done, see main.html script tag and secrets.sh for key
+        -note: run source secrets.sh each time you open to make key available
+    -ADD MAP: google map REGION GEOCHART -- clickable regions, map on homepage
+        -within region page, options to filter by features: name, color, bloom time, etc
+    -add search for native plant nurseries using google map api & zip code or address
 
 -CRUD.PY:
     -for searching by common/scientific name: only by name AND region,
     or combine common plants and list multiple regions?
     -or keep it simple by only doing regional plants
 
--Connect google search API for images
 -Routes for each region within the region route
     -Select plants from region for plantContainer to render
 
 
--server.py routes that need thinking out/work
+-SERVER>PY ROUTES that need thinking out/work
 @app.route('/region/plants')
 def list_of_regional_plants(region):
     regional_plants = []
@@ -69,7 +72,6 @@ def get_regional_plant_by_scientific_name(region, scientific_name):
 
 
 REACT useEffect:
-
 function PlantContainer(props) {
 
     const [plantData, setPlantData] = React.useState([]);
@@ -88,7 +90,7 @@ function PlantContainer(props) {
 
 
 USER STUFF (implement later?)
-CRUD.PY#implement user later
+CRUD.PY
 def create_user(fname, email, password, zipcode):
     """Create a new user and add to database."""
 

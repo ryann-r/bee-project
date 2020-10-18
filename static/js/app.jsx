@@ -30,7 +30,7 @@ function App() {
 // dynamic routes -- look at docs, make request for plant_id from db using useeffect
 // wrap everything in React.Fragment; otherwise can't have <div> and <nav> right next to each other
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//ReactDOM.render(<App />, document.getElementById('root'));
 
 function About() {
     return (
@@ -80,15 +80,15 @@ function PlantContainer(props) {
     React.useEffect(() => {
         fetch('/api/plants')
         .then((response) => response.json())
-        .then((data) => setPlantData(data))
-    }, [])
+        .then((data) => setPlantData(data.plants));
+    }, []);
 
     const plants = [];
-
-    if (plantData.length === 0) {
+    if (plantData.lenth === 0) {
         return <div>Loading...</div>;
     }
-    for (const plant in plantData) {
+
+    for (const plant of plantData) {
         plants.push(
             <div key={plant.plant_id}>
             <Plant
@@ -97,14 +97,13 @@ function PlantContainer(props) {
             scientific_name={plant.scientific_name}
             region={plant.region}/>
             </div>
-        );
+        )
     }
-
     return (
         <React.Fragment>
             {plants}
         </React.Fragment>
-    )
+    );
 }
 
 // in return statement above can use Array.map and object destructuring, look at docs
@@ -112,3 +111,10 @@ function PlantContainer(props) {
 ReactDOM.render(
     <PlantContainer />,
     document.getElementById('root'));
+
+
+
+
+
+// MAPS COMPONENTS:
+
