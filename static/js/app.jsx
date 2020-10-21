@@ -26,8 +26,7 @@ function App() {
         )
 }
 
-// dynamic routes -- look at docs, make request for plant_id from db using useeffect
-// wrap everything in React.Fragment; otherwise can't have <div> and <nav> right next to each other
+// add dynamic routes
 
 //ReactDOM.render(<App />, document.getElementById('root'));
 
@@ -44,9 +43,7 @@ function Region() {
     )
 };
 
-
-// use regional plants; display plants on regional plants page
-// make individual components clickable to see more info (/plants/<plant_id>)
+// make individual components clickable to see more info
 function Plant(props) {
     const {common_name, scientific_name, region, plant_id} = props; //destructuring
     return (
@@ -67,9 +64,6 @@ function Plant(props) {
 // );
 
 
-
-// possible pass in a plant as a prop instead of listing all props (common_name, etc) ? look up syntax
-// optional: change empty list in useState([]) to a loading variable / loading part of state.
 function PlantContainer(props) {
 
     const [plantData, setPlantData] = React.useState([]);
@@ -108,20 +102,3 @@ function PlantContainer(props) {
 ReactDOM.render(
      <PlantContainer />,
      document.getElementById('root'));
-
-// clicks to render different pages
-// map: region clicked renders appropriate plant list
-// click region (front-end) --> use for get call to server.py 
-//        --> calls crud to grab data --> renders appropriate page of
-//      Plant container component with regional data
-
-
-
-
-
-// MAPS COMPONENTS:
-
-
-// numbers are test data; finish parsing file and replace with actual numbers
-// is DC a state in charts? check docs
-

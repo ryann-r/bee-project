@@ -66,6 +66,8 @@ ALASKA PLANTS:
     -load plant data for region -- photo 'cards' and name (not all data about every plant)
     -click photo/card of plant
     -load individual plant data (think: flip the notecard over to show data)
+    -SO: click region (front-end) --> use for get call to server.py --> calls crud to grab data --> renders appropriate page of
+    Plant container component with regional data
 
 
 -IMAGES: amazons3 bucket: save images connected to data, extension
