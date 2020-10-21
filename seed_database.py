@@ -61,6 +61,8 @@ def generate_img_urls():
 
 generate_img_urls()
 
+# look into amazon s3 database for image urls and change above
+
 
 #def load_users():
     #"""Load users into database."""

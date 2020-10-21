@@ -17,7 +17,6 @@ function App() {
                         <About />
                     </ReactRouterDOM.Route>
                     <ReactRouterDOM.Route path='/region'>
-                                {/* need to add route for each region -- use /region/<region> ? get region from map? */}
                         <Region />
                     </ReactRouterDOM.Route>
                 </ReactRouterDOM.Switch>
@@ -40,9 +39,7 @@ function About() {
 
 function Region() {
     return (
-        <div>List of regions, each a link to another page.
-            Add ReactRouterDOM to app component.
-            Eventually replace with clickable map.
+        <div>Request data for region clicked.
         </div>
     )
 };
@@ -78,7 +75,7 @@ function PlantContainer(props) {
     const [plantData, setPlantData] = React.useState([]);
 
     React.useEffect(() => {
-        fetch('/api/plants')
+        fetch('/api/plants/<region>')
         .then((response) => response.json())
         .then((data) => setPlantData(data.plants));
     }, []);
@@ -109,12 +106,22 @@ function PlantContainer(props) {
 // in return statement above can use Array.map and object destructuring, look at docs
 
 ReactDOM.render(
-    <PlantContainer />,
-    document.getElementById('root'));
+     <PlantContainer />,
+     document.getElementById('root'));
+
+// clicks to render different pages
+// map: region clicked renders appropriate plant list
+// click region (front-end) --> use for get call to server.py 
+//        --> calls crud to grab data --> renders appropriate page of
+//      Plant container component with regional data
 
 
 
 
 
 // MAPS COMPONENTS:
+
+
+// numbers are test data; finish parsing file and replace with actual numbers
+// is DC a state in charts? check docs
 

@@ -1,7 +1,81 @@
 To do, issues to resolve, notes, and questions.
 
-*secrets.sh in .gitignore file for api key
 
+-Regions: note -- some states are in multiple regions. Option: change region in data to list of state abbreviations?
+    -California
+    -Florida
+    -Hawaii 
+    -Alaska
+    -Great Lakes Region: Minnesota, Wisconsin, Ohio, Michigan, Pennsylvania, New York
+    -Maritime Northwest Region: Washington, Oregon, Northern California (Include CA?)
+    -Mid-Atlantic Region: North Carolina, Virginia, West Virginia, Maryland, Delaware, New Jersey, Pennsylvania, DC
+    -Mid-West Region: Iowa, Missouri, Illinois, Indiana
+    -Northeast Region: ME, VT, MA, NH, RI, CT and New York (also Quebec, New Brunswick, Nova Scotia Canada)
+    -Northern Plains Region: North Dakota, South Dakota, Montana, Wyoming, Nebraska, Western Minnesota-
+    -Southeast Region: Alabama, Georgia, Kentucky, Louisiana, Mississippi, South Carolina, Tennessee
+    -
+
+-Current To-dos:
+    -dynamic routes in app.jsx
+    -draw regions map function (app.js) with test data
+    -look into google charts error: google not defined
+    -look into s3 database for image storage
+    -get images
+    -add alaskan and hawaiian plants to file, reseed db
+    -request to get regional data from server.py based on map click event (inside map);
+    send data to Plant Container (useState to change)
+        -later: filter results
+
+-Questions:
+    -do I do clicks and data fetching within the map component?
+        -clicks YES: chartEvents, then call PlantContainer with regional plants
+    -is DC a state in charts?
+
+
+ALASKA PLANTS:
+-chamerion latifolium
+-trifolium incarnatum (crimson clover): Great for most bees if allowed to flower before grazing or cutting for hay. Good cover crop.
+-trifolium repens (white clover):
+-trifolium pratense (red clover): Great for bumble bees.
+-trifolium hybridum (alsike clover): "Brown clover". 
+-lacy phacilia
+
+
+-GOOGLE CHARTS:
+    -to make it work in react:
+    -easiest: use html and jinja if needed
+    -can possibly change it later and move to app.jsx
+    x script tags, key, secrets.sh, global variable
+    x draw regions map function
+    -is DC a state in charts? check docs
+    x set regions location: [string, required] "a state in the US e.g. 'US-AL' for Alabama. Note that the 
+    resolution option must be set to either 'provinces' or 'metros'."
+    -regions color: [number, optional] set with colorAxis.colors property.
+        -check if possible in regions (not countries) mode
+    -get request of appropriate regional plants data, load page of plants
+        regionClick -- "called when a region is clicked. an object with a single
+        property (region) that is a string in ISO-3166 format describing the region clicked."
+    -get bee data per state; use this to color states in map (red-green == more threatened-less threatened)
+    -later: possibility to add Canada and MX -- have data, check if possible with map region
+
+
+
+-Flow:
+    -click on map (state)
+    -translate state to region (if state in region)
+    -load plant data for region -- photo 'cards' and name (not all data about every plant)
+    -click photo/card of plant
+    -load individual plant data (think: flip the notecard over to show data)
+
+
+-IMAGES: amazons3 bucket: save images connected to data, extension
+    -rather than hard coding them into this file
+
+-BEE DATA: use to color code map (geocharts)
+    -overlay effect? click option on bottom to toggle between choosing region and bee data
+    -look at google charts overlaying charts docs
+    -ideas: toggle between number of native bees in each state, and number of threatened bees in each state
+        -color 
 
 -Get plant data from database:
     -create MORE functions in crud.py to query the database 
@@ -32,60 +106,13 @@ To do, issues to resolve, notes, and questions.
     -Select plants from region for plantContainer to render
 
 
--SERVER>PY ROUTES that need thinking out/work
-@app.route('/region/plants')
-def list_of_regional_plants(region):
-    regional_plants = []
-    for plant in crud.get_plants_by_region(region):
-        regional_plants.append({'region': plant.region,
-        'common_name': plant.common_name,
-        'scientific_name': plant.scientific_name})
-
-
-@app.route('/region/plants/<common_name>')
-def plant():
-    plant = crud.get_regional_plant
-    return jsonify({'region': {'region': plant.region,
-    'common_name': plant.common_name,
-    'scientific_name': plant.scientific_name}})
-
-
--Crud.py functions to consider:
-def get_regional_plant(region, common_name):
-    """Returns a plant of a particular region."""
-
-    return Plant.query.filter(Plant.region == region,
-        Plant.common_name == common_name).first()
-
-
-def get_regional_plant_by_common_name(region, common_name):
-    """Return plants by region and common name."""
-
-    return Plant.query.filter(Plant.region == region, Plant.common_name == common_name).first()
-
-
-def get_regional_plant_by_scientific_name(region, scientific_name):
-    """Return plants by region and scientific name."""
-
-    return Plant.query.filter(Plant.region == region,
-        Plant.scientific_name == scientific_name).first()
-
 
 REACT useEffect:
-function PlantContainer(props) {
-
-    const [plantData, setPlantData] = React.useState([]);
-        // does it just know how to update plantData despite not defining the function anywhere?
-        // does plantData need to match a variable in the Plant component, or is it purely
-        // for reference in plantContainer ?
-
     React.useEffect(() => {
         fetch('/api/plants')                        // api route to fetch data from
         .then((response) => response.json())        // take response, convert it into json
         .then((data) => setPlantData(data))         // set response to data, pass in to function
-    }, [])                                          // why empty list?
-
-
+    }, [])                                          
 
 
 

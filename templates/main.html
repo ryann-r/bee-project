@@ -10,16 +10,76 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.2.0/react-router-dom.js" 
             integrity="sha512-LOOlcIrzggklo15g/pbJis06755L5SZYg2RZEUw7t8k/aALW/atg2qg6h8oSLIvk25ulbzhz/p4LH2PUYa+rLw==" 
             crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script defer src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-    google.charts.load('current', {'packages':['geochart'],
-    'mapsApiKey': 'GOOGLE_MAPS_KEY'})</script>
-        
+        google.charts.load('visualization', 'current', {
+        'packages':['geochart'],
+        'callback': drawRegionsMap,
+        'mapsApiKey': 'GOOGLE_MAPS_KEY'});
+        google.charts.setOnLoadCallback(drawRegionsMap);        
+
+        function drawRegionsMap() {
+            const data = google.visualization.array.ToDataTable([
+                ['US State', 'Color -- based on number of declining or threatened native bees']
+                ['US-AK', 1], ['US-AL', 2], ['US-AR', 3], ['US-AZ', 4], ['US-CA', 5],
+                ['US-CO', 6], ['US-CT', 7], ['US-DE', 8], ['US-FL', 9], ['US-GA', 10],
+                ['US-HI', 11], ['US-IA', 12], ['US-ID', 13], ['US-IL', 14], ['US-IN', 15],
+                ['US-KS', 16], ['US-KY', 17], ['US-LA', 18], ['US-MA', 19], ['US-MD', 20],
+                ['US-ME', 21], ['US-MI', 22], ['US-MN', 23], ['US-MO', 24], ['US-MS', 25],
+                ['US-MT', 26], ['US-NC', 27], ['US-ND', 28], ['US-NE', 29], ['US-NH', 30],
+                ['US-NJ', 31], ['US-NM', 32], ['US-NV', 33], ['US-NY', 34], ['US-OH', 35],
+                ['US-OK', 36], ['US-OR', 37], ['US-PA', 38], ['US-RI', 39], ['US-SC', 40],
+                ['US-SD', 41], ['US-TN', 42], ['US-TX', 43], ['US-UT', 44], ['US-VA', 45],
+                ['US-VT', 46], ['US-WA', 47], ['US-WI', 48], ['US-WV', 49], ['US-WY', 50]
+            ]);
+            
+            const options = {
+                title: 'North American bees and pollinator plants',
+                region: 'US',
+                displayMode: 'regions',
+                resolution: 'provinces',
+                colorAxis: { colors: ['#00853f', 'e31b23'] }
+                // spectrum of colors to use for the regions in datatable
+                // below may not work because in regions (not country) mode -- test
+                //backgroundColor: '#81d4fa', //the color of the ocean (light blue here)
+                //datalessRegionColor: '#f8bbd0',   //for countries outside the US
+                //defaultColor: null  //for regions in the US with no data
+            };
+
+            // check if needed:
+            // const visualization = new google.visualization.GeoChart(container);
+            const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+            chart.draw(data, options);
+
+            // to test click event
+            // const chartEvents = {
+            //     eventName: 'regionClick',
+            //     callback(chart, selected) {
+            //         console.log('Region selected:', selected.region)
+            //     }
+
+            // fetch data from server.py ('/api/plants/<region>')
+            // if state == x, y z, fetch <region>
+            // const chartEvents = {
+                // eventName: 'regionClick',
+                // callback(chart, selected) => {
+                //     fetch(//regionURL)
+                // }
+
+                //or ajax get request
+
+            
+        };
+    </script>
 </head>
 <body>
     <!-- container for React app -->
     <div id='root'></div>
+    <div id='regions_div' style='width: 900px; height: 500px'></div>
     <!-- script tag for JSX file -->
     <script type='text/jsx' src='static/js/app.jsx'></script>
+    
 </body>
 </html>

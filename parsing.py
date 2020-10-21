@@ -1,7 +1,7 @@
-"""Parse file of data."""
+"""Parse file of pollinator plant data."""
 
 def parse_file(filepath):
-    """Parse file, first line is column names,
+    """Parse file: first line is column names,
 
     remaining lines are data. Returns a list of key-value pairs."""
 
@@ -32,4 +32,3 @@ def parse_file(filepath):
 
 
     return my_list
-#print(my_list)
