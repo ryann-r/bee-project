@@ -10,18 +10,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.2.0/react-router-dom.js" 
             integrity="sha512-LOOlcIrzggklo15g/pbJis06755L5SZYg2RZEUw7t8k/aALW/atg2qg6h8oSLIvk25ulbzhz/p4LH2PUYa+rLw==" 
             crossorigin="anonymous"></script>
+    <link rel="icon" href="data:,">
 
-    <script defer src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">  
         google.charts.load('visualization', 'current', {
         'packages':['geochart'],
         'callback': drawRegionsMap,
-        'mapsApiKey': 'GOOGLE_MAPS_KEY'});
-        google.charts.setOnLoadCallback(drawRegionsMap);        
-
+        'mapsApiKey': 'GOOGLE_MAPS_KEY'
+    });
+        google.charts.setOnLoadCallback(drawRegionsMap);
+    
+        // chart: add region column for get request in selectHandler
         function drawRegionsMap() {
-            const data = google.visualization.array.ToDataTable([
-                ['US State', 'Color -- based on number of declining or threatened native bees']
+            const data = google.visualization.arrayToDataTable([
+                ['US State', 'Color'],
                 ['US-AK', 1], ['US-AL', 2], ['US-AR', 3], ['US-AZ', 4], ['US-CA', 5],
                 ['US-CO', 6], ['US-CT', 7], ['US-DE', 8], ['US-FL', 9], ['US-GA', 10],
                 ['US-HI', 11], ['US-IA', 12], ['US-ID', 13], ['US-IL', 14], ['US-IN', 15],
@@ -39,7 +42,7 @@
                 region: 'US',
                 displayMode: 'regions',
                 resolution: 'provinces',
-                colorAxis: { colors: ['#00853f', 'e31b23'] }
+                colorAxis: { colors: ['#FFB6C1', '#b11226'] }
                 // spectrum of colors to use for the regions in datatable
                 // below may not work because in regions (not country) mode -- test
                 //backgroundColor: '#81d4fa', //the color of the ocean (light blue here)
@@ -47,37 +50,27 @@
                 //defaultColor: null  //for regions in the US with no data
             };
 
-            // check if needed:
-            // const visualization = new google.visualization.GeoChart(container);
             const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+            
+            function selectHandler() {
+                const selectedState = chart.getSelection()[0];
+                if (selectedState) {
+                    const state = data.getValue(selectedState.row, 0);
+                    alert('The user selected ' + state);
+                }       
+            }
 
             chart.draw(data, options);
-
-            // to test click event
-            // const chartEvents = {
-            //     eventName: 'regionClick',
-            //     callback(chart, selected) {
-            //         console.log('Region selected:', selected.region)
-            //     }
-
-            // fetch data from server.py ('/api/plants/<region>')
-            // if state == x, y z, fetch <region>
-            // const chartEvents = {
-                // eventName: 'regionClick',
-                // callback(chart, selected) => {
-                //     fetch(//regionURL)
-                // }
-
-                //or ajax get request
-
+            google.visualization.events.addListener(chart, 'select', selectHandler);
+            
             
         };
-    </script>
+    </script> 
 </head>
 <body>
     <!-- container for React app -->
-    <div id='root'></div>
     <div id='regions_div' style='width: 900px; height: 500px'></div>
+    <div id='root'></div>
     <!-- script tag for JSX file -->
     <script type='text/jsx' src='static/js/app.jsx'></script>
     

@@ -1,21 +1,46 @@
 To do, issues to resolve, notes, and questions.
 
+-favicon 404 error: because you don't have an icon in the tab
+
+Issues atm:
+1. Does this make sense // will this work? Or am I missing a request?
+-Google charts code is in main.html
+-If a region of the chart is selected, go to the url: '/api/plants/region'
+-Event listener: Ajax get request for @app.route('/api/plants/<region>) e.g. ('/api/plants/California')
+-This will cause the appropriate plant container to render on the page?
+    -do I need to use useState instead of or in addition to useEffect ?
+
+3. going to 0.0.0.0.5000/Florida makes appropriate JSON data appear
+But, if I put '/api/plants/Florida' in the fetch statement of PlantContainer,
+I get an error: plantData is not defined.
+-it works if I put ('/api/plants') in the fetch statement
+
+
+4. photos: over 250. is there a database I can put them in? Abby mentioned
+amazons3 but they charge fees, are there free options?
+
 
 -Regions: note -- some states are in multiple regions. Option: change region in data to list of state abbreviations?
     -California
     -Florida
-    -Hawaii 
-    -Alaska
+    -Hawaii *
+    -Alaska *
+    -Arizona *
+    -Idaho *
+    -New Mexico *
+    -Nevada *
+    -notes: put NY in northeast region
     -Great Lakes Region: Minnesota, Wisconsin, Ohio, Michigan, Pennsylvania, New York
     -Maritime Northwest Region: Washington, Oregon, Northern California (Include CA?)
     -Mid-Atlantic Region: North Carolina, Virginia, West Virginia, Maryland, Delaware, New Jersey, Pennsylvania, DC
-    -Mid-West Region: Iowa, Missouri, Illinois, Indiana
+    -Midwest Region: Iowa, Missouri, Illinois, Indiana
     -Northeast Region: ME, VT, MA, NH, RI, CT and New York (also Quebec, New Brunswick, Nova Scotia Canada)
     -Northern Plains Region: North Dakota, South Dakota, Montana, Wyoming, Nebraska, Western Minnesota-
     -Southeast Region: Alabama, Georgia, Kentucky, Louisiana, Mississippi, South Carolina, Tennessee
-    -
+    -Southern Plains Region: Colorado, Kansas, Oklahoma, Arkansas, Texas
 
 -Current To-dos:
+    -add regions to charts array for selection
     -dynamic routes in app.jsx
     -draw regions map function (app.js) with test data
     -look into google charts error: google not defined
@@ -66,7 +91,8 @@ ALASKA PLANTS:
     -load plant data for region -- photo 'cards' and name (not all data about every plant)
     -click photo/card of plant
     -load individual plant data (think: flip the notecard over to show data)
-    -SO: click region (front-end) --> use for get call to server.py --> calls crud to grab data --> renders appropriate page of
+    -SO: click region (front-end) --> use for get call to server.py --> 
+    calls crud to grab data --> renders appropriate page of
     Plant container component with regional data
 
 
@@ -146,3 +172,20 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User user_id={self.user_id} email={self.email}>'
+
+
+
+
+// if state == x, y z, fetch <region>
+    // const chartEvents = {
+    // eventName: 'regionClick',
+    // callback(chart, selected) => {
+    //     fetch(//regionURL)
+    // }
+
+                //or ajax get request
+
+//OR, add URL to 'domain' column in data table
+    //google.visualization.events.addListener(chart, 'select', function () {
+    //    const selection = chart.getSelection();
+    //    if (selection.length > 0) {

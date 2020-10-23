@@ -9,22 +9,16 @@ function App() {
                 <p>
                     <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
                 </p>
-                <p>
-                    <ReactRouterDOM.Link to='/region'>Find Plants by Region</ReactRouterDOM.Link>
-                </p>
                 <ReactRouterDOM.Switch>
                     <ReactRouterDOM.Route path='/about'>
                         <About />
-                    </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/region'>
-                        <Region />
                     </ReactRouterDOM.Route>
                 </ReactRouterDOM.Switch>
             </ReactRouterDOM.BrowserRouter>
         </nav>
         </React.Fragment>
         )
-}
+};
 
 // add dynamic routes
 
@@ -69,7 +63,7 @@ function PlantContainer(props) {
     const [plantData, setPlantData] = React.useState([]);
 
     React.useEffect(() => {
-        fetch('/api/plants/<region>')
+        fetch('/api/plants')
         .then((response) => response.json())
         .then((data) => setPlantData(data.plants));
     }, []);
