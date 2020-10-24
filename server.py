@@ -39,7 +39,7 @@ def get_regional_plants_json(region):
         'common_name': plant.common_name,
         'scientific_name': plant.scientific_name})
 
-    return jsonify({'regional plants': regional_plants_list})
+    return jsonify({'plants': regional_plants_list})
 
 
 @app.route('/api/plants/<plant_id>')

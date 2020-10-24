@@ -9,6 +9,9 @@ function App() {
                 <p>
                     <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
                 </p>
+                {/* </ReactRouterDOM.BrowserRouter><p>
+                    <ReactRouterDOM.Link to='/'
+                </p> */}
                 <ReactRouterDOM.Switch>
                     <ReactRouterDOM.Route path='/about'>
                         <About />
@@ -58,18 +61,22 @@ function Plant(props) {
 // );
 
 
+
 function PlantContainer(props) {
+    console.log('starting plant container render');
 
     const [plantData, setPlantData] = React.useState([]);
 
     React.useEffect(() => {
-        fetch('/api/plants')
+        fetch('/api/plants/Florida')
         .then((response) => response.json())
         .then((data) => setPlantData(data.plants));
     }, []);
 
+
     const plants = [];
-    if (plantData.lenth === 0) {
+    
+    if (plantData.length === 0) {
         return <div>Loading...</div>;
     }
 
@@ -93,6 +100,11 @@ function PlantContainer(props) {
 
 // in return statement above can use Array.map and object destructuring, look at docs
 
-ReactDOM.render(
-     <PlantContainer />,
+const returnValue = ReactDOM.render(
+     <App />,
      document.getElementById('root'));
+
+// render gives return value
+// possible ideas: 
+// 1. to add map to the component, then you can modify the state
+

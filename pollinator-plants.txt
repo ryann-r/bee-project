@@ -261,3 +261,13 @@ Hawaii; Forbs; Year-round; Shoreline seapurslane; Sesuvium portulacastrum; P; pi
 Hawaii; Forbs; Year-round; 'Uhaloa; Waltheria indica; P; yellow; 6; L; Drought, wind, salt spray, and heat tolerant. Leaves are silvery and fuzzy. Tiny yellow flowers resemble miniature hibiscus, and attract bees and butterflies.
 Hawaii; Shrubs & Trees; Early; Hiddenpetal Indian mallow; Abultilon eremitopetalum; P; green, red; 10; L; Drought tolerant shrub. Lime green fower petals are completely hidden from site, but a promenent red stamen is visible. Attracts bees, birds, and butterflies.
 Hawaii; Shrubs & Trees; Early; Koa; Acacia koa; P; white, yellow; 50; L; The largest native tree in the Hawaiian Islands. Nitrogen-fixing. Great for erosion control. Showy powder puff flowers are visited by bees and flies.
+
+
+Southwest Region; Shrubs & Trees; Mid-Late; Prairie acacia; Acaciella angustissima; P; white; 3; L; A thornless acacia with lacy foliage. Makes good ground cover and erosion control. Attracts butterflies, bees, and moths.
+Southwest Region; Shrubs & Trees; Early-Late; Whitebrush; Aloysia gratissima; P; white; 10; M; Blooms best in full sun. Produces strongly vanilla-scented flowers, attracting many bee species. Used as shelter by small birds and lizards.
+Southwest Region; Forbs; Early-Late; Pine-needle milkweed; Asclepias linaria; P; white; 6; M; Grows well in full sun and well-draining soil. Attracts bees, and is a larval host for the Queen and Monarch butterflies.
+Southwest Region; Shrubs & Trees; Mid; Pink fairyduster; Calliandra eriophylla; P; white, pink; 3; L; Heat and drought tolerant. Excellent understory option. Attracts bees, swallowtail butterflies, and hummingbirds.
+Southwest Region; Forbs; Early-Late; Palmleaf thoroughwort; Conoclinium dissectrum; P; blue, purple; 3; M; One of the best butterfly attracting plants available. Queens are especially fond of the Palmleaf thoroughwort. Larval host to Rawsons metalmark butterfly.
+Southwest Region; Shrubs & Trees; Early; Rosary babybonnets; Coursetia glandulosa; P; white, pink; 20; L; Pink and white pea shaped blooms attract carpenter and bumble bees.
+Southwest Region; Shrubs & Trees; Early; Santa Catalina prairie clover; Dalea pulchra; P; purple; 4; M; Enjoys full sun and is drought tolerant. Found at 2,000 to 5,000 feet. Larval host plant for numerous native butterflies, also excellent for bees and birds.
+Southwest Region; Shrubs & Trees; Early-Late; Desert lavender; Hyptis emoryi; P; blue, violet; 8; L;
