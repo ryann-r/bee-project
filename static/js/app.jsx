@@ -9,12 +9,14 @@ function App() {
                 <p>
                     <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
                 </p>
-                {/* </ReactRouterDOM.BrowserRouter><p>
-                    <ReactRouterDOM.Link to='/'
-                </p> */}
+                    <ReactRouterDOM.Link to='/garden/<user_id>'>Garden</ReactRouterDOM.Link>
+                
                 <ReactRouterDOM.Switch>
                     <ReactRouterDOM.Route path='/about'>
                         <About />
+                    </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/garden/<user_id>'>
+                        <Garden />
                     </ReactRouterDOM.Route>
                 </ReactRouterDOM.Switch>
             </ReactRouterDOM.BrowserRouter>
@@ -33,25 +35,37 @@ function About() {
     )
 };
 
-function Region() {
+function Garden() {
     return (
-        <div>Request data for region clicked.
+        <div>User garden page.
         </div>
     )
 };
 
+// first display image, common name, scientific name, and add to garden button
 // make individual components clickable to see more info
 function Plant(props) {
-    const {common_name, scientific_name, region, plant_id} = props; //destructuring
+    const {common_name, scientific_name, region, plant_id} = props;
+
+    // have this function (associated with button) make request to server
+    // $.post('/add-plant-to-garden)
+    function addToGarden () {
+        alert('success');
+    }
+
     return (
+        <div>
         <React.Fragment>
             <h1>Common Name: {common_name}</h1>
             <p>Key: {plant_id}</p>
             <p>Scientific Name: {scientific_name}</p>
             <p>Region: {region}</p>
+            <div><button onClick = {addToGarden}>Add to garden</button></div>
             {/* include image -- from table */}
         </React.Fragment>
-    )
+
+        </div>
+    );
 }
 
 // test Plant component with hard-coded data
@@ -63,7 +77,6 @@ function Plant(props) {
 
 
 function PlantContainer(props) {
-    console.log('starting plant container render');
 
     const [plantData, setPlantData] = React.useState([]);
 
@@ -100,8 +113,9 @@ function PlantContainer(props) {
 
 // in return statement above can use Array.map and object destructuring, look at docs
 
+
 const returnValue = ReactDOM.render(
-     <App />,
+     <PlantContainer />,
      document.getElementById('root'));
 
 // render gives return value

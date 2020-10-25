@@ -26,6 +26,8 @@ class Plant(db.Model):
     image_url = db.Column(db.String(250), nullable=True)
     # pollinators = db.Column(db.String)
 
+    garden_plants = db.relationship('Garden')
+
     def __repr__(self):
         return f'<plant_id={self.plant_id} common_name={self.common_name}>'
 
@@ -33,6 +35,41 @@ class Plant(db.Model):
 
 # native bee table -- implement later (location)
 # randomizing data is an option
+
+class User(db.Model):
+    """A user."""
+
+    __tablename__ = 'users'
+
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    fname = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
+    region = db.Column(db.String, nullable=True)
+
+    # user_id is foreign key to FavoritePlants
+    garden_plants = db.relationship('Garden')
+
+
+    def __repr__(self):
+        return f'<User user_id={self.user_id} email={self.email}>'
+
+class Garden(db.Model):
+    """Plants added to user gardens."""
+
+    __tablename__ = 'garden plants'
+
+    garden_plants_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'), nullable=False)
+
+    user = db.relationship('User')
+    plant = db.relationship('Plant')
+
+    def __repr__(self):
+        return f'<User user_id={self.user_id} plant_id={self.plant_id}>'
+
+
 
 
 

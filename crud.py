@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import Plant #db
+from model import Plant, User, Garden
 
 
 def get_all_plants():
@@ -15,10 +15,15 @@ def get_plants_by_region(region):
     return Plant.query.filter(Plant.region == region).all()
 
 
-def get_plant(plant_id):
-    """Return a single plant by plant_id."""
+def get_user(user_id):
+    """Return a user."""
 
-    return Plant.query.filter(Plant.plant_id == plant_id).first()
+    return User.query.filter(User.user_id == user_id).first()
+
+def get_garden_plants(user_id):
+    """Returns garden plants for a given user."""
+
+    return Garden.query.filter(Garden.user_id == user_id).all()
 
 
 
