@@ -23,7 +23,9 @@ def get_user(user_id):
 def get_garden_plants(user_id):
     """Returns garden plants for a given user."""
 
-    return Garden.query.filter(Garden.user_id == user_id).all()
+    return Garden.query.filter(Garden.garden_id == garden_id).all()
+
+
 
 
 

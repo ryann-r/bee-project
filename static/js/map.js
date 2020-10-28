@@ -44,7 +44,7 @@ function drawRegionsMap() {
         'Southeast Region' : ['US-AL', 'US-GA', 'US-KY', 'US-LA', 'US-MS', 'US-SC', 'US-TN'],
         'Southern Plains Region' : ['US-CO', 'US-KS', 'US-OK', 'US-AR', 'US-TX'],
         'California' : ['US-CA'], 'Hawaii' : ['US-HI'], 'Alaska' : ['US-AK'],
-        'Southwest Region' : ['US-NM', 'US-AZ']}
+        'Southwest Region' : ['US-NM', 'US-AZ', 'US-ID']}
 
         if (selectedState) {
             const state = data.getValue(selectedState.row, 0);
@@ -53,6 +53,7 @@ function drawRegionsMap() {
                 if (regions[region].includes(state)) {
                     console.log(state + ' in ' + region)
                     $.get('/api/plants/' + region);
+                    // make region a variable to pass into PlantContainer
                 }
             }   
 

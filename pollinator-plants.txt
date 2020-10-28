@@ -270,4 +270,37 @@ Southwest Region; Shrubs & Trees; Mid; Pink fairyduster; Calliandra eriophylla; 
 Southwest Region; Forbs; Early-Late; Palmleaf thoroughwort; Conoclinium dissectrum; P; blue, purple; 3; M; One of the best butterfly attracting plants available. Queens are especially fond of the Palmleaf thoroughwort. Larval host to Rawsons metalmark butterfly.
 Southwest Region; Shrubs & Trees; Early; Rosary babybonnets; Coursetia glandulosa; P; white, pink; 20; L; Pink and white pea shaped blooms attract carpenter and bumble bees.
 Southwest Region; Shrubs & Trees; Early; Santa Catalina prairie clover; Dalea pulchra; P; purple; 4; M; Enjoys full sun and is drought tolerant. Found at 2,000 to 5,000 feet. Larval host plant for numerous native butterflies, also excellent for bees and birds.
-Southwest Region; Shrubs & Trees; Early-Late; Desert lavender; Hyptis emoryi; P; blue, violet; 8; L;
+Southwest Region; Shrubs & Trees; Early-Late; Desert lavender; Hyptis emoryi; P; blue, violet; 8; L; Has leaves that can be crushed and used to make a flavorful tea and the flowers smell faintly of honey. A favorite plant of many native bees.
+Southwest Region; Shrubs & Trees; Mid-Late; Velvetpod mimosa; Mimosa dysocarpa; P; pink; 6; L; Be careful where you place this shrub, because it comes with sharp thorns. A favorite of butterflies. Birds also visit and feed on the seed.
+Southwest Region; Forbs; Mid; Passionflower vine; Passiflora incarnata; P; pink, blue, purple; 36; M; A climbing vine with showy ornamental blooms. Good for ground cover, fences, walls, and columns. A butterfly favorite.
+Southwest Region; Forbs; Early-Late; Desert senna; Senna covesii; P; yellow; 2; L; Good understory option. Larval host to the cloudless sulphur butterfly. Carpenter and bumble bees feed on the pollen of the bright yellow flowers.
+
+Rocky Mountain Region; Forbs; Early; Little western bittercress; Cardamine oligosperma; P, A; white; 2; M; Harvested from the wild as a food and medicine. Visited by bees and other insects.
+Rocky Mountain Region; Forbs; Early; Sierra larkspur; Delphinium glaucum; P; purple, blue; 8; H; Be cautious as this plant is fatally toxic to humans and animals. Attracts bees, butterflies, hummingbirds, and other birds.
+Rocky Mountain Region; Forbs; Early; Arctic pearlwort; Sagina saginoides; B; white; 1; H; Requires high water and partial shade. Attracts bees and other insect pollinators.
+Rocky Mountain Region; Forbs; Early; Desert globemallow; Sphaeralcea ambigua spp. monticloa; P; orange; 3; L; Drought-tolerant. The large number of bright flowers are a steady source of pollen and nectar to honey bees and other insects.
+Rocky Mountain Region; Forbs; Early; Lyall's angelica; Angelica arguta; P; white; 6; H; Umbrella shaped clusters of white flowers sit on stalks up to 6 feet high. Larval host plant for the anise swallowtail butterfly. Visited by bee and butterfly pollinators.
+Rocky Mountain Region; Forbs; Early; Foothill arnica; Arnica fulgens; P; yellow; 2; M; Grows best in partial shade. Pollinated by several native bumble bees.
+Rocky Mountain Region; Forbs; Early; Anderson's larkspur; Delphinium andersonii; P; purple; 2; L; Grows best in full sun and well-drained soil. Visited by a long list of native bees.
+Rocky Mountain Region; Forbs; Early; Rainer pleated gentian; Gentiana calycosa; P; blue; 1; M; All parts of this plant are poisonous to humans. Grows best in partial shade. Especially valuable for bumble bees.
+Rocky Mountain Region; Forbs; Early; Bigflower agoseris; Agoseris grandiflora; P; yellow; 2; M; Adaptable to many soil and habitat types, grows well in full or partial shade. Especially attractive to native bee pollinators.
+Rocky Mountain Region; Forbs; Early; Western columbine; Aguilegia formosa; P; red; 3; M; Prefers moist rocky soils, but will grow in dry, nutrient poor soil. Attracts hummingbirds.
+Rocky Mountain Region; Forbs; Early; Scarlet monkeyflower; Mimulus cardinalis; P; red, orange; 3; H; Prefers moist soils and partial shade. Easily propagated or grow from seed. Crimson flowers attract hummingbirds.
+Rocky Mountain Region; Forbs; Early; Drummond's rockcress; Arabis drummondii; B; white, pink; 2; M; Many small white or pink flowers grow at the end of long erect stalks. Visited by native bees.
+Rocky Mountain Region; Forbs; Early; Arrowleaf balsamroot; Balsamorhiza sagittata; P; yellow; 2; M; Grows best in full sun and moist soil. Valuable to native bees and bumble bees.
+Rocky Mountain Region; Forbs; Mid; Western polemonium; Polemonium occidentale; P; blue, purple; 3; H; Small, blue-purple, bell-shaped flowers are visited by butterflies and numerous bumble bee species.
+Rocky Mountain Region; Forbs; Mid; Varileaf cinquefoil; Potentilla diversifolia; P; yellow; 3; M; Grows mostly in moist meadows and rocky areas. Especially valuable to native bees.
+Rocky Mountain Region; Forbs; Mid; Alkali buttercup; Ranunculus cymbalaria; P; yellow; 1; H; Grows best is partial shade. Low toxicity if eaten, minor skin irritation lasts minutes if touched. Visited by native bumble bees.
+Rocky Mountain Region; Forbs; Mid; American vetch; Vicia americana; P; purple; 2; L; A slender, climbing plant with small showy flowers. Visited by butterflies and bees.
+Rocky Mountain Region; Forbs; Mid; Columbian monkshood; Aconitum columbianum; P; purple, blue; 6; H; Grows best in shade. Poisonous to humans and animals if ingested. Attracts bumble bees, hawkmoths, and hummingbirds.
+Rocky Mountain Region; Forbs; Mid; Pacific anemone; Anemone multifida; P; yellow, white, pink; 2; M; Ideal for moist, shady areas. Visited by bumble, honey, and other native bees.
+Rocky Mountain Region; Forbs; Mid; Illinois bundleflower; Desmanthus illinoensis; P; white; 3; M; Erect plant with ball-like clusters of white-green flowers. Leaves fold in strong sunlight or when touched. Pollinated by the Northern and Southern cloudywing skipper butterflies.
+Rocky Mountain Region; Forbs; Mid-Late; Nuttall's sunflower; Helianthus nuttallii; P; yellow, brown; 10; M; Multiple large upright stems support bright yellow 2-inch ray flowers in late summer. Wonderful for native bees.
+Rocky Mountain Region; Forbs; Mid-Late; Fringed grass of Parnassus; Parnassia fimbriata; P; white; 2; H; Grows best in wet conditions. Beautiful showy flowers with prominent stamens. White five-pevaled flowers attract flies, beetles, and bees.
+Rocky Mountain Region; Forbs; Mid-Late; Herbaceous penstemon; Penstemon rydbergii oreocharis; P; purple; 3; L; Wetland species with lance-shaped foliage and spikes of tubular flowers. Visited by hummingbird and bee pollinators.
+Rocky Mountain Region; Forbs; Mid-Late; Indianhemp dogbane; Apocynum cannabinum; P; white; 4; H; Produces clusters of tiny white flowers that bloom in summer. Very important to insect pollinators, including bees, moths, and monarch butterflies.
+Rocky Mountain Region; Forbs; Late; Thickstem aster; Eurybia integrifolia; P; purple; 3; L; Late-blooming mountain wildflowers. Visited by several species of native bumble bees and monarch butterflies.
+Rocky Mountain Region; Forbs; Late; Missouri goldenrod; Solidago missouriensis; P; yellow; 3; L; The earliest of the goldenrods to bloom in late summer. Attracts honey bees, other native bees, and butterflies.
+Rocky Mountain Region; Forbs; Late; Swamp milkweed; Asclepias incarnata; P; red; 5; H; Valuable to native bumble and honey bees, butterflies, and hummingbirds. Larval host to monarch and queen butterflies.
+Rocky Mountain Region; Forbs; Late; Common sneezewood; Helenium autumnale; P; yellow; 5; M; Requires a damp site and full sun. Poisonous to humans. Visited by native bees, wasps, syrphid flies, butterflies, and beetles.
+Rocky Mountain Region; 

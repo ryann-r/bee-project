@@ -27,7 +27,7 @@ def get_plants_json():
 
     return jsonify({'plants': plants_list})
 
-
+# ADD OTHER PROPERTIES
 @app.route('/api/plants/<region>')
 def get_regional_plants_json(region):
     """Return plants of a particular region."""
@@ -37,7 +37,13 @@ def get_regional_plants_json(region):
         regional_plants_list.append({'plant_id': plant.plant_id,
         'region': plant.region,
         'common_name': plant.common_name,
-        'scientific_name': plant.scientific_name})
+        'scientific_name': plant.scientific_name,
+        'plant_type': plant.plant_type,
+        'flower_color': plant.flower_color,
+        'bloom_period': plant.bloom_period,
+        'life_cycle': plant.life_cycle,
+        'max_height': plant.max_height,
+        'notes': plant.notes})
 
     return jsonify({'plants': regional_plants_list})
 
@@ -46,49 +52,42 @@ def get_regional_plants_json(region):
 def create_user():
     """Create user, add to the database."""
 
-    fname = request.form.get('first name')
-    email = request.form.get('email')
-    password = request.form.get('password')
-    region = request.form.get('region')
+    fname = request.json('fname')
+    email = request.json('email')
+    password = request.json('password')
 
-    new_user = User(fname=fname, email=email, password=password, region=region)
-    #db.session.add(new_user)
-    #db.session.commit()
+    new_user = User(fname=fname, email=email, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+
+    # Errors: User and db undefined
 
     return jsonify({'success': True})
 
 # add plant to Garden table (user_id, plant_id)
-@app.route('/add-plant-to-garden', methods=['POST'])
-def add_plant_to_garden(user_id, plant_id):
+@app.route('/add-to-garden', methods=['POST'])
+def add_to_garden(garden_id, plant_id):
     """Add a plant to the Garden table of database."""
 
-    # user_id: get from current logged in user
-    # plant_id: get from plant component clicked
+    garden_id = request.json('garden_id')
+    plant_id: request.json('plant_id')
 
-    #new_garden_plant = Garden(user_id=user_id, plant_id=plant_id)
-    #db.session.add(new_garden_plant)
-    #db.session.commit()
+    new_garden_plant = Garden(garden_id=garden_id, plant_id=plant_id)
+    db.session.add(new_garden_plant)
+    db.session.commit()
 
-    #return jsonify({'success': True})
+    return jsonify({'success': True})
 
 
 # get all plants a particular user added to their garden (user_id)
-@app.route('/api/garden/<user_id>')
-def get_garden_plants(user_id):
+@app.route('/api/garden/<garden_id>')
+def get_garden_plants(garden_id):
     """Return plants saved in garden for a particular user."""
 
-    garden_plants = crud.get_garden_plants(user_id)
+    garden_plants = crud.get_garden_plants(garden_id)
     return jsonify({'garden plants': garden_plants})
 
 
-@app.route('/api/plants/<plant_id>')
-def get_plant_by_id(plant_id):
-    """Return plant by plant id."""
-
-    plant = crud.get_plant(plant_id)
-    return jsonify({'plant': plant.plant_id,
-    'common_name': plant.common_name,
-    'scientific_name': plant.scientific_name})
 
 
 if __name__ == '__main__':

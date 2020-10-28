@@ -26,7 +26,7 @@ class Plant(db.Model):
     image_url = db.Column(db.String(250), nullable=True)
     # pollinators = db.Column(db.String)
 
-    garden_plants = db.relationship('Garden')
+    garden = db.relationship('Garden')
 
     def __repr__(self):
         return f'<plant_id={self.plant_id} common_name={self.common_name}>'
@@ -42,35 +42,42 @@ class User(db.Model):
     __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    garden_id = db.Column(db.Integer, db.ForeignKey('gardens.garden_id'), autoincrement=True)
+        #foreign key to garden table
     fname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-    region = db.Column(db.String, nullable=True)
-
-    # user_id is foreign key to FavoritePlants
-    garden_plants = db.relationship('Garden')
-
+    # hash_pw = db.Column(db.String, nullable=False)
+    # ?? region = db.Column(db.String, nullable=True)
+    
 
     def __repr__(self):
         return f'<User user_id={self.user_id} email={self.email}>'
 
+#### ADD HASH PW & PYTHON FLASK SECURITY ADD-ON ####
+
 class Garden(db.Model):
     """Plants added to user gardens."""
 
-    __tablename__ = 'garden plants'
+    __tablename__ = 'gardens'
 
-    garden_plants_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    garden_id = db.Column(db.Integer, db.ForeignKey('users.garden_id'), primary_key=True)
     plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'), nullable=False)
 
-    user = db.relationship('User')
     plant = db.relationship('Plant')
 
     def __repr__(self):
         return f'<User user_id={self.user_id} plant_id={self.plant_id}>'
 
 
+# don't want to have so many records -- have a different garden_id for each entry and
+# have to refer by user_id. issues with add / edit / delete
 
+# option 1: generate one garden_id per user in Users, make foreign key in garden table
+# use garden id to find all plant entries for a given user
+
+# option 2: say maximum number of plants (e.g. 10) per user, make 1 column for each plant allowed (10)
+# make each column nullable, one query could return all plants from a particular user's garden
 
 
 def connect_to_db(flask_app, db_uri='postgresql:///plantsdb', echo=True):
