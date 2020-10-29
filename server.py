@@ -23,7 +23,13 @@ def get_plants_json():
         plants_list.append({'plant_id': plant.plant_id,
         'region': plant.region,
         'common_name': plant.common_name,
-        'scientific_name': plant.scientific_name})
+        'scientific_name': plant.scientific_name,
+        'plant_type': plant.plant_type,
+        'flower_color': plant.flower_color,
+        'bloom_period': plant.bloom_period,
+        'life_cycle': plant.life_cycle,
+        'max_height': plant.max_height,
+        'notes': plant.notes})
 
     return jsonify({'plants': plants_list})
 
@@ -48,7 +54,7 @@ def get_regional_plants_json(region):
     return jsonify({'plants': regional_plants_list})
 
 
-@app.route('/create-user', methods=['POST'])
+@app.route('/create-account', methods=['POST'])
 def create_user():
     """Create user, add to the database."""
 

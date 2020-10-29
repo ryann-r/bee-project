@@ -22,6 +22,8 @@ function drawRegionsMap() {
         ['US-VT', 46], ['US-WA', 47], ['US-WI', 48], ['US-WV', 49], ['US-WY', 50]
     ]);
 
+    // change values to reflect number of threatened native bees in each state
+
     
     const options = {
         title: 'North American bees and pollinator plants',
@@ -52,8 +54,10 @@ function drawRegionsMap() {
             for (region in regions) {
                 if (regions[region].includes(state)) {
                     console.log(state + ' in ' + region)
-                    $.get('/api/plants/' + region);
+                    fetch('/api/plants/' + region);
                     // make region a variable to pass into PlantContainer
+                    // export to app.jsx & import into app.jsx
+                    // or move map to app.jsx
                 }
             }   
 

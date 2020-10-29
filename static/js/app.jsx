@@ -6,15 +6,21 @@ function App() {
 
         <nav>
             <ReactRouterDOM.BrowserRouter>
+                <p>
                     <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
+                </p>
+                <p>
                     <ReactRouterDOM.Link to='/garden/<user_id>'>Garden</ReactRouterDOM.Link>
+                </p>
+                <p>
                     <ReactRouterDOM.Link to='/create-account'>Sign me up!</ReactRouterDOM.Link>
+                </p>
                 <ReactRouterDOM.Switch>
                     <ReactRouterDOM.Route path='/about'>
                         <About />
                     </ReactRouterDOM.Route>
                     <ReactRouterDOM.Route path='/garden/<user_id>'>
-                        <Garden />
+                        <GardenContainer />
                     </ReactRouterDOM.Route>
                     <ReactRouterDOM.Route path='/create-account'>
                         <CreateAccount />
@@ -46,12 +52,17 @@ class CreateAccount extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    // do I need a handleChange(event) function?
+    // double-check this
+    handleChange(event) {
+        const target = event.target;
+        const value = event.target.value;
+        this.setState({[target]: value});
+    }
 
     handleSubmit(event) {
         alert("Thanks for signing up," + this.state.fname);
-        $.get('/create')
         event.preventDefault
+        //fetch('/create_user')
     }
 
     render() {
@@ -61,47 +72,42 @@ class CreateAccount extends React.Component {
                 {/* need value for each input? */}
                 <h1>Create Account</h1>
                 <form onSubmit={this.handleSubmit}>
-                    <label>Your First Name:
-                        <input type="text" value={this.state.value}></input>
+                    <label>First Name:
+                        <input type="text" value={this.state.value} onChange={this.handleChange}></input>
                     </label>
                     <label>Email:
-                        <input type="text" value={this.state.value}></input> 
+                        <input type="text" value={this.state.value} onChange={this.handleChange}></input> 
                     </label>
                     <label>Password:
-                        <input type="text" value={this.state.value}></input>
+                        <input type="text" value={this.state.value} onChange={this.handleChange}></input>
                     </label>
+                    <input type="submit" value="Submit" />
                 </form>
             </React.Fragment>
         );
     }
 }
 
-// input: user garden plants (from back end), user name for greeting
-// return plants (like plant components)
-// same as PlantContainer (make an instance) but with different data // route
-// or add it to PlantContainer; use hooks to determine which route to use to render which plants
-function GardenContainer() {
-    return (
-        <div>User garden.
-        </div>
-    );
-}
+
 
 // first display image, common name, scientific name, and add to garden button
 // make individual components clickable to see more info
 // pass in garden_id as props to 
+// make into a class? issue with PlantContainer when I tried to change both to classes
 function Plant(props) {
+
     const { plant_id, common_name, scientific_name, region, plant_type,
         flower_color, bloom_period, life_cycle, max_height, notes } = props;
 
     // click details button to see more details, below
+    // details not displaying, props is printing
     function displayPlantDetails () {
         console.log(props)
         return (
             <React.Fragment>
                 <img src='/static/img/plant/1.jpg' 
                 width='200px' />
-                <h1>{props.common_name}</h1>
+                <h1>{common_name}</h1>
                 <p>{scientific_name}</p>
                 <p>Native to: {region}</p>
                 <p>Plant type: {plant_type}</p>
@@ -127,6 +133,7 @@ function Plant(props) {
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(this.state.value)
+            // line 135: cannot read property 'state' of undefined
         })
         .then((response) => response.json())
     }
@@ -146,15 +153,8 @@ function Plant(props) {
     );
 }
 
-// test Plant component with hard-coded data
-// ReactDOM.render(
-//     <Plant common_name='Baby blue eyes' scientific_name='Nemophilia menziesii' region='California'/>,
-//     document.getElementById('root')
-// );
 
-
-// input (props, region)
-// + region
+// input region from map click as props
 function PlantContainer(props) {
 
     const [plantData, setPlantData] = React.useState([]);
@@ -172,6 +172,7 @@ function PlantContainer(props) {
         return <div>Loading...</div>;
     }
 
+    // below is what is being passed as props to plant container.
     for (const plant of plantData) {
         plants.push(
             <div key={plant.plant_id}>
@@ -193,6 +194,23 @@ function PlantContainer(props) {
 // in return statement above can use Array.map and object destructuring, look at docs
 
 
+// input: user garden plants (from back end), user name for greeting
+// return plants (like plant components)
+// same as PlantContainer (make an instance) but with different data // route
+// or add it to PlantContainer; use hooks to determine which route to use to render which plants
+class GardenContainer extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (
+            <div>User garden.
+            </div>
+        );
+    }
+}
+
+
 const returnValue = ReactDOM.render(
      <PlantContainer />,
      document.getElementById('root'));
@@ -201,3 +219,5 @@ const returnValue = ReactDOM.render(
 // possible ideas: 
 // 1. to add map to the component, then you can modify the state
 // 2. make plant container a class instead of a component
+
+// function vs class: can only set state in classes, not functions
