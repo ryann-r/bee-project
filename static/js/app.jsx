@@ -43,22 +43,20 @@ function About() {
 };
 
 // change to function
-class CreateAccount extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { fname: '', email: '', password: ''};
-        this.handleChange = this.handleSubmit.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+function Account() {
+    const [account, setAccount] = useState({});
 
-    // double-check this
-    handleChange(event) {
-        const target = event.target;
-        const value = event.target.value;
-        this.setState({[target]: value});
-    }
+    const handleChange = ({ target }) => {
+        const name = target.name;
+        const value = target.value;
+        setAccount({
+            [name]: value
+        });
+    };
+    // above: change using object destructuring
 
-    handleSubmit(event) {
+    const handleSubmit = (event) => {
+        event.preventDefault();
         alert("Thanks for signing up," + this.state.fname);
 
         //FETCH post to server
@@ -68,35 +66,33 @@ class CreateAccount extends React.Component {
         }).then(function(response) {
             console.log(response)
             return response.json();
-        });
+        });   
+    };
 
-        event.preventDefault();
-    }
-
-    render() {
-        return (
-            <React.Fragment>
-                {/* set values to fname, email, etc to send back in post request */}
-                {/* need value for each input? */}
-                <h1>Create Account</h1>
-                <form onSubmit={this.handleSubmit}>
-                    <label>First Name:
-                        <input type="text" value={this.state.value} onChange={this.handleChange}></input>
-                    </label>
-                    <label>Email:
-                        <input type="text" value={this.state.value} onChange={this.handleChange}></input> 
-                    </label>
-                    <label>Password:
-                        <input type="text" value={this.state.value} onChange={this.handleChange}></input>
-                    </label>
-                    <input type="submit" value="Submit" />
-                </form>
-            </React.Fragment>
-        );
-    }
+    return (
+        <form onSubmit={handleSubmit}>
+            <input value={account.fname}
+            onChange={handleChange}
+            name="fname"
+            type="text"
+            placeholder="First Name" 
+            />
+            <input value={account.email}
+            onChange={handleChange}
+            name="email"
+            type="text"
+            placeholder="Email"
+            />
+            <input value={account.password}
+            onChange={handleChange}
+            type="password"
+            name="password"
+            placeholder="Password"
+            />
+            <button type="submit">Submit</button>
+        </form>
+    )
 }
-
-
 
 // first display image, common name, scientific name, and add to garden button
 // make individual components clickable to see more info
@@ -156,7 +152,7 @@ function Plant(props) {
             <p>{scientific_name}</p>
             {/* italicize scientific name */}
             <p>Native to {region}</p>
-            <button value={} onClick = {displayPlantDetails}>Details</button>
+            <button value={value} onClick = {displayPlantDetails}>Details</button>
             {/* set state with above click, ERROR: props is not defined at displayPlantDetails */}
             <button onClick = {addToGarden}>Add to garden</button>
         </React.Fragment>
@@ -222,19 +218,14 @@ function PlantContainer(props) {
                     if (regions[region].includes(state)) {
                         console.log(state + ' in ' + region)
                         setRegion(region);
-                        // pass to use effect to fetch correct URL
-
-                        // fetch('/api/plants/' + region);
+                        // set state and pass to use effect to fetch correct URL
                     }
                 }   
-
             };
-        }
-    
+        }    
 
     chart.draw(data, options);
-    google.visualization.events.addListener(chart, 'select', selectHandler);
-       
+    google.visualization.events.addListener(chart, 'select', selectHandler);   
     };
 
     const [plantData, setPlantData] = React.useState([]);
