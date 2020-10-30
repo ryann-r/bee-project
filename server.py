@@ -82,18 +82,18 @@ def add_to_garden(garden_id, plant_id):
     db.session.add(new_garden_plant)
     db.session.commit()
 
+    # errors: db undefined
+
     return jsonify({'success': True})
 
 
-# get all plants a particular user added to their garden (user_id)
+# get all plants a particular user added to their garden (garden_id)
 @app.route('/api/garden/<garden_id>')
 def get_garden_plants(garden_id):
     """Return plants saved in garden for a particular user."""
 
     garden_plants = crud.get_garden_plants(garden_id)
     return jsonify({'garden plants': garden_plants})
-
-
 
 
 if __name__ == '__main__':
