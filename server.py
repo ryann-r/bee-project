@@ -1,7 +1,7 @@
 """Server for pollinator plants app."""
 
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import connect_to_db
+from model import db, connect_to_db, Garden, User, Plant
 import crud
 
 app = Flask(__name__)
@@ -13,7 +13,6 @@ def index():
     return render_template('main.html')
 
 
-#Database and API routes
 @app.route('/api/plants')
 def get_plants_json():
     """Return all plants."""
@@ -33,7 +32,7 @@ def get_plants_json():
 
     return jsonify({'plants': plants_list})
 
-# ADD OTHER PROPERTIES
+
 @app.route('/api/plants/<region>')
 def get_regional_plants_json(region):
     """Return plants of a particular region."""
@@ -66,14 +65,12 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
 
-    # Errors: User and db undefined
-
     return jsonify({'success': True})
 
-# add plant to Garden table (user_id, plant_id)
+
 @app.route('/add-to-garden', methods=['POST'])
 def add_to_garden(garden_id, plant_id):
-    """Add a plant to the Garden table of database."""
+    """Add a new garden plant to the database."""
 
     garden_id = request.json('garden_id')
     plant_id: request.json('plant_id')
@@ -82,17 +79,15 @@ def add_to_garden(garden_id, plant_id):
     db.session.add(new_garden_plant)
     db.session.commit()
 
-    # errors: db undefined
-
     return jsonify({'success': True})
 
 
-# get all plants a particular user added to their garden (garden_id)
 @app.route('/api/garden/<garden_id>')
 def get_garden_plants(garden_id):
-    """Return plants saved in garden for a particular user."""
+    """Return all garden plants for a particular user."""
 
     garden_plants = crud.get_garden_plants(garden_id)
+
     return jsonify({'garden plants': garden_plants})
 
 

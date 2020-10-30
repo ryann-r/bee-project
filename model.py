@@ -70,15 +70,6 @@ class Garden(db.Model):
         return f'<User user_id={self.user_id} plant_id={self.plant_id}>'
 
 
-# don't want to have so many records -- have a different garden_id for each entry and
-# have to refer by user_id. issues with add / edit / delete
-
-# option 1: generate one garden_id per user in Users, make foreign key in garden table
-# use garden id to find all plant entries for a given user
-
-# option 2: say maximum number of plants (e.g. 10) per user, make 1 column for each plant allowed (10)
-# make each column nullable, one query could return all plants from a particular user's garden
-
 
 def connect_to_db(flask_app, db_uri='postgresql:///plantsdb', echo=True):
     """Connect to the database."""

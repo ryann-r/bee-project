@@ -42,7 +42,7 @@ function About() {
     )
 };
 
-
+// change to function
 class CreateAccount extends React.Component {
     constructor(props) {
         super(props);
@@ -191,9 +191,6 @@ function PlantContainer(props) {
             ['US-SD', 41], ['US-TN', 42], ['US-TX', 43], ['US-UT', 44], ['US-VA', 45],
             ['US-VT', 46], ['US-WA', 47], ['US-WI', 48], ['US-WV', 49], ['US-WY', 50]
         ]);
-
-        // change values to reflect number of threatened native bees in each state
-
         
         const options = {
             title: 'North American bees and pollinator plants',
@@ -238,7 +235,7 @@ function PlantContainer(props) {
     chart.draw(data, options);
     google.visualization.events.addListener(chart, 'select', selectHandler);
        
-};
+    };
 
     const [plantData, setPlantData] = React.useState([]);
 

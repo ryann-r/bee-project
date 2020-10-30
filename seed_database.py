@@ -15,7 +15,6 @@ os.system('createdb plantsdb')
 connect_to_db(server.app)
 db.create_all()
 
-# to get parsing.py data into table, use SQLAlchemy
 #import pdb
 def load_plants():
     """Loads plants from plants into database."""
@@ -38,8 +37,6 @@ def load_plants():
             notes=d['notes'],
         )
 
-    
-
         db.session.add(plant)
 
     db.session.commit()
@@ -61,15 +58,7 @@ def generate_img_urls():
 
 generate_img_urls()
 
-# look into amazon s3 database for image urls and change above
-
-
-#def load_users():
-    #"""Load users into database."""
-
-    # necessary? create_user in crud.py
-
-    
+   
 if __name__ == '__main__':
     from server import app
 
