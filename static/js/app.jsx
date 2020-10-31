@@ -1,4 +1,3 @@
-
 function App() {
     return (
         <React.Fragment>
@@ -44,7 +43,7 @@ function About() {
 
 // change to function
 function Account() {
-    const [account, setAccount] = useState({});
+    const [account, setAccount] = React.useState([]);
 
     const handleChange = ({ target }) => {
         const name = target.name;
@@ -60,13 +59,13 @@ function Account() {
         alert("Thanks for signing up," + this.state.fname);
 
         //FETCH post to server
-        fetch('/create_user', {
-            method: "POST",
-            body: JSON.stringify(this.state)
-        }).then(function(response) {
-            console.log(response)
-            return response.json();
-        });   
+        React.useEffect(() => {
+            fetch('/create-account', {
+                method: "POST"
+            })
+            .then((response) => response.json())
+            .then((data) => setAccount(data.account));
+        }, []);  
     };
 
     return (
@@ -101,66 +100,40 @@ function Plant(props) {
     const { common_name, scientific_name, region, plant_type,
         flower_color, bloom_period, life_cycle, max_height, notes } = props;
     
-    const [details, setDetails] = React.useState(null);
-    const [garden, setGarden] = React.useState(null);
-
-
-    function displayPlantDetails () {
-        console.log(props)
-        setDetails(event.target.value);
-        // value should be details below, which are passed into larger function as props.
-    }
-        return (
-            <React.Fragment>
-                {/* {details} */}
-                <h1>{common_name}</h1>
-                <img src='/static/img/plant/1.jpg' 
-                width='200px' />
-                <p>{scientific_name}</p>
-                <p>Native to: {region}</p>
-                <p>Plant type: {plant_type}</p>
-                <p>Flower color: {flower_color}</p>
-                <p>Bloom period: {bloom_period}</p>
-                <p>Life cycle: {life_cycle}</p>
-                <p>Maximum height: {max_height}</p>
-                <p>Notes: {notes}</p>
-            </React.Fragment>
-        );
+    //const [garden, setGarden] = React.useState([]);
     
     // add plant to garden: need to pass in garden_id as props
-    // set state every time you add a plant: how to do this in a nested function? **
     // send data to backend by post request
-    function addToGarden () {
-        alert('Success!');
-        //setGarden([]) // 
+    // function addToGarden (event) {
+    //     event.preventDefault();
+    //     alert('Success!');
+    //     //setGarden([]) // 
 
-        // fetch('/add-to-garden', {
-        //     method: "POST",
-        //     body: {garden} //??
-        //     // body: JSON.stringify(this.state) // this is class syntax, need to use useState
-        //     // line 135: cannot read property 'state' of undefined
-        // })
-        // .then((response) => response.json())
-    }
+    //     React.useEffect(() => {
+    //         fetch('/create-account', {
+    //             method: "POST"
+    //         })
+    //         .then((response) => response.json())
+    //         .then((data) => setGarden(data.garden));
+    //     }, []); 
+    // };
 
     return (
         <React.Fragment>
             <h1>{common_name}</h1>
-            {/* test img: */}
-            <img src='/static/img/plant/1.jpg' 
-                width='200px' />
+            <img src='/static/img/plant/1.jpg' width='200px' />
             <p>{scientific_name}</p>
-            {/* italicize scientific name */}
-            <p>Native to {region}</p>
-            <button value={value} onClick = {displayPlantDetails}>Details</button>
-            {/* set state with above click, ERROR: props is not defined at displayPlantDetails */}
-            <button onClick = {addToGarden}>Add to garden</button>
+            <p>Plant type: {plant_type}</p>
+            <p>Flower color: {flower_color}</p>
+            <p>Bloom period: {bloom_period}</p>
+            <p>Life cycle: {life_cycle}</p>
+            <p>Maximum height: {max_height}</p>
+            <p>Notes: {notes}</p>
         </React.Fragment>
     );
 }
 
 
-// input region from map click as props
 function PlantContainer(props) {
 
     const [clickedRegion, setRegion] = React.useState('')
@@ -231,10 +204,13 @@ function PlantContainer(props) {
     const [plantData, setPlantData] = React.useState([]);
 
     React.useEffect(() => {
-        fetch('api/plants' + {clickedRegion})
+        fetch('api/plants/'  + {clickedRegion})
         .then((response) => response.json())
         .then((data) => setPlantData(data.plants));
     }, []);
+    // no error, and 'state in region' printing when clicked
+    // but only Loading... displays, no plants.
+    // works as expected with test URL ('api/plants/Florida')
 
 
     const plants = [];
@@ -322,10 +298,3 @@ function Garden(props) {
 ReactDOM.render(
     <PlantContainer />,
     document.getElementById('root'));
-
-// render gives return value
-// possible ideas: 
-// 1. to add map to the component, then you can modify the state
-// 2. make plant container a class instead of a component
-
-// function vs class: can only set state in classes, not functions
