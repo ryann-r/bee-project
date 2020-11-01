@@ -26,7 +26,7 @@ class Plant(db.Model):
     image_url = db.Column(db.String(250), nullable=True)
     # pollinators = db.Column(db.String)
 
-    garden = db.relationship('Garden')
+    # garden = db.relationship('Garden')
 
     def __repr__(self):
         return f'<plant_id={self.plant_id} common_name={self.common_name}>'
@@ -42,13 +42,15 @@ class User(db.Model):
     __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    garden_id = db.Column(db.Integer, db.ForeignKey('gardens.garden_id'), autoincrement=True)
+    # garden_id = db.Column(db.Integer, db.ForeignKey('gardens.garden_id'), autoincrement=True)
         #foreign key to garden table
     fname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     # hash_pw = db.Column(db.String, nullable=False)
     # ?? region = db.Column(db.String, nullable=True)
+
+    # garden = db.relationship('Garden')
     
 
     def __repr__(self):
@@ -56,18 +58,19 @@ class User(db.Model):
 
 #### ADD HASH PW & PYTHON FLASK SECURITY ADD-ON ####
 
-class Garden(db.Model):
-    """Plants added to user gardens."""
+# class Garden(db.Model):
+#     """Plants added to user gardens."""
 
-    __tablename__ = 'gardens'
+#     __tablename__ = 'gardens'
 
-    garden_id = db.Column(db.Integer, db.ForeignKey('users.garden_id'), primary_key=True)
-    plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'), nullable=False)
+#     garden_id = db.Column(db.Integer, db.ForeignKey('users.garden_id'), primary_key=True)
+#     plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'), nullable=False)
 
-    plant = db.relationship('Plant')
+#     plant = db.relationship('Plant')
+#     user = db.relationship('User')
 
-    def __repr__(self):
-        return f'<User user_id={self.user_id} plant_id={self.plant_id}>'
+#     def __repr__(self):
+#         return f'<User user_id={self.user_id} plant_id={self.plant_id}>'
 
 
 

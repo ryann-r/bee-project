@@ -11,19 +11,19 @@ function App() {
                 <p>
                     <ReactRouterDOM.Link to='/garden/<user_id>'>Garden</ReactRouterDOM.Link>
                 </p>
-                <p>
+                {/* <p>
                     <ReactRouterDOM.Link to='/create-account'>Sign me up!</ReactRouterDOM.Link>
-                </p>
+                </p> */}
                 <ReactRouterDOM.Switch>
                     <ReactRouterDOM.Route path='/about'>
                         <About />
                     </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/garden/<user_id>'>
+                    {/* <ReactRouterDOM.Route path='/garden/<user_id>'>
                         <Garden />
-                    </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/create-account'>
+                    </ReactRouterDOM.Route> */}
+                    {/* <ReactRouterDOM.Route path='/create-account'>
                         <CreateAccount />
-                    </ReactRouterDOM.Route>
+                    </ReactRouterDOM.Route> */}
                 </ReactRouterDOM.Switch>
             </ReactRouterDOM.BrowserRouter>
         </nav>
@@ -100,28 +100,28 @@ function Plant(props) {
     const { common_name, scientific_name, region, plant_type,
         flower_color, bloom_period, life_cycle, max_height, notes } = props;
     
-    //const [garden, setGarden] = React.useState([]);
+    const [garden, setGarden] = React.useState([]);
     
-    // add plant to garden: need to pass in garden_id as props
-    // send data to backend by post request
-    // function addToGarden (event) {
-    //     event.preventDefault();
-    //     alert('Success!');
-    //     //setGarden([]) // 
+    //add plant to garden: need to pass in garden_id as props
+    //send data to backend by post request
+    //useEffect? NO: inside a nested function.
+    function addToGarden (event) {
+        event.preventDefault();
+        alert('Success!'); 
 
-    //     React.useEffect(() => {
-    //         fetch('/create-account', {
-    //             method: "POST"
-    //         })
-    //         .then((response) => response.json())
-    //         .then((data) => setGarden(data.garden));
-    //     }, []); 
-    // };
+        
+        // fetch('/add-to-garden', {
+        //     method: "POST"
+        // })
+        // .then((response) => response.json())
+        // .then((data) => setGarden(data.garden));
+    };
 
     return (
         <React.Fragment>
             <h1>{common_name}</h1>
             <img src='/static/img/plant/1.jpg' width='200px' />
+            <p>{region}</p>
             <p>{scientific_name}</p>
             <p>Plant type: {plant_type}</p>
             <p>Flower color: {flower_color}</p>
@@ -129,20 +129,20 @@ function Plant(props) {
             <p>Life cycle: {life_cycle}</p>
             <p>Maximum height: {max_height}</p>
             <p>Notes: {notes}</p>
+            <button onClick={addToGarden}>Add to garden</button>
         </React.Fragment>
     );
 }
 
 
-function PlantContainer(props) {
+function PlantContainer() {
 
-    const [clickedRegion, setRegion] = React.useState('')
-    // set region is setting it to an object not a string
+    const [plantData, setPlantData] = React.useState([]);
 
     google.charts.load('visualization', 'current', {
     'packages':['geochart'],
     'callback': drawRegionsMap,
-    'mapsApiKey': 'GOOGLE_MAPS_KEY'
+    'mapsApiKey': 'GOOGLE_CHARTS_KEY'
     });
     google.charts.setOnLoadCallback(drawRegionsMap);
 
@@ -181,19 +181,31 @@ function PlantContainer(props) {
             'Northern Plains Region' : ['US-ND', 'US-SD', 'US-MT', 'US-WY'],
             'Southeast Region' : ['US-AL', 'US-GA', 'US-KY', 'US-LA', 'US-MS', 'US-SC', 'US-TN'],
             'Southern Plains Region' : ['US-CO', 'US-KS', 'US-OK', 'US-AR', 'US-TX'],
-            'California' : ['US-CA'], 'Hawaii' : ['US-HI'], 'Alaska' : ['US-AK'],
-            'Southwest Region' : ['US-NM', 'US-AZ', 'US-ID']}
-
+            'California' : ['US-CA'],
+            'Hawaii' : ['US-HI'],
+            'Alaska' : ['US-AK'],
+            'Southwest Region' : ['US-NM', 'US-AZ', 'US-ID'],
+            'Florida' : ['US-FL'],
+            'Rocky Mountain Region' : ['US-UT', 'US-NV', 'US-ID']};
+            console.log(data.getValue(selectedState.row, 0));
             if (selectedState) {
                 const state = data.getValue(selectedState.row, 0);
+                
                 console.log(state);
                 for (let region in regions) {
                     if (regions[region].includes(state)) {
                         console.log(state + ' in ' + region)
-                        setRegion(region);
-                        // set state and pass to use effect to fetch correct URL
+                    
+                
+                    fetch('api/plants/'  + region)
+                        .then((response) => response.json())
+                        .then((data) => setPlantData(data.plants));
+
+                    if (plantData.length === 0) {
+                        return <div>Loading...</div>;
                     }
-                }   
+                    }
+                }
             };
         }    
 
@@ -201,23 +213,10 @@ function PlantContainer(props) {
     google.visualization.events.addListener(chart, 'select', selectHandler);   
     };
 
-    const [plantData, setPlantData] = React.useState([]);
-
-    React.useEffect(() => {
-        fetch('api/plants/'  + {clickedRegion})
-        .then((response) => response.json())
-        .then((data) => setPlantData(data.plants));
-    }, []);
-    // no error, and 'state in region' printing when clicked
-    // but only Loading... displays, no plants.
-    // works as expected with test URL ('api/plants/Florida')
-
 
     const plants = [];
     
-    if (plantData.length === 0) {
-        return <div>Loading...</div>;
-    }
+
 
     // below is what is being passed as props to plant component
     for (const plant of plantData) {
@@ -242,7 +241,7 @@ function PlantContainer(props) {
             {plants}
         </React.Fragment>
     );
-}
+};
 
 // in return statement above can use Array.map and object destructuring, look at docs
 

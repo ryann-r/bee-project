@@ -261,8 +261,6 @@ Hawaii; Forbs; Year-round; Shoreline seapurslane; Sesuvium portulacastrum; P; pi
 Hawaii; Forbs; Year-round; 'Uhaloa; Waltheria indica; P; yellow; 6; L; Drought, wind, salt spray, and heat tolerant. Leaves are silvery and fuzzy. Tiny yellow flowers resemble miniature hibiscus, and attract bees and butterflies.
 Hawaii; Shrubs & Trees; Early; Hiddenpetal Indian mallow; Abultilon eremitopetalum; P; green, red; 10; L; Drought tolerant shrub. Lime green fower petals are completely hidden from site, but a promenent red stamen is visible. Attracts bees, birds, and butterflies.
 Hawaii; Shrubs & Trees; Early; Koa; Acacia koa; P; white, yellow; 50; L; The largest native tree in the Hawaiian Islands. Nitrogen-fixing. Great for erosion control. Showy powder puff flowers are visited by bees and flies.
-
-
 Southwest Region; Shrubs & Trees; Mid-Late; Prairie acacia; Acaciella angustissima; P; white; 3; L; A thornless acacia with lacy foliage. Makes good ground cover and erosion control. Attracts butterflies, bees, and moths.
 Southwest Region; Shrubs & Trees; Early-Late; Whitebrush; Aloysia gratissima; P; white; 10; M; Blooms best in full sun. Produces strongly vanilla-scented flowers, attracting many bee species. Used as shelter by small birds and lizards.
 Southwest Region; Forbs; Early-Late; Pine-needle milkweed; Asclepias linaria; P; white; 6; M; Grows well in full sun and well-draining soil. Attracts bees, and is a larval host for the Queen and Monarch butterflies.
@@ -274,7 +272,6 @@ Southwest Region; Shrubs & Trees; Early-Late; Desert lavender; Hyptis emoryi; P;
 Southwest Region; Shrubs & Trees; Mid-Late; Velvetpod mimosa; Mimosa dysocarpa; P; pink; 6; L; Be careful where you place this shrub, because it comes with sharp thorns. A favorite of butterflies. Birds also visit and feed on the seed.
 Southwest Region; Forbs; Mid; Passionflower vine; Passiflora incarnata; P; pink, blue, purple; 36; M; A climbing vine with showy ornamental blooms. Good for ground cover, fences, walls, and columns. A butterfly favorite.
 Southwest Region; Forbs; Early-Late; Desert senna; Senna covesii; P; yellow; 2; L; Good understory option. Larval host to the cloudless sulphur butterfly. Carpenter and bumble bees feed on the pollen of the bright yellow flowers.
-
 Rocky Mountain Region; Forbs; Early; Little western bittercress; Cardamine oligosperma; P, A; white; 2; M; Harvested from the wild as a food and medicine. Visited by bees and other insects.
 Rocky Mountain Region; Forbs; Early; Sierra larkspur; Delphinium glaucum; P; purple, blue; 8; H; Be cautious as this plant is fatally toxic to humans and animals. Attracts bees, butterflies, hummingbirds, and other birds.
 Rocky Mountain Region; Forbs; Early; Arctic pearlwort; Sagina saginoides; B; white; 1; H; Requires high water and partial shade. Attracts bees and other insect pollinators.
@@ -303,4 +300,3 @@ Rocky Mountain Region; Forbs; Late; Thickstem aster; Eurybia integrifolia; P; pu
 Rocky Mountain Region; Forbs; Late; Missouri goldenrod; Solidago missouriensis; P; yellow; 3; L; The earliest of the goldenrods to bloom in late summer. Attracts honey bees, other native bees, and butterflies.
 Rocky Mountain Region; Forbs; Late; Swamp milkweed; Asclepias incarnata; P; red; 5; H; Valuable to native bumble and honey bees, butterflies, and hummingbirds. Larval host to monarch and queen butterflies.
 Rocky Mountain Region; Forbs; Late; Common sneezewood; Helenium autumnale; P; yellow; 5; M; Requires a damp site and full sun. Poisonous to humans. Visited by native bees, wasps, syrphid flies, butterflies, and beetles.
-Rocky Mountain Region; 

@@ -1,7 +1,7 @@
 """Server for pollinator plants app."""
 
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import db, connect_to_db, Garden, User, Plant
+from model import db, connect_to_db, User, Plant  #Garden,
 import crud
 
 app = Flask(__name__)
