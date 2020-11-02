@@ -26,7 +26,6 @@ class Plant(db.Model):
     image_url = db.Column(db.String(250), nullable=True)
     # pollinators = db.Column(db.String)
 
-    # garden = db.relationship('Garden')
 
     def __repr__(self):
         return f'<plant_id={self.plant_id} common_name={self.common_name}>'
@@ -42,35 +41,46 @@ class User(db.Model):
     __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    # garden_id = db.Column(db.Integer, db.ForeignKey('gardens.garden_id'), autoincrement=True)
-        #foreign key to garden table
     fname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-    # hash_pw = db.Column(db.String, nullable=False)
-    # ?? region = db.Column(db.String, nullable=True)
-
-    # garden = db.relationship('Garden')
-    
+    region = db.Column(db.String, nullable=False)
+    # hash_pw = db.Column(db.String, nullable=False)    
 
     def __repr__(self):
         return f'<User user_id={self.user_id} email={self.email}>'
 
-#### ADD HASH PW & PYTHON FLASK SECURITY ADD-ON ####
+    #### ADD HASH PW & PYTHON FLASK SECURITY ADD-ON ####
 
-# class Garden(db.Model):
-#     """Plants added to user gardens."""
 
-#     __tablename__ = 'gardens'
+class UserGarden(db.Model):
+    """Associates a user and a garden."""
 
-#     garden_id = db.Column(db.Integer, db.ForeignKey('users.garden_id'), primary_key=True)
-#     plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'), nullable=False)
+    __tablename__ = 'usergarden'
 
-#     plant = db.relationship('Plant')
-#     user = db.relationship('User')
+    usergarden_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
-#     def __repr__(self):
-#         return f'<User user_id={self.user_id} plant_id={self.plant_id}>'
+    def __repr__(self):
+        return f'<Usergarden_id={self.usergarden_id} user_id={self.user_id}>'
+
+
+class Garden(db.Model):
+    """Plants in a user's garden."""
+
+    __tablename__ = 'gardens'
+
+    garden_plant_id = db.Column(db.Integer, primary_key=True)
+    garden_id = db.Column(db.Integer, db.ForeignKey('usergarden.usergarden_id'))
+    plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'))
+
+    # grab all plant ids associated with garden_id from Garden table
+
+    plant = db.relationship('Plant', backref=db.backref('gardens'))
+    garden = db.relationship('UserGarden', backref=db.backref('gardens'))
+
+    def __repr__(self):
+        return f'<User garden_id={self.garden_id} plant_id={self.plant_id}>'
 
 
 

@@ -1,7 +1,7 @@
 """Server for pollinator plants app."""
 
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
-from model import db, connect_to_db, User, Plant  #Garden,
+from model import db, connect_to_db, User, Plant, Garden, UserGarden
 import crud
 
 app = Flask(__name__)
@@ -48,7 +48,8 @@ def get_regional_plants_json(region):
         'bloom_period': plant.bloom_period,
         'life_cycle': plant.life_cycle,
         'max_height': plant.max_height,
-        'notes': plant.notes})
+        'notes': plant.notes,
+        'img_url': plant.image_url})
 
     return jsonify({'plants': regional_plants_list})
 

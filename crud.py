@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import Plant, User, connect_to_db, db #Garden
+from model import db, connect_to_db, User, Plant, Garden, UserGarden
 
 
 def get_all_plants():
@@ -21,10 +21,13 @@ def get_user(user_id):
     return User.query.filter(User.user_id == user_id).first()
 
 
-# def get_garden_plants(garden_id):
-#     """Returns garden plants for a given user."""
+def get_garden_plants(user_id):
+    """Returns garden plants for a given user."""
 
-#     return Garden.query.filter(Garden.garden_id == garden_id).all()
+    usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()
+    usergardenid = usergarden.usergarden_id
+    garden_plants = Garden.query.filter(Garden.garden_id == usergardenid).all()
+    return garden_plants
 
 
 def create_user(fname, email, password):
@@ -38,15 +41,17 @@ def create_user(fname, email, password):
     return user
 
 
-# def add_garden_plant(garden_id, plant_id):
-#     """Add a plant to a user's garden."""
+def add_garden_plant(user_id, plant_id):
+    """Add a plant to a user's garden."""
 
-#     garden_plant = Garden(garden_id, plant_id)
+    # query UserGarden table with user_id for garden_id
+    garden_id = UserGarden.query.filter(UserGarden.user_id == user_id).first
+    garden_plant = Garden(garden_id, plant_id)
 
-#     db.session.add(garden_plant)
-#     db.session.commit()
+    db.session.add(garden_plant)
+    db.session.commit()
 
-#     return garden_plant
+    return garden_plant
 
 
 if __name__ == '__main__':

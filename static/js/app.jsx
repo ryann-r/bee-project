@@ -28,7 +28,7 @@ function App() {
             </ReactRouterDOM.BrowserRouter>
         </nav>
         </React.Fragment>
-        )
+    )
 };
 
 // add dynamic routes
@@ -68,6 +68,9 @@ function Account() {
         }, []);  
     };
 
+    // add select region (state, dropdown), set region to session to limit
+    // adding plants from a users home region
+
     return (
         <form onSubmit={handleSubmit}>
             <input value={account.fname}
@@ -93,35 +96,123 @@ function Account() {
     )
 }
 
-// first display image, common name, scientific name, and add to garden button
-// make individual components clickable to see more info
-// pass in garden_id as props
-function Plant(props) {
-    const { common_name, scientific_name, region, plant_type,
-        flower_color, bloom_period, life_cycle, max_height, notes } = props;
+// // use user_id from session for addToGarden
+// function Plant(props) {
+//     const { common_name, scientific_name, region, plant_type,
+//         flower_color, bloom_period, life_cycle, max_height, notes } = props;
     
-    const [garden, setGarden] = React.useState([]);
+//     const [garden, setGarden] = React.useState([]);
     
-    //add plant to garden: need to pass in garden_id as props
-    //send data to backend by post request
-    //useEffect? NO: inside a nested function.
-    function addToGarden (event) {
-        event.preventDefault();
-        alert('Success!'); 
+//     //add plant to garden: need to pass in user_id as props
+//         // add user_id to the session when the user logs in,
+//         // so you don't have to pass it in as a prop
+//     //query usergarden table for garden_id that matches user_id
+//     //use that garden_id to add plant (plant_id + garden_id) to garden
+
+
+//     //send data to backend by post request
+//     //useEffect? NO: inside a nested function.
+//     function addToGarden (event) {
+//         event.preventDefault();
+//         alert('Success!'); 
 
         
-        // fetch('/add-to-garden', {
-        //     method: "POST"
-        // })
-        // .then((response) => response.json())
-        // .then((data) => setGarden(data.garden));
-    };
+//         // fetch('/add-to-garden', {
+//         //     method: "POST"
+//         // })
+//         // .then((response) => response.json())
+//         // .then((data) => setGarden(data.garden));
+//     };
+
+//     return (
+//         <React.Fragment>
+//             <h1>{common_name}</h1>
+//             <img src='/static/img/plant/1.jpg' width='200px' />
+//             <p>{region}</p>
+//             <p>{scientific_name}</p>
+//             <p>Plant type: {plant_type}</p>
+//             <p>Flower color: {flower_color}</p>
+//             <p>Bloom period: {bloom_period}</p>
+//             <p>Life cycle: {life_cycle}</p>
+//             <p>Maximum height: {max_height}</p>
+//             <p>Notes: {notes}</p>
+//             <button onClick={addToGarden}>Add to garden</button>
+//         </React.Fragment>
+//     );
+// }
+
+function DisplayPlantCards (props) {
+    const { common_name, scientific_name, region, plant_type,
+    flower_color, bloom_period, life_cycle, max_height, notes, img_url } = props;
 
     return (
-        <React.Fragment>
+        <div className="page-container">
+
+            <PlantCard common_name={common_name}
+            img_url={img_url}
+            scientific_name={scientific_name}
+            plant_type={plant_type}
+            flower_color={flower_color}
+            bloom_period={bloom_period}
+            life_cycle={life_cycle}
+            max_height={max_height}
+            notes={notes} />
+            <footer>
+                Pollinator plant data comes from Xerces Society for Invertebrate Conservation.
+            </footer>
+        </div>
+    )
+}
+
+function PlantCard (props) {
+    const { common_name, scientific_name, region, plant_type,
+    flower_color, bloom_period, life_cycle, max_height, notes, img_url } = props;
+    
+    const [flipped, setFlipped] = React.useState(false);
+
+    const handleClick = () => {
+        setFlipped(!flipped);
+    }
+
+    return (
+        <div onClick={handleClick} onClick={handleClick}
+        className={flipped ? "card-container flipped" : "card-container"}>
+            
+            <Front common_name={common_name} 
+            img_url={img_url} 
+            scientific_name={scientific_name} />
+            
+            <Back common_name={common_name} 
+            img_url={img_url} 
+            scientific_name={scientific_name}
+            plant_type={plant_type} 
+            flower_color={flower_color} 
+            bloom_period={bloom_period}
+            life_cycle={life_cycle}
+            max_height={max_height}
+            notes={notes} />
+        </div>
+        );
+}
+
+
+function Front (props) {
+    const { common_name, scientific_name, img_url } = props;
+    return (
+        <div className="front">
+            <ImageArea img_url={img_url} common_name={common_name}/>
+            <MainArea common_name={common_name}
+            scientific_name={scientific_name}/>
+        </div>
+    )
+}
+
+function Back (props) {
+    const { common_name, scientific_name, plant_type,
+    flower_color, bloom_period, life_cycle, max_height, notes } = props;
+    return (
+        <div className="back">
             <h1>{common_name}</h1>
-            <img src='/static/img/plant/1.jpg' width='200px' />
-            <p>{region}</p>
             <p>{scientific_name}</p>
             <p>Plant type: {plant_type}</p>
             <p>Flower color: {flower_color}</p>
@@ -129,9 +220,31 @@ function Plant(props) {
             <p>Life cycle: {life_cycle}</p>
             <p>Maximum height: {max_height}</p>
             <p>Notes: {notes}</p>
-            <button onClick={addToGarden}>Add to garden</button>
-        </React.Fragment>
-    );
+        </div>
+    )
+}
+
+function ImageArea (props) {
+    const { img_url, common_name} = props;
+    return (
+        <div className="image-container">
+            <img className="card-image"
+            src={img_url} alt={common_name}></img>
+        </div>
+    )
+}
+
+function MainArea (props) {
+    const { common_name, scientific_name} = props;
+    return (
+        <div className="main-area">
+            <div className="plant-card">
+                <h1>{common_name}</h1>
+                <p>{scientific_name}</p>
+                <p className="read-more">Click to see more details</p>
+            </div>
+        </div>
+    )
 }
 
 
@@ -187,23 +300,21 @@ function PlantContainer() {
             'Southwest Region' : ['US-NM', 'US-AZ', 'US-ID'],
             'Florida' : ['US-FL'],
             'Rocky Mountain Region' : ['US-UT', 'US-NV', 'US-ID']};
-            console.log(data.getValue(selectedState.row, 0));
+            
             if (selectedState) {
                 const state = data.getValue(selectedState.row, 0);
                 
-                console.log(state);
                 for (let region in regions) {
                     if (regions[region].includes(state)) {
-                        console.log(state + ' in ' + region)
-                    
-                
-                    fetch('api/plants/'  + region)
-                        .then((response) => response.json())
-                        .then((data) => setPlantData(data.plants));
+                        console.log(state + ' in ' + region);
+                              
+                        fetch('api/plants/'  + region)
+                            .then((response) => response.json())
+                            .then((data) => setPlantData(data.plants));
 
-                    if (plantData.length === 0) {
-                        return <div>Loading...</div>;
-                    }
+                        if (plantData.length === 0) {
+                            return <div>Loading...</div>;
+                        }
                     }
                 }
             };
@@ -213,16 +324,13 @@ function PlantContainer() {
     google.visualization.events.addListener(chart, 'select', selectHandler);   
     };
 
-
     const plants = [];
     
-
-
     // below is what is being passed as props to plant component
     for (const plant of plantData) {
         plants.push(
             <div key={plant.plant_id}>
-            <Plant
+            <DisplayPlantCards
             plant_id={plant.plant_id}
             common_name={plant.common_name} 
             scientific_name={plant.scientific_name}
@@ -235,7 +343,7 @@ function PlantContainer() {
             notes={plant.notes} />
             </div>
         )
-    }
+    };
     return (
         <React.Fragment>
             {plants}
@@ -247,15 +355,35 @@ function PlantContainer() {
 
 
 // input: user garden plants (from back end), user name for greeting
-// return plants (like plant components)
-// same as PlantContainer (make an instance) but with different data // route
-// or add it to PlantContainer; use hooks to determine which route to use to render which plants
-// refactor because repeated code from Plant Container -- just using different URLs
-    // use state to determine which URL: this.state = { url: undefined }
+// possibly refactor with PlantCard to make less repetitive
+function GardenPlant(props) {
+    const { common_name, scientific_name, region, plant_type,
+        flower_color, bloom_period, life_cycle, max_height, notes } = props;
+
+    return (
+        <React.Fragment>
+            <h1>{common_name}</h1>
+            <img src='/static/img/plant/1.jpg' width='200px' />
+            <p>{region}</p>
+            <p>{scientific_name}</p>
+            <p>Plant type: {plant_type}</p>
+            <p>Flower color: {flower_color}</p>
+            <p>Bloom period: {bloom_period}</p>
+            <p>Life cycle: {life_cycle}</p>
+            <p>Maximum height: {max_height}</p>
+            <p>Notes: {notes}</p>
+            <button onClick={addToGarden}>Add to garden</button>
+        </React.Fragment>
+    );
+};
+
+
+
 function Garden(props) {
 
     const [plantData, setPlantData] = React.useState([]);
 
+    // use useEffect because you know what data is to be loaded on first render.
     React.useEffect(() => {
         fetch('/api/garden/<garden_id>')
         .then((response) => response.json())
@@ -272,7 +400,7 @@ function Garden(props) {
     for (const plant of plantData) {
         plants.push(
             <div key={plant.plant_id}>
-            <Plant
+            <GardenPlant
             plant_id={plant.plant_id}
             common_name={plant.common_name} 
             scientific_name={plant.scientific_name}
