@@ -1,6 +1,7 @@
 """Models for pollinator plants app."""
 
 from flask_sqlalchemy import SQLAlchemy
+from security import pwd_context
 
 db = SQLAlchemy()
 
@@ -41,11 +42,27 @@ class User(db.Model):
     __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    fname = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False, unique=True)
+    fname = db.Column(db.String(32), nullable=False)
     region = db.Column(db.String, nullable=False)
-    # hash_pw = db.Column(db.String, nullable=False)    
+    password = db.Column(db.String, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    authenticated = db.Column(db.Boolean, default=False)
+
+    def encrypt_password(self, password):
+        """Encrypt user password, set to self.password_hash."""
+
+        self.password_hash = pwd_context.encrypt(password)
+
+    def verify_password(self, password):
+        """Verify user password."""
+
+        return pwd_context.verify(password, self.password_hash)
+
+    def is_authenticated(self):
+        """Return True if user is authenticated."""
+
+        return self.authenticated
 
     def __repr__(self):
         return f'<User user_id={self.user_id} email={self.email}>'

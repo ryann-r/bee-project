@@ -9,21 +9,21 @@ function App() {
                     <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
                 </p>
                 <p>
-                    <ReactRouterDOM.Link to='/garden/<user_id>'>Garden</ReactRouterDOM.Link>
+                    <ReactRouterDOM.Link to='/login'>Log In</ReactRouterDOM.Link>
                 </p>
-                {/* <p>
-                    <ReactRouterDOM.Link to='/create-account'>Sign me up!</ReactRouterDOM.Link>
-                </p> */}
+                <p>
+                    <ReactRouterDOM.Link to='/api/register'>Sign up</ReactRouterDOM.Link>
+                </p>
                 <ReactRouterDOM.Switch>
                     <ReactRouterDOM.Route path='/about'>
                         <About />
                     </ReactRouterDOM.Route>
-                    {/* <ReactRouterDOM.Route path='/garden/<user_id>'>
-                        <Garden />
-                    </ReactRouterDOM.Route> */}
-                    {/* <ReactRouterDOM.Route path='/create-account'>
-                        <CreateAccount />
-                    </ReactRouterDOM.Route> */}
+                    <ReactRouterDOM.Route path='/login'>
+                        <Login />
+                    </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/api/register'>
+                        <Register />
+                    </ReactRouterDOM.Route>
                 </ReactRouterDOM.Switch>
             </ReactRouterDOM.BrowserRouter>
         </nav>
@@ -41,51 +41,137 @@ function About() {
     )
 };
 
-// change to function
-function Account() {
-    const [account, setAccount] = React.useState([]);
 
-    const handleChange = ({ target }) => {
-        const name = target.name;
-        const value = target.value;
-        setAccount({
+function Register() {
+    const [formData, setFormData] = React.useState([]);
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({
             [name]: value
         });
-    };
-    // above: change using object destructuring
-
+    }
     const handleSubmit = (event) => {
         event.preventDefault();
-        alert("Thanks for signing up," + this.state.fname);
-
-        //FETCH post to server
-        React.useEffect(() => {
-            fetch('/create-account', {
-                method: "POST"
+        alert('Thanks for signing up!')
+        
+        fetch('/api/register', {
+                method: 'POST',
+                body: JSON.stringify({ formData }),
+                headers: { 'Content-Type': 'application/json' },
             })
-            .then((response) => response.json())
-            .then((data) => setAccount(data.account));
-        }, []);  
-    };
-
-    // add select region (state, dropdown), set region to session to limit
-    // adding plants from a users home region
+                .then(response => response.json())
+                .then(json => setFormData(json.formData))
+    }    
 
     return (
         <form onSubmit={handleSubmit}>
-            <input value={account.fname}
-            onChange={handleChange}
-            name="fname"
-            type="text"
-            placeholder="First Name" 
-            />
-            <input value={account.email}
+            <input value={formData.email}
             onChange={handleChange}
             name="email"
             type="text"
             placeholder="Email"
             />
-            <input value={account.password}
+            <input value={formData.fname}
+            onChange={handleChange}
+            name="fname"
+            type="text"
+            placeholder="First Name" 
+            />
+            <input value={formData.password}
+            onChange={handleChange}
+            type="password"
+            name="password"
+            placeholder="Password"
+            />
+            <select value={formData.region} onChange={handleChange}>
+                <option value="Southeast Region">Alabama</option>
+                <option value="Alaska">Alaska</option>
+                <option value="Southwest Region">Arizona</option>
+                <option value="Southern Plains Region">Arkansas</option>
+                <option value="California">California</option>
+                <option value="Southern Plains Region">Colorado</option>
+                <option value="Northeast Region">Connecticut</option>
+                <option value="Mid-Atlantic Region">Delaware</option>
+                <option value="Florida">Florida</option>
+                <option value="Southeast Region">Georgia</option>
+                <option value="Hawaii">Hawaii</option>
+                <option value="Rocky Mountain Region">Idaho</option>
+                <option value="Midwest Region">Illinois</option>
+                <option value="Midwest Region">Indiana</option>
+                <option value="Midwest Region">Iowa</option>
+                <option value="Southern Plains Region">Kansas</option>
+                <option value="Southeast Region">Kentucky</option>
+                <option value="Southeast Region">Louisiana</option>
+                <option value="Northeast Region">Maine</option>
+                <option value="Mid-Atlantic Region">Maryland</option>
+                <option value="Northeast Region">Massachusetts</option>
+                <option value="Great Lakes Region">Michigan</option>
+                <option value="Great Lakes Region">Minnesota</option>
+                <option value="Southeast Region">Mississippi</option>
+                <option value="Midwest Region">Missouri</option>
+                <option value="Northern Plains Region">Montana</option>
+                <option value="Northern Plains Region">Nebraska</option>
+                <option value="Rocky Mountain Region">Nevada</option>
+                <option value="Northeast Region">New Hampshire</option>
+                <option value="Mid-Atlantic Region">New Jersey</option>
+                <option value="Southwest Region">New Mexico</option>
+                <option value="Northeast Region">New York</option>
+                <option value="Mid-Atlantic Region">North Carolina</option>
+                <option value="Northern Plains Region">North Dakota</option>
+                <option value="Great Lakes Region">Ohio</option>
+                <option value="Southern Plains Region">Oklahoma</option>
+                <option value="Maritime Northwest Region">Oregon</option>
+                <option value="Mid-Atlantic Region">Pennsylvania</option>
+                <option value="Northeast Region">Rhode Island</option>
+                <option value="Southeast Region">South Carolina</option>
+                <option value="Northern Plains Region">South Dakota</option>
+                <option value="Southeast Region">Tennessee</option>
+                <option value="Southern Plains Region">Texas</option>
+                <option value="Rocky Mountain Region">Utah</option>
+                <option value="Northeast Region">Vermont</option>
+                <option value="Mid-Atlantic Region">Virginia</option>
+                <option value="Maritime Northwest Region">Washington</option>
+                <option value="Mid-Atlantic Region">West Virginia</option>
+                <option value="Great Lakes Region">Wisconsin</option>
+                <option value="Northern Plains Region">Wyoming</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+    )
+}
+
+
+function Login () {
+    const [formData, setFormData] = React.useState([]);
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({
+            [name]: value
+        });
+    }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        
+        fetch('/login', {
+                method: 'POST',
+                body: JSON.stringify({ formData }),
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(response => response.json())
+                .then(json => setFormData(json.formData))
+    }
+    //error 405: the above it attempting to make a GET request after a POST request
+    return (
+        <form onSubmit={handleSubmit}>
+        <input value={formData.email}
+            onChange={handleChange}
+            name='email'
+            type='text'
+            placeholder='Email' 
+            />
+            <input value={formData.password}
             onChange={handleChange}
             type="password"
             name="password"
@@ -93,7 +179,8 @@ function Account() {
             />
             <button type="submit">Submit</button>
         </form>
-    )
+    );
+    
 }
 
 // // use user_id from session for addToGarden
@@ -173,6 +260,9 @@ function PlantCard (props) {
     const handleClick = () => {
         setFlipped(!flipped);
     }
+
+    //const addToGarden
+    //add button to front/back: in front/back component or here
 
     return (
         <div onClick={handleClick} onClick={handleClick}
@@ -357,8 +447,13 @@ function PlantContainer() {
 // input: user garden plants (from back end), user name for greeting
 // possibly refactor with PlantCard to make less repetitive
 function GardenPlant(props) {
-    const { common_name, scientific_name, region, plant_type,
-        flower_color, bloom_period, life_cycle, max_height, notes } = props;
+    const [garden, setGarden] = React.useState([]);
+
+    React.useEffect(() => {
+        fetch('/api/garden/<garden_id>', (result) => {
+            setGarden(result)
+        });
+    }, [])
 
     return (
         <React.Fragment>
@@ -372,7 +467,7 @@ function GardenPlant(props) {
             <p>Life cycle: {life_cycle}</p>
             <p>Maximum height: {max_height}</p>
             <p>Notes: {notes}</p>
-            <button onClick={addToGarden}>Add to garden</button>
+            <button onClick={removeFromGarden}>Remove from garden</button>
         </React.Fragment>
     );
 };
@@ -423,5 +518,5 @@ function Garden(props) {
 
 
 ReactDOM.render(
-    <PlantContainer />,
+    <Register />,
     document.getElementById('root'));

@@ -1,16 +1,92 @@
 """Server for pollinator plants app."""
 
-from flask import Flask, render_template, request, flash, session, redirect, jsonify
+from flask import Flask, render_template, request, flash, session, url_for, redirect, jsonify
+from markupsafe import escape
+from flask_login import LoginManager
 from model import db, connect_to_db, User, Plant, Garden, UserGarden
 import crud
+import security
 
 app = Flask(__name__)
+app.secret_key = 'APP_SECRET_KEY'
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
 @app.route('/')
 def index():
     """View homepage."""
+
     return render_template('main.html')
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Given user_id, return associated User object."""
+
+    return crud.get_user_by_id(user_id)
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    """Log user into app."""
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    current_user = User.query.filter(User.email == email).first
+
+    if not current_user:
+        flash("Email not registered, please try again or sign up.")
+        return redirect('/login')
+
+    if current_user.password != password:
+        flash("Incorrect password, please try again.")
+        return redirect('/login')
+
+    session['user_id'] = current_user.user_id
+    session['region'] = current_user.region
+    flash(f'Logged in as {email}')
+        
+    return redirect('/api/plants')
+
+
+@app.route('/api/register', methods=['POST'])
+def register():
+    """Create user, add to the database."""
+
+    email = request.json.get('email')
+    fname = request.json.get('fname')
+    region = request.json.get('region')
+    password = request.json.get('password')
+    if email is None or password is None:
+        flash('Invalid email or password.')
+        return redirect('/api/register')
+    if User.query.filter_by(email=email).first() is not None:
+        return redirect('/api/register')
+    
+    new_user = User(email=email, fname=fname, password=password, region=region)
+    new_user.hash_password(password)
+    db.session.add(new_user)
+    db.session.commit()
+    session['user_id'] = new_user.user_id
+    session['region'] = new_user.region
+    flash("You've registered successfully!")
+
+    return jsonify({'success': True})
+
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
+
+
+@app.route('/dashboard')
+def dashboard():
+    """Shows logged in user dashboard."""
+
+    if session.get('user_id') != None:
+        user_id = session.get('user_id')
 
 
 @app.route('/api/plants')
@@ -52,21 +128,6 @@ def get_regional_plants_json(region):
         'img_url': plant.image_url})
 
     return jsonify({'plants': regional_plants_list})
-
-
-@app.route('/create-account', methods=['POST'])
-def create_user():
-    """Create user, add to the database."""
-
-    fname = request.json('fname')
-    email = request.json('email')
-    password = request.json('password')
-
-    new_user = User(fname=fname, email=email, password=password)
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({'success': True})
 
 
 @app.route('/add-to-garden', methods=['POST'])

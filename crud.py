@@ -15,10 +15,15 @@ def get_plants_by_region(region):
     return Plant.query.filter(Plant.region == region).all()
 
 
-def get_user(user_id):
-    """Return a user."""
+def get_user_by_id(user_id):
+    """Return a user by user_id."""
 
     return User.query.filter(User.user_id == user_id).first()
+
+def get_user_by_email(email):
+    """Return a user by email."""
+
+    return User.query.filter(User.email == email).first()
 
 
 def get_garden_plants(user_id):
@@ -30,10 +35,12 @@ def get_garden_plants(user_id):
     return garden_plants
 
 
-def create_user(fname, email, password):
+def create_user(fname, email, password, region):
     """Create and return a new user."""
 
-    user = User(fname=fname, email=email, password=password)
+    # or region=session[region] ?
+
+    user = User(fname=fname, email=email, password=password, region=region)
 
     db.session.add(user)
     db.session.commit()
