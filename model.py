@@ -24,7 +24,7 @@ class Plant(db.Model):
     # check if issue for searching later
     water_needs = db.Column(db.String, nullable=False)
     notes = db.Column(db.String, nullable=False)
-    image_url = db.Column(db.String(250), nullable=True)
+    img_url = db.Column(db.String(250), nullable=True)
     # pollinators = db.Column(db.String)
 
 
@@ -44,7 +44,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String, nullable=False, unique=True)
     fname = db.Column(db.String(32), nullable=False)
-    region = db.Column(db.String, nullable=False)
+    user_region = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     authenticated = db.Column(db.Boolean, default=False)

@@ -1,7 +1,7 @@
 """Server for pollinator plants app."""
 
-from flask import Flask, render_template, request, flash, session, url_for, redirect, jsonify
-from markupsafe import escape
+from flask import Flask, render_template, request, flash, session, redirect, jsonify
+#from markupsafe import escape
 from flask_login import LoginManager
 from model import db, connect_to_db, User, Plant, Garden, UserGarden
 import crud
@@ -17,7 +17,7 @@ login_manager.init_app(app)
 def index():
     """View homepage."""
 
-    return render_template('main.html')
+    return render_template('main.html', session=session)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -27,26 +27,35 @@ def load_user(user_id):
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    """Log user into app."""
+    """Log user into app. If already logged in, redirect to dashboard.
+    
+    If email not registered, redirect to login. If incorrect password,
+    redirect to login. If correct, set current user to session, and 
+    redirect to user dashboard."""
 
     email = request.form.get('email')
     password = request.form.get('password')
 
     current_user = User.query.filter(User.email == email).first
 
+    if session.get('user_id') is not None:
+        flash("You're already logged in.")
+        return redirect('/dashboard')
+
     if not current_user:
-        flash("Email not registered, please try again or sign up.")
+        flash("Email not registered, please try again.")
         return redirect('/login')
 
     if current_user.password != password:
         flash("Incorrect password, please try again.")
         return redirect('/login')
 
+    session['fname'] = current_user.fname
     session['user_id'] = current_user.user_id
-    session['region'] = current_user.region
-    flash(f'Logged in as {email}')
+    session['user_region'] = current_user.user_region
+    flash(f'Welcome back, { fname }!')
         
-    return redirect('/api/plants')
+    return redirect('/dashboard')
 
 
 @app.route('/api/register', methods=['POST'])
@@ -55,12 +64,13 @@ def register():
 
     email = request.json.get('email')
     fname = request.json.get('fname')
-    region = request.json.get('region')
+    user_region = request.json.get('user_region')
     password = request.json.get('password')
     if email is None or password is None:
-        flash('Invalid email or password.')
+        flash('Invalid email or password, please try again.')
         return redirect('/api/register')
-    if User.query.filter_by(email=email).first() is not None:
+    if User.query.filter(User.email == email).first() is not None:
+        flash('Email entered is already registered, please try again.')
         return redirect('/api/register')
     
     new_user = User(email=email, fname=fname, password=password, region=region)
@@ -68,25 +78,29 @@ def register():
     db.session.add(new_user)
     db.session.commit()
     session['user_id'] = new_user.user_id
-    session['region'] = new_user.region
-    flash("You've registered successfully!")
+    session['user_region'] = new_user.user_region
+    session['fname'] = new_user.fname
+    flash(f"Welcome, { fname }!")
 
-    return jsonify({'success': True})
-
+    return redirect('/dashboard')
 
 
 @app.route('/logout')
 def logout():
+    """Log user out, clear session. Redirect to homepage."""
+
     session.clear()
     return redirect('/')
 
 
-@app.route('/dashboard')
-def dashboard():
-    """Shows logged in user dashboard."""
+# @app.route('/dashboard')
+# def dashboard():
+#     """Shows logged in user dashboard."""
 
-    if session.get('user_id') != None:
-        user_id = session.get('user_id')
+#     if session.get('user_id') is not None:
+#         user_id = session.get('user_id')
+#         query for garden
+
 
 
 @app.route('/api/plants')
@@ -144,11 +158,12 @@ def add_to_garden(garden_id, plant_id):
     return jsonify({'success': True})
 
 
-@app.route('/api/garden/<garden_id>')
-def get_garden_plants(garden_id):
+@app.route('/api/garden/<user_id>')
+def get_garden_plants(user_id):
     """Return all garden plants for a particular user."""
 
-    garden_plants = crud.get_garden_plants(garden_id)
+    user_id = session.get('user_id')
+    garden_plants = crud.get_garden_plants(user_id)
 
     return jsonify({'garden plants': garden_plants})
 

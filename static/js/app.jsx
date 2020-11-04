@@ -43,12 +43,17 @@ function About() {
 
 
 function Register() {
-    const [formData, setFormData] = React.useState([]);
-
+    const [formData, setFormData] = React.useState({
+        email: '',
+        fname: '',
+        password: '',
+        user_region: ''
+    });
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const value = event.target.value;
         setFormData({
-            [name]: value
+            ...state,
+            [event.target.name]: value
         });
     }
     const handleSubmit = (event) => {
@@ -63,28 +68,27 @@ function Register() {
                 .then(response => response.json())
                 .then(json => setFormData(json.formData))
     }    
-
     return (
         <form onSubmit={handleSubmit}>
-            <input value={formData.email}
+            <input value={state.email}
             onChange={handleChange}
             name="email"
             type="text"
             placeholder="Email"
             />
-            <input value={formData.fname}
+            <input value={state.fname}
             onChange={handleChange}
             name="fname"
             type="text"
             placeholder="First Name" 
             />
-            <input value={formData.password}
+            <input value={state.password}
             onChange={handleChange}
             type="password"
             name="password"
             placeholder="Password"
             />
-            <select value={formData.region} onChange={handleChange}>
+            <select value={state.user_region} onChange={handleChange}>
                 <option value="Southeast Region">Alabama</option>
                 <option value="Alaska">Alaska</option>
                 <option value="Southwest Region">Arizona</option>
@@ -143,12 +147,13 @@ function Register() {
 
 
 function Login () {
-    const [formData, setFormData] = React.useState([]);
-
+    const [formData, setFormData] = React.useState({email: '', password: ''});
+    
     const handleChange = (event) => {
-        const { name, value } = event.target;
+        const value = event.target.value;
         setFormData({
-            [name]: value
+            ...state,
+            [event.target.name]: value
         });
     }
     const handleSubmit = (event) => {
@@ -165,13 +170,13 @@ function Login () {
     //error 405: the above it attempting to make a GET request after a POST request
     return (
         <form onSubmit={handleSubmit}>
-        <input value={formData.email}
+        <input value={state.email}
             onChange={handleChange}
             name='email'
             type='text'
             placeholder='Email' 
             />
-            <input value={formData.password}
+            <input value={state.password}
             onChange={handleChange}
             type="password"
             name="password"
@@ -230,7 +235,7 @@ function Login () {
 
 function DisplayPlantCards (props) {
     const { common_name, scientific_name, region, plant_type,
-    flower_color, bloom_period, life_cycle, max_height, notes, img_url } = props;
+    flower_color, bloom_period, life_cycle, max_height, notes, img_url, user_region } = props;
 
     return (
         <div className="page-container">
@@ -243,9 +248,12 @@ function DisplayPlantCards (props) {
             bloom_period={bloom_period}
             life_cycle={life_cycle}
             max_height={max_height}
-            notes={notes} />
+            notes={notes}
+            region={region}
+            user_region={user_region} />
             <footer>
-                Pollinator plant data comes from Xerces Society for Invertebrate Conservation.
+                {/* move elsewhere */}
+                Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.
             </footer>
         </div>
     )
@@ -253,15 +261,16 @@ function DisplayPlantCards (props) {
 
 function PlantCard (props) {
     const { common_name, scientific_name, region, plant_type,
-    flower_color, bloom_period, life_cycle, max_height, notes, img_url } = props;
+    flower_color, bloom_period, life_cycle, max_height, notes, 
+    img_url, region, user_region } = props;
     
     const [flipped, setFlipped] = React.useState(false);
+    const [canAdd, setCanAdd] = React.useState();
 
     const handleClick = () => {
         setFlipped(!flipped);
     }
 
-    //const addToGarden
     //add button to front/back: in front/back component or here
 
     return (
@@ -270,7 +279,10 @@ function PlantCard (props) {
             
             <Front common_name={common_name} 
             img_url={img_url} 
-            scientific_name={scientific_name} />
+            scientific_name={scientific_name}
+            user_region={user_region}
+            region={region} 
+            user_region={user_region}/>
             
             <Back common_name={common_name} 
             img_url={img_url} 
@@ -287,12 +299,19 @@ function PlantCard (props) {
 
 
 function Front (props) {
-    const { common_name, scientific_name, img_url } = props;
+    const { common_name, scientific_name, img_url, region, user_region } = props;
+
+    //const addToGarden = (event) => {
+        // conditional button: if plant region != user_region disable button 
+        // and print message
+    //}
+
     return (
         <div className="front">
             <ImageArea img_url={img_url} common_name={common_name}/>
             <MainArea common_name={common_name}
             scientific_name={scientific_name}/>
+            {/* <button addToGarden */}
         </div>
     )
 }
@@ -319,7 +338,7 @@ function ImageArea (props) {
     return (
         <div className="image-container">
             <img className="card-image"
-            src={img_url} alt={common_name}></img>
+            src={img_url} alt={common_name} width = '200px'></img>
         </div>
     )
 }
@@ -419,8 +438,8 @@ function PlantContainer() {
     // below is what is being passed as props to plant component
     for (const plant of plantData) {
         plants.push(
-            <div key={plant.plant_id}>
             <DisplayPlantCards
+            key={plant.plant_id}
             plant_id={plant.plant_id}
             common_name={plant.common_name} 
             scientific_name={plant.scientific_name}
@@ -430,10 +449,13 @@ function PlantContainer() {
             bloom_period={plant.bloom_period}
             life_cycle={plant.life_cycle}
             max_height={plant.max_height}
-            notes={plant.notes} />
-            </div>
+            notes={plant.notes}
+            user_region="{{session['region'}}" />
         )
     };
+    // above: check that PlantContainer has access to session,
+    // passed as a variable to render_template of '/' (main.html)
+
     return (
         <React.Fragment>
             {plants}
@@ -447,18 +469,17 @@ function PlantContainer() {
 // input: user garden plants (from back end), user name for greeting
 // possibly refactor with PlantCard to make less repetitive
 function GardenPlant(props) {
+    const { common_name, scientific_name, region, plant_type,
+    flower_color, bloom_period, life_cycle, max_height, notes, img_url } = props;
+
     const [garden, setGarden] = React.useState([]);
 
-    React.useEffect(() => {
-        fetch('/api/garden/<garden_id>', (result) => {
-            setGarden(result)
-        });
-    }, [])
+    
 
     return (
         <React.Fragment>
             <h1>{common_name}</h1>
-            <img src='/static/img/plant/1.jpg' width='200px' />
+            <img src={img_url} width='200px' />
             <p>{region}</p>
             <p>{scientific_name}</p>
             <p>Plant type: {plant_type}</p>
@@ -472,30 +493,27 @@ function GardenPlant(props) {
     );
 };
 
-
-
-function Garden(props) {
+// use session user_id to query for user garden
+function Garden() {
 
     const [plantData, setPlantData] = React.useState([]);
 
-    // use useEffect because you know what data is to be loaded on first render.
     React.useEffect(() => {
-        fetch('/api/garden/<garden_id>')
+        fetch('/api/garden/')
         .then((response) => response.json())
         .then((data) => setPlantData(data.plants));
     }, []);
 
-
-    const plants = [];
+    const gardenPlants = [];
     
     if (plantData.length === 0) {
         return <div>Loading...</div>;
     }
 
     for (const plant of plantData) {
-        plants.push(
-            <div key={plant.plant_id}>
+        gardenPlants.push(
             <GardenPlant
+            key={plant.plant_id}
             plant_id={plant.plant_id}
             common_name={plant.common_name} 
             scientific_name={plant.scientific_name}
@@ -505,13 +523,13 @@ function Garden(props) {
             bloom_period={plant.bloom_period}
             life_cycle={plant.life_cycle}
             max_height={plant.max_height}
-            notes={plant.notes} />
-            </div>
-        )
+            notes={plant.notes}
+            img_url={plant.img_url} />
+        );
     }
     return (
         <React.Fragment>
-            {plants}
+            {gardenPlants}
         </React.Fragment>
     );
 }

@@ -49,7 +49,7 @@ def generate_img_urls():
     plants = Plant.query.all()
 
     for plant in plants:
-        plant.image_url = 'static/img/plant/' + str(plant.plant_id)
+        plant.img_url = 'static/img/plant/' + str(plant.plant_id)
         # possibly change file names
 
         db.session.add(plant)

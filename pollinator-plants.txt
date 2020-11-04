@@ -5,7 +5,7 @@ California; Forbs; Early; Lacy phacelia; Phacelia tanacetifolia; A; purple; 3; L
 California; Forbs; Early-Mid; California poppy; Eschscholzia californica; A, P; orange; 0.5; L; Easy to establish and long blooming. Attracts a diversity of bees, bumble bees in particular.
 California; Forbs; Early-Mid; Elegant clarkia; Clarkia unguiculata; A; pink; 0.5; L; Strikingly unique flowers attract bees and butterflies. Larval host for Clark's sphinx moth.
 California; Forbs; Early-Mid; Globe gilia; Gilia capitata; A, P; blue; 1; M; Globe-shaped, periwinkle-blue flower clusters attract a diversity of bees and butterflies.
-California; Forbs; Mid; California phacelia; Phacelia californica; P; purple; 1; L; Tightly coiled flower heads are very attractive to bumble bees and other native bees. Tolerates clay soils.
+California; Forbs; Mid; California phacelia; Phacelia californica; P; purple; 1; L; Tightly coiled flower heads are very attractive to butterflies, bumble bees and other native bees. Tolerates clay soils.
 California; Forbs; Mid; Cleveland sage; Salvia clevelandii; P; purple; 3; L; Showy flowers attract bees, butterflies, and hummingbirds. Extremely fragrant foliage. Requires good drainage.
 California; Forbs; Mid; Foothill penstemon; Penstemon heterophyllus; P; blue; 3; L; Iridescent violet flowers attract bees, butterflies, and hummingbirds. Requires good drainage. Heat and drought tolerant.
 California; Forbs; Mid; Narrowleaf milkweed; Asclepias fascicularis; P; pink, white; 1.5; M; Monarch butterfly host plant. High-quality nectar source for many bees. Easier to establish from transplants than from seed.
@@ -14,7 +14,7 @@ California; Forbs; Mid-Late; Common sunflower; Helianthus annuus; A; yellow; 5; 
 California; Forbs; Mid-Late; Gumplant; Grindelia camporum; P; yellow; 4; L; Long-lasting flowers. Attracts small, native bees. Tolerates clay soils and wet or dry conditions.
 California; Forbs; Late; California aster; Symphyotrichum chilense; P; purple; 5; L; One of the latest fall blooming plants. Important for pre-hibernation bumble bee queens. Tolerates clay soils.
 California; Forbs; Late; California fuchsia; Epilobium canum; P; orange, red; 3; L; Abundant scarlet-colored flowers. Critical late-season nectar source for hummingbirds and bees.
-California; Forbs; Late; California goldenrod; Solidago velutina spp. californica; P; yellow; 3; M; Important late-season forage for bees, butterflies, beneficial solitary wasps, pollen-eating soldier beetles, and more.
+California; Forbs; Late; California goldenrod; Solidago velutina californica; P; yellow; 3; M; Important late-season forage for bees, butterflies, beneficial solitary wasps, pollen-eating soldier beetles, and more.
 California; Shrubs & Trees; Early; California lilac; Ceanothus azureus 'Concha'; P; purple; 4; L; Attracts bees and butterflies with a profusion of bright violet-blue flowers. Tolerates clay soils.
 California; Shrubs & Trees; Early; McMinn manzanita; Arctostaphylos densiflora 'Howard McMinn'; P; white; 5; L; Clusters of small, bell-shaped flowers provide early season forage for bumble bees and other spring bees. Tolerates clay soils.
 California; Shrubs & Trees; Early; Oregon grape; Berberis aquifolium; P; yellow; 5; L; Attracts honey bees and native bees, including mason bees (Osmia spp.). Tolerates shade and wet or dry conditions.
@@ -78,7 +78,7 @@ Maritime Northwest Region; Forbs; Early-Mid; Douglas meadowfoam; Limnanthes doug
 Maritime Northwest Region; Forbs; Early-Mid; Meadow checkermallow; Sidalcea campestris; P; pink; 2-6; M; Hardy, long-lived plant. A larval host for numerous butterflies an skippers, including the west coast lady (Vanessa annabella).
 Maritime Northwest Region; Forbs; Early-Mid; Slender clarkia; Clarkia gracilis; A; purple; 1.5; L; Fast-growing. Easy to establish from seed. Highly variable with numerous subspecies. Prefers open, well-drained sites.
 Maritime Northwest Region; Forbs; Mid; Large-flowered collomia; Collomia grandiflora; A; pink; 1-3; L-M; A very showy native plant that prefers partial shade and dry soils. Bees collect bright blue pollen from the blossoms.
-Maritime Northwest Region; Forbs; Mid; Selfheal; Prunella vulgaris spp. lanceolata; P; purple; 1.5; M; Easy to establish from seed. Fast-growing ground cover that will tolerate mowing or grazing. Highly attractive to various pollinators.
+Maritime Northwest Region; Forbs; Mid; Selfheal; Prunella vulgaris lanceolata; P; purple; 1.5; M; Easy to establish from seed. Fast-growing ground cover that will tolerate mowing or grazing. Highly attractive to various pollinators.
 Maritime Northwest Region; Forbs; Mid; Showy milkweed; Asclepias speciosa; P; pink; 1.5-5; M; Slow to establish from seed. Larval host for the monarch butterfly and a high-quality nectar source for a wide variety of floral visitors.
 Maritime Northwest Region; Forbs; Late; Canada goldenrod; Solidago canadensis; P; yellow; 3-6; M; Slow-growing, rhizomatous plant. Significant resource for honey bees and late-season native bees, such as bumble bees.
 Maritime Northwest Region; Forbs; Late; Douglas aster; Symphyotrichum subspicatum; P; purple; 4; M; Establishes better from transplant. Visitors include leafcutter bees and the woodland skipper butterfly (Ochlodes sylvanoides).
@@ -122,7 +122,7 @@ Mid-Atlantic Region; Shrubs & Trees; Mid; New Jersey tea; Ceanothus americanus; 
 Midwest Region; Forbs; Early; Cream wild indigo; Baptisia bracteata; P; cream; 2; L; Visited by queen bumble bees (Bombus spp.) and other long-tongued bees. Larval host for numerous butterflies and skippers.
 Midwest Region; Forbs; Early; Golden Alexanders; Zizia aurea; P; yellow; 3; H; Tolerates some shade. Attracts bees and beneficial insects. Larval host for black swallowtails (Papilio polyxenes).
 Midwest Region; Forbs; Early; Wild geranium; Geranium maculatum; P; pink; 1; M; Prefers partial but tolerates full sun. Attracts mining (Andrena spp.), mason (Osmia spp.), digger, and bumble bees. Larval host for several moths.
-Midwest Region; Forbs; Early-Mid; Smooth penstemon; penstemon digitalis; P; white; 2; M; Semi-evergreen. Prolific nectar producer. Visited by a huge diversity of butterflies, moths, and bees, including honey bees.
+Midwest Region; Forbs; Early-Mid; Smooth penstemon; Penstemon digitalis; P; white; 2; M; Semi-evergreen. Prolific nectar producer. Visited by a huge diversity of butterflies, moths, and bees, including honey bees.
 Midwest Region; Forbs; Mid; Narrowleaf mountain mint; Pycnanthemum tenuifolium; P; white; 2.5; M; Fragrant foliage. Visited by blue and copper butterflies, many bees (including honey bees), flies, beetles, and other beneficials.
 Midwest Region; Forbs; Mid; Pale purple coneflower; Echinacea pallida; P; purple; 3; L; Withstands drought well. Attractive to a wide range of pollinators and a key nectar source for skippers.
 Midwest Region; Forbs; Mid; Purple prairie clover; Dalea purpurea; P; purple; 2; L; Legume (contributes nitrogen to the soil). Very attractive to many bees, also to butterflies, flies, and beetles.
