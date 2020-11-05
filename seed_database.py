@@ -43,20 +43,20 @@ def load_plants():
 
 load_plants()
 
-def generate_img_urls():
+def generate_image_urls():
     """Add img_url to Plant table."""
 
     plants = Plant.query.all()
 
     for plant in plants:
-        plant.img_url = 'static/img/plant/' + str(plant.plant_id)
+        plant.image_url = 'static/img/plant/' + str(plant.plant_id) + '.jpg'
         # possibly change file names
 
         db.session.add(plant)
 
     db.session.commit()
 
-generate_img_urls()
+generate_image_urls()
 
    
 if __name__ == '__main__':

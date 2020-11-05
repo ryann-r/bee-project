@@ -1,7 +1,7 @@
 """Models for pollinator plants app."""
 
 from flask_sqlalchemy import SQLAlchemy
-from security import pwd_context
+from security import pwd_context, hash_password, check_hashed_password
 
 db = SQLAlchemy()
 
@@ -24,7 +24,7 @@ class Plant(db.Model):
     # check if issue for searching later
     water_needs = db.Column(db.String, nullable=False)
     notes = db.Column(db.String, nullable=False)
-    img_url = db.Column(db.String(250), nullable=True)
+    image_url = db.Column(db.String(250), nullable=True)
     # pollinators = db.Column(db.String)
 
 
@@ -46,18 +46,19 @@ class User(db.Model):
     fname = db.Column(db.String(32), nullable=False)
     user_region = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    authenticated = db.Column(db.Boolean, default=False)
+    #password_hash = db.Column(db.String(128), nullable=False)
+    #authenticated = db.Column(db.Boolean, default=False)
 
-    def encrypt_password(self, password):
-        """Encrypt user password, set to self.password_hash."""
+    # did password encryption in server.py
+    # def encrypt_password(self, password):
+    #     """Encrypt user password, set to self.password_hash."""
 
-        self.password_hash = pwd_context.encrypt(password)
+    #     self.password_hash = pwd_context.encrypt(password)
 
-    def verify_password(self, password):
-        """Verify user password."""
+    # def verify_password(self, password):
+    #     """Verify user password."""
 
-        return pwd_context.verify(password, self.password_hash)
+    #     return pwd_context.verify(password, self.password_hash)
 
     def is_authenticated(self):
         """Return True if user is authenticated."""
@@ -81,7 +82,6 @@ class UserGarden(db.Model):
     def __repr__(self):
         return f'<Usergarden_id={self.usergarden_id} user_id={self.user_id}>'
 
-
 class Garden(db.Model):
     """Plants in a user's garden."""
 
@@ -91,14 +91,11 @@ class Garden(db.Model):
     garden_id = db.Column(db.Integer, db.ForeignKey('usergarden.usergarden_id'))
     plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'))
 
-    # grab all plant ids associated with garden_id from Garden table
-
     plant = db.relationship('Plant', backref=db.backref('gardens'))
     garden = db.relationship('UserGarden', backref=db.backref('gardens'))
 
     def __repr__(self):
-        return f'<User garden_id={self.garden_id} plant_id={self.plant_id}>'
-
+        return f'<User garden_id={self.garden_id} plant_id={self.plant_id}'
 
 
 def connect_to_db(flask_app, db_uri='postgresql:///plantsdb', echo=True):
