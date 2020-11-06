@@ -1,8 +1,9 @@
 function App() {
     return (
         <React.Fragment>
+        <img src='/static/img/plant/homepagebee.jpg' width='900px'></img>
         <h1>Buzz buzz. Did you know...</h1>
-        <div>One in three bites of food exists because of the hard work
+        <div>One in three bites of food exists in great thanks to the hard work
             of pollinators like bees, butterflies, beetles, flies, moths, 
             bats, and birds.
         </div>
@@ -14,13 +15,18 @@ function App() {
         <div>There are more than 3,500 native bee species in the United States.
         Colony Collapse Disorder occurs when the worker bees, those that gather
         pollen food for the hive, suddenly disappear. There are a variety of causes,
-        including the overuse of agricultural neonicotinoid pesticides. Every winter
-        since 2006, 
+        including the overuse of agricultural neonicotinoid pesticides. Since 2006, 
+        about 30% of hives are lost each winter.
         </div>
         <h2>Can I help?</h2>
         <div>Absolutely! Here are some of the best ways to help:
-            <p>1. Plant a wide variety of flowering pollinator-friendly plants in your garden.</p>
-            <p>2. Use pesticides responsibily, or not at all! Consider using </p>
+            <p>1. Plant a wide variety of native flowering pollinator-friendly plants in your garden.</p>
+            <p>2. Use pesticides responsibily, or not at all! Consider using plants that attract
+                other beneficial insects (think: predators of the pests).
+            </p>
+            <p>3. Accept insect friends nibbling on your lettuce before you.</p>
+            <p>4. Pollinators are thirsty -- put out a shallow dish of clean water.</p>
+            <p>6. Leave dead tree trunks in your </p>
         </div>
 
         <nav>
@@ -45,7 +51,7 @@ function App() {
                         <Register />
                     </ReactRouterDOM.Route>
                     <ReactRouterDOM.Route path='/garden/<user_id>'>
-                        <Garden />
+                        <GardenContainer />
                     </ReactRouterDOM.Route>
                 </ReactRouterDOM.Switch>
             </ReactRouterDOM.BrowserRouter>
@@ -80,31 +86,10 @@ function Register() {
             [event.target.name]: value
         });
     }
-    const handleSubmit = (event) => {
-        console.log("Inside handleSubmit")
-        console.log(formData)
-        event.preventDefault();
-        
-        fetch('/api/register', {
-                method: 'POST',
-                body: JSON.stringify({ formData }),
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-            })
-                .then(response => response.json())
-                .then(json => setFormData(json.formData));
-                // is this necessary since POST-ing data ?
-    }
-    // POST 500: INTERNAL SERVER ERROR
-    // consolelog shows all but user_region in state (formData) in handleSubmit, 
-    // but all columns null when server tries to populate database.
-    // issue with dropdown select -- doesn't appear to select state,
-    // and user_region state is not set. but correct region is recognized in 
-    // the browser console after formData console-logs. what is happening here? async?
+
+    // don't really need to do handleSubmit because rendering new page after login
     return (
-        <form onSubmit={handleSubmit}>
+        <form action='/api/register' method='POST'>
             <label>Email:
             <input value={formData.email}
             onChange={handleChange}
@@ -138,7 +123,7 @@ function Register() {
             />
             </label>
             <label>State of Residence: 
-                <select value={formData.user_region} onChange={handleChange}>
+                <select name="user_region" value={formData.user_region} onChange={handleChange}>
                     <option value="Southeast Region">Alabama</option>
                     <option value="Alaska">Alaska</option>
                     <option value="Southwest Region">Arizona</option>
@@ -208,27 +193,16 @@ function Login () {
             [event.target.name]: value
         });
     }
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        
-        fetch('/login', {
-                method: 'POST',
-                body: JSON.stringify({ formData }),
-                headers: { 'Content-Type': 'application/json' },
-            })
-                .then(response => response.json())
-                .then(json => setFormData(json.formData))
-    }
-    //error 405: the above it attempting to make a GET request after a POST request
+    // don't need handleSubmit because login redirects
     return (
-        <form onSubmit={handleSubmit}>
-        <input value={state.email}
+        <form action='/api/login' method='POST'>
+        <input value={formData.email}
             onChange={handleChange}
             name='email'
             type='text'
             placeholder='Email' 
             />
-            <input value={state.password}
+            <input value={formData.password}
             onChange={handleChange}
             type="password"
             name="password"
@@ -236,15 +210,15 @@ function Login () {
             />
             <button type="submit">Submit</button>
         </form>
-    );
-    
+    );  
 }
 
 function Dashboard () {
+    const fname = document.getElementById('root').getAttribute('fname');
     return(
         <React.Fragment>
             <div>
-                {/* <h1>Welcome back, SESSION FNAME </h1>  */}
+                <h1>Welcome back, {fname}!</h1>
                 {/* more detailed information about choosing pollinator plants, how to use the site */}
             </div>
             <nav>
@@ -278,56 +252,13 @@ function Dashboard () {
 }
 
 
-// // use user_id from session for addToGarden
-// function Plant(props) {
-//     const { common_name, scientific_name, region, plant_type,
-//         flower_color, bloom_period, life_cycle, max_height, notes } = props;
-    
-//     const [garden, setGarden] = React.useState([]);
-    
-//     //add plant to garden: need to pass in user_id as props
-//         // add user_id to the session when the user logs in,
-//         // so you don't have to pass it in as a prop
-//     //query usergarden table for garden_id that matches user_id  in server
-//     //use that garden_id to add plant (plant_id + garden_id) to garden
-
-
-//     //send data to backend by post request
-//     //useEffect? NO: inside a nested function.
-//     function addToGarden (event) {
-//         event.preventDefault();
-//         alert('Success!'); 
-
-        
-//         // fetch('/add-to-garden', {
-//         //     method: "POST"
-//         // })
-//         // .then((response) => response.json())
-//         // .then((data) => setGarden(data.garden));
-//     };
-
-//     return (
-//         <React.Fragment>
-//             <h1>{common_name}</h1>
-//             <img src='/static/img/plant/1.jpg' width='200px' />
-//             <p>{region}</p>
-//             <p>{scientific_name}</p>
-//             <p>Plant type: {plant_type}</p>
-//             <p>Flower color: {flower_color}</p>
-//             <p>Bloom period: {bloom_period}</p>
-//             <p>Life cycle: {life_cycle}</p>
-//             <p>Maximum height: {max_height}</p>
-//             <p>Notes: {notes}</p>
-//             <button onClick={addToGarden}>Add to garden</button>
-//         </React.Fragment>
-//     );
-// }
-
-// get user_id from session and pass in as props for add-to-garden
 function DisplayPlantCards (props) {
     const { plant_id, common_name, scientific_name, region, plant_type,
-    flower_color, bloom_period, life_cycle, max_height, notes, image_url, user_region } = props;
-
+    flower_color, bloom_period, life_cycle, max_height, notes, image_url } = props;
+    const user_region = document.getElementById('root').getAttribute('user_region');
+    const user_id = document.getElementById('root').getAttribute('user_id');
+    // do I have to explicitly call these props?
+    
     return (
         <div className="page-container">
             <h1>You're viewing pollinator plants native to: {region}</h1>
@@ -345,10 +276,9 @@ function DisplayPlantCards (props) {
             max_height={max_height}
             notes={notes}
             region={region}
-            user_region={user_region} />
+            user_region={user_region}
+            user_id={user_id} />
             <footer>
-                {/* move elsewhere */}
-                
             </footer>
         </div>
     )
@@ -373,9 +303,7 @@ function PlantCard (props) {
             <Front
             common_name={common_name} 
             image_url={image_url} 
-            scientific_name={scientific_name}
-            region={region} 
-            user_region={user_region}/>
+            scientific_name={scientific_name} />
             
             <Back
             plant_id={plant_id}
@@ -388,6 +316,8 @@ function PlantCard (props) {
             life_cycle={life_cycle}
             max_height={max_height}
             notes={notes}
+            user_region={user_region} 
+            region={region} 
             user_region={user_region} />
         </div>
         );
@@ -395,7 +325,7 @@ function PlantCard (props) {
 
 
 function Front (props) {
-    const { common_name, scientific_name, image_url, region, user_region } = props;
+    const { common_name, scientific_name, image_url } = props;
 
     return (
         <div className="front">
@@ -406,9 +336,11 @@ function Front (props) {
     )
 }
 
+//pass in region and session user_region for conditional button
 function Back (props) {
     const { plant_id, common_name, scientific_name, plant_type,
-    flower_color, bloom_period, life_cycle, max_height, notes } = props;
+    flower_color, bloom_period, life_cycle, max_height, notes,
+    region, user_region } = props;
 
     const [addPlant, setAddPlant] = React.useState({plant_id: ''});
 
@@ -418,14 +350,13 @@ function Back (props) {
         setAddPlant({
             [event.target.name]: value
         });
+        // might need to give name to button
    
         fetch('/api/add-to-garden', {
                 method: 'POST',
                 body: JSON.stringify({ addPlant }),
                 headers: { 'Content-Type': 'application/json' },
             })
-                .then(response => response.json())
-                .then(json => setAddPlant(json.addPlant))
     }    
     // conditional button: if plant region != user_region disable button
     // and print message
@@ -447,8 +378,6 @@ function Back (props) {
     )
 }
 
-// conditional addToGarden button: if user_region == region, enable, if not disable
-// 
 
 function ImageArea (props) {
     const { image_url, common_name} = props;
@@ -477,12 +406,14 @@ function MainArea (props) {
 function HomePlantContainer() {
     
     const [plantData, setPlantData] = React.useState([]);
+    const user_region = document.getElementById('root').getAttribute('user_region');
 
-    // const region = session user region
-
-    fetch('api/plants/'  + region) // add session user_region to end of URL
-    .then((response) => response.json())
-    .then((data) => setPlantData(data.plants));
+    React.useEffect(() => {
+        fetch('api/plants/' + user_region)
+        .then((response) => response.json())
+        .then((data) => setPlantData(data.plants));
+    }, []);
+    
 
     if (plantData.length === 0) {
         return <div>Loading...</div>;
@@ -502,8 +433,7 @@ function HomePlantContainer() {
             life_cycle={plant.life_cycle}
             max_height={plant.max_height}
             notes={plant.notes}
-            image_url={plant.image_url}
-            user_region="{{session['region']}}" />
+            image_url={plant.image_url} />       
         )
     };
 
@@ -610,12 +540,9 @@ function MapPlantContainer() {
             life_cycle={plant.life_cycle}
             max_height={plant.max_height}
             notes={plant.notes}
-            image_url={plant.image_url}
-            user_region="{{session['region']}}" />
+            image_url={plant.image_url} />
         )
     };
-    // above: check that MapPlantContainer has access to session,
-    // passed as a variable to render_template of '/' (main.html)
 
     return (
         <React.Fragment>
@@ -624,17 +551,16 @@ function MapPlantContainer() {
     );
 };
 
-// in return statement above can use Array.map and object destructuring, look at docs
-
-
 // input: user garden plants (from back end), user name for greeting
 // possibly refactor with PlantCard to make less repetitive -- conditional rendering 
 function GardenPlants(props) {
     const { plant_id, common_name, scientific_name, region, plant_type,
     flower_color, bloom_period, life_cycle, max_height, notes, image_url } = props;
+    const user_id = document.getElementById('root').getAttribute('user_id')
   
     const [removePlant, setRemovePlant] = React.useState({plant_id: ''});
 
+    // use user_id and plant_id
     const removeFromGarden = (event) => {
         event.preventDefault();
         
@@ -649,6 +575,7 @@ function GardenPlants(props) {
             })
                 .then(response => response.json())
                 .then(json => setRemovePlant(json.removePlant))
+                // does this make sense? possibly remove .thens
     }
 
     // make sure plant card is removed from db and page after button is selected
@@ -714,5 +641,9 @@ function GardenContainer() {
 
 
 ReactDOM.render(
-    <App />,
+    <Register />,
     document.getElementById('root'));
+
+// how to access session elements passed into html as attributes:
+//    1.  username=document.getElementById('root').getAttribute('user_id')
+//    2.  $('#root').attr('user_id')

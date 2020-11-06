@@ -1,5 +1,5 @@
 """Server for pollinator plants app."""
-
+import os
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from jinja2 import StrictUndefined
 from flask_debugtoolbar import DebugToolbarExtension
@@ -8,7 +8,7 @@ from flask_login import LoginManager
 from model import db, connect_to_db, User, Plant, Garden, UserGarden
 import crud
 from security import pwd_context, hash_password, check_hashed_password
-import os
+
 
 app = Flask(__name__)                       # instance of the flask app
 
@@ -24,8 +24,12 @@ login_manager.init_app(app)
 @app.route('/')
 def index():
     """View homepage."""
+    #username = session['fname']
 
-    return render_template('main.html', session=session)
+    return render_template('main.html',
+        fname=session['fname'],
+        user_id=session['user_id'],
+        user_region=session['user_region'])
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -65,7 +69,7 @@ def login():
     session['user_region'] = current_user.user_region
     flash(f'Welcome back, { fname }!')
         
-    return redirect('/dashboard')
+    return redirect('/')
     # do I need to pass current session data in here to use as props in Garden component?
 
 
@@ -105,8 +109,11 @@ def register():
     
     flash(f"Welcome, { fname }!")
 
-    return redirect('/dashboard')
+    return redirect('/')
     # how to pass session data to this url ?
+    # session data is set as a cookie in the http header as part of the http response
+    # flash puts message in buffer so you can pull them out, it won't appear 
+    # in browser unless you explicitly do "getflashmessages" MAYBE
 
 @app.route('/logout')
 def logout():

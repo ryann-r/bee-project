@@ -30,7 +30,9 @@
 </head>
 <body>
     <div id='regions_div' style='width: 900px; height: 500px'></div>
-    <div id='root'></div>
+    <!-- this space is showing up on every page. limit to pages with map. -->
+    <div id='root' fname='{{fname}}' user_id='{{user_id}}' user_region='{{user_region}}'></div>
+    <!-- will the above pass in current session to app.jsx? -->
     <script type='text/jsx' src='static/js/app.jsx'></script>
     <script type="text/javascript" src='static/js/map.js'></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
