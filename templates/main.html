@@ -3,7 +3,7 @@
 <head>
     <meta charset="UFT-8">
     <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
-    <title>Pollinator Plants</title>
+    <title>{% block title %} Pollinator Plants {% endblock %}</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
@@ -16,7 +16,7 @@
 
     <!-- <script type="module" src="https://unpkg.com/react-card-flip@1.0.11/lib/ReactCardFlip.js"></script> -->
     <!-- bootstrap css here: -->
-    <link rel="styleshee" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
     crossorigin="anonymous">
 
@@ -26,15 +26,17 @@
     <link rel="icon" href="data:,">
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    
 </head>
 <body>
     <div id='regions_div' style='width: 900px; height: 500px'></div>
-    <!-- this space is showing up on every page. limit to pages with map. -->
     <div id='root' fname='{{fname}}' user_id='{{user_id}}' user_region='{{user_region}}'></div>
-    <!-- will the above pass in current session to app.jsx? -->
+    
+    {% for message in get_flashed_messages() %}
+        <p>{{ message }}</p>
+    {% endfor %}
+
     <script type='text/jsx' src='static/js/app.jsx'></script>
-    <script type="text/javascript" src='static/js/map.js'></script>
+    <!-- <script type="text/javascript" src='static/js/map.js'></script> -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>

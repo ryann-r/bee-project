@@ -24,12 +24,20 @@ login_manager.init_app(app)
 @app.route('/')
 def index():
     """View homepage."""
-    #username = session['fname']
+    
+    if 'user_id' in session.keys():
+        fname=session['fname']
+        user_id=session['user_id']
+        user_region=session['user_region']
+    else:
+        fname=None
+        user_id=None
+        user_region=None
 
     return render_template('main.html',
-        fname=session['fname'],
-        user_id=session['user_id'],
-        user_region=session['user_region'])
+        fname=fname,
+        user_id=user_id,
+        user_region=user_region)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -37,7 +45,7 @@ def load_user(user_id):
 
     return crud.get_user_by_id(user_id)
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['GET', 'POST'])
 def login():
     """Log user into app. If already logged in, redirect to user garden.
     
@@ -45,31 +53,44 @@ def login():
     redirect to homepage. If correct, add current user to session, and
     redirect to user dashboard."""
 
-    email = request.form.get('email')
+    # 1. user logging in, submit username, pw, fname in the FORM, grab from form save to session
+        # not username: redirect to login, retry
+        # pw incorrect: error message, try again
+        # redirect to garden
+    # 2. user is logged in, manually types in /login
+        # already in the session
+        # redirect to garden
+    # 3. someone who isn't logged in manually types in /login
+        # redirect to homepage
+
+    username = request.form.get('username')
     password = request.form.get('password')
-    fname = request.form.get('fname')
 
-    current_user = User.query.filter(User.email == email).first()
+    # check hashed pw to hashed pw
 
-    if session.get('user_id') is not None:
-        flash("You're already logged in.")
-        return redirect('/dashboard')
+    if not username and password:   # scenario 2
+        user_id = session.get('user_id')
+        if user_id is not None:
+            current_user = crud.get_user_by_id(user_id)
+            fname = current_user.fname
+            flash(f'Welcome back, { fname }!')
+            return redirect('/api/garden/' + str(user_id))
 
-    if not current_user:
-        flash("The email you entered is not registered. Please try again or register as a new user.")
-        return redirect('/')
+    if username and password:   # in form scenario 1
+        current_user = User.query.filter(User.username == username, User.password == password).first()
+        if not current_user:
+            flash("Incorrect username or password, please try again.")
+            return redirect('/api/login')
+        fname = current_user.fname
+        user_id = current_user.user_id
+        session['fname'] = current_user.fname
+        session['user_id'] = current_user.user_id
+        session['user_region'] = current_user.user_region
+        flash(f'Welcome back, { fname }!')
+        return redirect('/api/garden/' + str(user_id))
 
-    if current_user.password != password:
-        flash("Incorrect password, please try again.")
-        return redirect('/login')
-
-
-    session['fname'] = current_user.fname
-    session['user_id'] = current_user.user_id
-    session['user_region'] = current_user.user_region
-    flash(f'Welcome back, { fname }!')
-        
     return redirect('/')
+     
     # do I need to pass current session data in here to use as props in Garden component?
 
 
@@ -80,36 +101,36 @@ def register():
     #ISSUES: error with hash_password
     # "TOO MANY REDIRECTS"
 
-    email = request.form.get('email')
+    username = request.form.get('username')
     fname = request.form.get('fname')
     user_region = request.form.get('user_region')
     password = request.form.get('password')
-    #confirm_password = request.form.get('confirm_password')
+    confirm_password = request.form.get('confirm_password')
     #password_hash = hash_password(password)
 
-    #if password != confirm_password:
-        #flash("Passwords do not match, please try again.")
-        #return redirect('/api/register')
-    #elif email is None or password is None:
-        #flash('Invalid email or password, please try again.')
-        #return redirect('/api/register')
-    #elif User.query.filter(User.email == email).first() is not None:
-        #flash('Email entered is already registered, please try again.')
-        #return redirect('/api/register')
-    #else:
+    if password != confirm_password:
+        flash("Passwords do not match, please try again.")
+        return redirect('/api/register')
+    if username is None or password is None:
+        flash('Invalid email or password, please try again.')
+        return redirect('/api/register')
+    if User.query.filter(User.username == username).first() is not None:
+        flash('Username is already registered, please try again.')
+        return redirect('/api/register')
     
-    new_user = User(email=email, fname=fname, user_region=user_region, password=password)
-    db.session.add(new_user)
-    db.session.commit()
+    new_user = crud.create_user(username, fname, password, user_region)
+    user_id = new_user.user_id
+    new_usergarden = crud.create_user_garden(new_user.user_id)
 
-    # save user_id, user_region, and first name to session
+    session['usergarden_id'] = new_usergarden.usergarden_id
     session['user_id'] = new_user.user_id
     session['user_region'] = new_user.user_region
     session['fname'] = new_user.fname
-    
+    # save user_id, user_region, and first name to session
+
     flash(f"Welcome, { fname }!")
 
-    return redirect('/')
+    return redirect('/api/garden/' + str(user_id))
     # how to pass session data to this url ?
     # session data is set as a cookie in the http header as part of the http response
     # flash puts message in buffer so you can pull them out, it won't appear 
@@ -123,11 +144,11 @@ def logout():
 
     return redirect('/')
 
-@app.route('/dashboard/<user_id>')
-def dashboard():
-    """Display user dashboard."""
+# @app.route('/explore')
+# def explore():
+#     """Display clickable map to view plants by region."""
 
-    
+# conditionally render regions_div for map for this route
 
 
 @app.route('/api/plants')
@@ -177,30 +198,49 @@ def get_garden_plants(user_id):
     """Return all garden plants for a particular user."""
 
     user_id = session.get('user_id')
-    garden_plants = crud.get_garden_plants(user_id)
+    if user_id is None:
+        flash("Please sign up or log in to continue.")
+        return redirect('/')
+
+    # query for garden plants, get plant_id of each
+    # 
+    garden_plants = []
+
+    plants = crud.get_garden_plants_data(user_id)
+    for plant in plants:
+        garden_plants.append({'plant_id': plant.plant_id,
+        'region': plant.region,
+        'common_name': plant.common_name,
+        'scientific_name': plant.scientific_name,
+        'plant_type': plant.plant_type,
+        'flower_color': plant.flower_color,
+        'bloom_period': plant.bloom_period,
+        'life_cycle': plant.life_cycle,
+        'max_height': plant.max_height,
+        'notes': plant.notes,
+        'image_url': plant.image_url})
 
     return jsonify({'garden plants': garden_plants})
 
 
-# @app.route('/api/add-to-garden', methods=['POST'])
-# def add_to_garden(user_id, plant_id):
-#     """Add a new plant to a user's garden."""
+@app.route('/api/add-to-garden', methods=['POST'])
+def add_to_garden():
+    """Add a new plant to a user's garden."""
+    # addPlant in component is correct
 
-#     user_id = session.get('user_id')
-#     plant_id = request.json('plant_id')  # in POST request from addToGarden button
-#     # query for plant common name using plant_id for flash message below
+    user_id = session.get('user_id')
+    plant_id = request.json.get('plant_id')
+    plant = crud.get_plant_by_id(plant_id)
+    common_name = plant.common_name
 
-#     # query for user garden_id using user_id -- change to join
-#     usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()
-#     garden_id = usergarden.usergarden_id
-#     new_garden_plant = Garden(garden_id=garden_id, plant_id=plant_id)
-#     db.session.add(new_garden_plant)
-#     db.session.commit()
+    garden_id = crud.get_usergarden_id(user_id)
+    new_garden_plant = Garden(garden_id=garden_id, plant_id=plant_id)
+    db.session.add(new_garden_plant)
+    db.session.commit()
 
-#     # idea: randomly choose phrase to put at beginning of flash message
-#     flash("{common_name} has been added to your garden!")
+    flash("{common_name} has been added to your garden!")
 
-#     return jsonify({'success': True})
+    return jsonify({'success': True})
 
 # @app.route('/api/remove-from-garden', methods=['POST', 'DELETE'])    # is this a post or get request?
 # def remove_from_garden(user_id, plant_id):

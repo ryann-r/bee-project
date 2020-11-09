@@ -42,7 +42,7 @@ class User(db.Model):
     __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    email = db.Column(db.String, nullable=False, unique=True)
+    username = db.Column(db.String, nullable=False, unique=True)
     fname = db.Column(db.String(32), nullable=False)
     user_region = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
@@ -66,7 +66,7 @@ class User(db.Model):
         return self.authenticated
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} email={self.email}>'
+        return f'<User user_id={self.user_id} username={self.username}>'
 
     #### ADD HASH PW & PYTHON FLASK SECURITY ADD-ON ####
 

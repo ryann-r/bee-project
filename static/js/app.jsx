@@ -2,6 +2,54 @@ function App() {
     return (
         <React.Fragment>
         <img src='/static/img/plant/homepagebee.jpg' width='900px'></img>
+
+        <nav>
+            <ReactRouterDOM.BrowserRouter>
+                <p>
+                    <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
+                </p>
+                <p>
+                    <ReactRouterDOM.Link to='/login'>Log In</ReactRouterDOM.Link>
+                </p>
+                <p>
+                    <ReactRouterDOM.Link to='/api/register'>Sign up</ReactRouterDOM.Link>
+                </p>
+                <p>
+                    <ReactRouterDOM.Link to='/explore'>Explore Pollinator Plants</ReactRouterDOM.Link>
+                </p>
+                <p>
+                    <ReactRouterDOM.Link to='/api/garden/<user_id>'>Garden</ReactRouterDOM.Link>
+                </p>
+                <ReactRouterDOM.Switch>
+                    <ReactRouterDOM.Route path='/about'>
+                        <About />
+                    </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/login'>
+                        <Login />
+                    </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/api/register'>
+                        <Register />
+                    </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/explore'>
+                        <MapPlantContainer />
+                    </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/api/garden/<user_id>'>
+                        <GardenContainer />
+                    </ReactRouterDOM.Route>
+                </ReactRouterDOM.Switch>
+            </ReactRouterDOM.BrowserRouter>
+        </nav>
+        </React.Fragment>
+    )
+};
+
+// add dynamic routes
+
+//ReactDOM.render(<App />, document.getElementById('root'));
+
+function About() {
+    return (
+        <React.Fragment>
         <h1>Buzz buzz. Did you know...</h1>
         <div>One in three bites of food exists in great thanks to the hard work
             of pollinators like bees, butterflies, beetles, flies, moths, 
@@ -26,54 +74,15 @@ function App() {
             </p>
             <p>3. Accept insect friends nibbling on your lettuce before you.</p>
             <p>4. Pollinators are thirsty -- put out a shallow dish of clean water.</p>
-            <p>6. Leave dead tree trunks in your </p>
-        </div>
-
-        <nav>
-            <ReactRouterDOM.BrowserRouter>
-                <p>
-                    <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
-                </p>
-                <p>
-                    <ReactRouterDOM.Link to='/login'>Log In</ReactRouterDOM.Link>
-                </p>
-                <p>
-                    <ReactRouterDOM.Link to='/api/register'>Sign up</ReactRouterDOM.Link>
-                </p>
-                <ReactRouterDOM.Switch>
-                    <ReactRouterDOM.Route path='/about'>
-                        <About />
-                    </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/login'>
-                        <Login />
-                    </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/api/register'>
-                        <Register />
-                    </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/garden/<user_id>'>
-                        <GardenContainer />
-                    </ReactRouterDOM.Route>
-                </ReactRouterDOM.Switch>
-            </ReactRouterDOM.BrowserRouter>
-        </nav>
+            <p>6. Leave dead tree trunks in your </p>.</div>
         </React.Fragment>
-    )
-};
-
-// add dynamic routes
-
-//ReactDOM.render(<App />, document.getElementById('root'));
-
-function About() {
-    return (
-        <div>Something about a web app.</div>
     )
 };
 
 
 function Register() {
     const [formData, setFormData] = React.useState({
-        email: '',
+        username: '',
         fname: '',
         password: '',
         confirm_password: '',
@@ -90,12 +99,12 @@ function Register() {
     // don't really need to do handleSubmit because rendering new page after login
     return (
         <form action='/api/register' method='POST'>
-            <label>Email:
-            <input value={formData.email}
+            <label>Username:
+            <input value={formData.username}
             onChange={handleChange}
-            name="email"
+            name="username"
             type="text"
-            placeholder="Email"
+            placeholder="Username"
             />
             </label>
             <label>First Name:
@@ -184,23 +193,23 @@ function Register() {
 
 
 function Login () {
-    const [formData, setFormData] = React.useState({email: '', password: ''});
+    const [formData, setFormData] = React.useState({ username: '', password: '' });
     
     const handleChange = (event) => {
         const value = event.target.value;
         setFormData({
-            ...state,
+            ...formData,
             [event.target.name]: value
         });
     }
     // don't need handleSubmit because login redirects
     return (
         <form action='/api/login' method='POST'>
-        <input value={formData.email}
+        <input value={formData.username}
             onChange={handleChange}
-            name='email'
+            name='username'
             type='text'
-            placeholder='Email' 
+            placeholder='Username' 
             />
             <input value={formData.password}
             onChange={handleChange}
@@ -213,45 +222,6 @@ function Login () {
     );  
 }
 
-function Dashboard () {
-    const fname = document.getElementById('root').getAttribute('fname');
-    return(
-        <React.Fragment>
-            <div>
-                <h1>Welcome back, {fname}!</h1>
-                {/* more detailed information about choosing pollinator plants, how to use the site */}
-            </div>
-            <nav>
-            <ReactRouterDOM.BrowserRouter>
-                <p>
-                    <ReactRouterDOM.Link to='/garden/<user_id>'>Garden</ReactRouterDOM.Link>
-                </p>
-                <p>
-                    {/* input session user_region to render user region plants */}
-                    <ReactRouterDOM.Link to='/api/plants'>View Native Plants</ReactRouterDOM.Link>
-                </p>
-                <p>
-                    <ReactRouterDOM.Link to='/api/plants/'>View Plants Anywhere!</ReactRouterDOM.Link>
-                </p>
-                    <ReactRouterDOM.Switch>
-                        <ReactRouterDOM.Route path='/garden/<user_id>'>
-                            <Garden />
-                        </ReactRouterDOM.Route>
-                        <ReactRouterDOM.Route path='/api/plants/<region>'>
-                            <HomePlantContainer />
-                            {/* above: need to pass in user_region from session as region */}
-                        </ReactRouterDOM.Route>
-                        <ReactRouterDOM.Route path='/api/plants'>
-                            <PlantContainer />
-                        </ReactRouterDOM.Route>
-                    </ReactRouterDOM.Switch>
-            </ReactRouterDOM.BrowserRouter>
-            </nav>
-        </React.Fragment>
-    );
-}
-
-
 function DisplayPlantCards (props) {
     const { plant_id, common_name, scientific_name, region, plant_type,
     flower_color, bloom_period, life_cycle, max_height, notes, image_url } = props;
@@ -263,6 +233,7 @@ function DisplayPlantCards (props) {
         <div className="page-container">
             <h1>You're viewing pollinator plants native to: {region}</h1>
             <h2>Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.</h2>
+            {/* above text appears above each plant card -- move so it's at the top of the page */}
             {/* website link? */}
             <PlantCard
             plant_id={plant_id}
@@ -341,16 +312,18 @@ function Back (props) {
     const { plant_id, common_name, scientific_name, plant_type,
     flower_color, bloom_period, life_cycle, max_height, notes,
     region, user_region } = props;
-
-    const [addPlant, setAddPlant] = React.useState({plant_id: ''});
+    
+    const [addPlant, setAddPlant] = React.useState({ plant_id: null });
 
     const addToGarden = (event) => {
         event.preventDefault();
+        console.log("inside add to garden");
+        console.log({plant_id});
 
         setAddPlant({
-            [event.target.name]: value
+            plant_id: {plant_id}
         });
-        // might need to give name to button
+        console.log(addPlant);
    
         fetch('/api/add-to-garden', {
                 method: 'POST',
@@ -358,8 +331,7 @@ function Back (props) {
                 headers: { 'Content-Type': 'application/json' },
             })
     }    
-    // conditional button: if plant region != user_region disable button
-    // and print message
+    // conditional button: if plant region != user_region disable button and print message
     // disable button after click // change text "in garden"
 
     return (
@@ -372,7 +344,8 @@ function Back (props) {
             <p>Life cycle: {life_cycle}</p>
             <p>Maximum height (ft): {max_height}</p>
             <p>Notes: {notes}</p>
-            <button value={plant_id} onClick={addToGarden}>Add to garden</button>
+            <p>plant_id: {plant_id}</p>
+            <button onClick={addToGarden}>Add to garden</button>
             {/* disabled={addPlant} --> will this disable after added to state? */}
         </div>
     )
@@ -482,6 +455,7 @@ function MapPlantContainer() {
             colorAxis: { colors: ['#FFB6C1', '#b11226'] }
         };
 
+        // document.createElement('div')
         const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
         
         function selectHandler() {
@@ -518,7 +492,8 @@ function MapPlantContainer() {
                     }
                 }
             };
-        }    
+        }
+        // possibly add useEffect to render plants from session user_region upon first render
 
     chart.draw(data, options);
     google.visualization.events.addListener(chart, 'select', selectHandler);   
@@ -597,40 +572,47 @@ function GardenPlants(props) {
     );
 };
 
-// use session user_id to query for user garden: pass in as props
-function GardenContainer() {
 
+function GardenContainer() {
+    const user_id = document.getElementById('root').getAttribute('user_id')
+    console.log(user_id)
+    const fname = document.getElementById('root').getAttribute('fname')
+    console.log(fname)
     const [plantData, setPlantData] = React.useState([]);
 
     React.useEffect(() => {
-        fetch('/api/garden/') // add user_id from session to end of url
+        fetch('/api/garden/' + user_id)
         .then((response) => response.json())
         .then((data) => setPlantData(data.plants));
     }, []);
 
     const gardenPlants = [];
+
+    // if (plantData.length === 0) {
+    //     return <div>Loading...</div>;
     
-    if (plantData.length === 0) {
-        return <div>Loading...</div>;
+    if (!plantData) {
+        return <div>Your garden is empty. Explore plants native to your region.</div>;
+    } else {
+        for (const plant of plantData) {
+            gardenPlants.push(
+                <GardenPlants
+                key={plant.plant_id}
+                plant_id={plant.plant_id}
+                common_name={plant.common_name} 
+                scientific_name={plant.scientific_name}
+                region={plant.region}
+                plant_type={plant.plant_type}
+                flower_color={plant.flower_color}
+                bloom_period={plant.bloom_period}
+                life_cycle={plant.life_cycle}
+                max_height={plant.max_height}
+                notes={plant.notes}
+                image_url={plant.image_url} />
+            );
+        }
     }
 
-    for (const plant of plantData) {
-        gardenPlants.push(
-            <GardenPlants
-            key={plant.plant_id}
-            plant_id={plant.plant_id}
-            common_name={plant.common_name} 
-            scientific_name={plant.scientific_name}
-            region={plant.region}
-            plant_type={plant.plant_type}
-            flower_color={plant.flower_color}
-            bloom_period={plant.bloom_period}
-            life_cycle={plant.life_cycle}
-            max_height={plant.max_height}
-            notes={plant.notes}
-            image_url={plant.image_url} />
-        );
-    }
     return (
         <React.Fragment>
             <h1>Message -- conditional ? </h1>
@@ -641,8 +623,12 @@ function GardenContainer() {
 
 
 ReactDOM.render(
-    <Register />,
+    <App />,
     document.getElementById('root'));
+
+// global variable set to true only when explore is clicked; defaults to 
+// false for every other condition
+// if explore is true, render regions div
 
 // how to access session elements passed into html as attributes:
 //    1.  username=document.getElementById('root').getAttribute('user_id')
