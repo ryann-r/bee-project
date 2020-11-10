@@ -12,13 +12,13 @@ function App() {
                     <ReactRouterDOM.Link to='/login'>Log In</ReactRouterDOM.Link>
                 </p>
                 <p>
-                    <ReactRouterDOM.Link to='/api/register'>Sign up</ReactRouterDOM.Link>
+                    <ReactRouterDOM.Link to='/register'>Sign up</ReactRouterDOM.Link>
                 </p>
                 <p>
                     <ReactRouterDOM.Link to='/explore'>Explore Pollinator Plants</ReactRouterDOM.Link>
                 </p>
                 <p>
-                    <ReactRouterDOM.Link to='/api/garden/<user_id>'>Garden</ReactRouterDOM.Link>
+                    <ReactRouterDOM.Link to='/garden'>Garden</ReactRouterDOM.Link>
                 </p>
                 <ReactRouterDOM.Switch>
                     <ReactRouterDOM.Route path='/about'>
@@ -27,13 +27,13 @@ function App() {
                     <ReactRouterDOM.Route path='/login'>
                         <Login />
                     </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/api/register'>
+                    <ReactRouterDOM.Route path='/register'>
                         <Register />
                     </ReactRouterDOM.Route>
                     <ReactRouterDOM.Route path='/explore'>
                         <MapPlantContainer />
                     </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/api/garden/<user_id>'>
+                    <ReactRouterDOM.Route path='/garden'> 
                         <GardenContainer />
                     </ReactRouterDOM.Route>
                 </ReactRouterDOM.Switch>
@@ -98,39 +98,44 @@ function Register() {
 
     // don't really need to do handleSubmit because rendering new page after login
     return (
-        <form action='/api/register' method='POST'>
+        <form action='/register' method='POST'>
+            <p>
             <label>Username:
             <input value={formData.username}
             onChange={handleChange}
             name="username"
             type="text"
-            placeholder="Username"
-            />
+            placeholder="Username" />
             </label>
+            </p>
+            <p>
             <label>First Name:
             <input value={formData.fname}
             onChange={handleChange}
             name="fname"
             type="text"
-            placeholder="First Name" 
-            />
+            placeholder="First Name" />
             </label>
+            </p>
+            <p>
             <label>Password: 
             <input value={formData.password}
             onChange={handleChange}
             type="password"
             name="password"
-            placeholder="Password"
-            />
+            placeholder="Password" />
             </label>
+            </p>
+            <p>
             <label>Confirm Password:
             <input value={formData.confirm_password}
             onChange={handleChange}
             type="password"
             name="confirm_password"
-            placeholder="Confirm Password"
-            />
+            placeholder="Confirm Password" />
             </label>
+            </p>
+            <p>
             <label>State of Residence: 
                 <select name="user_region" value={formData.user_region} onChange={handleChange}>
                     <option value="Southeast Region">Alabama</option>
@@ -185,6 +190,7 @@ function Register() {
                     <option value="Northern Plains Region">Wyoming</option>
                 </select>
             </label>
+            </p>
             {/* disabled={!formdata} should keep button disabled unless all input fields are filled out */}
             <button disabled={!formData} type="submit">Submit</button>
         </form>
@@ -204,7 +210,7 @@ function Login () {
     }
     // don't need handleSubmit because login redirects
     return (
-        <form action='/api/login' method='POST'>
+        <form action='/login' method='POST'>
         <input value={formData.username}
             onChange={handleChange}
             name='username'
@@ -231,8 +237,6 @@ function DisplayPlantCards (props) {
     
     return (
         <div className="page-container">
-            <h1>You're viewing pollinator plants native to: {region}</h1>
-            <h2>Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.</h2>
             {/* above text appears above each plant card -- move so it's at the top of the page */}
             {/* website link? */}
             <PlantCard
@@ -313,21 +317,12 @@ function Back (props) {
     flower_color, bloom_period, life_cycle, max_height, notes,
     region, user_region } = props;
     
-    const [addPlant, setAddPlant] = React.useState({ plant_id: null });
-
+    // event necessary ?
     const addToGarden = (event) => {
         event.preventDefault();
-        console.log("inside add to garden");
-        console.log({plant_id});
-
-        setAddPlant({
-            plant_id: {plant_id}
-        });
-        console.log(addPlant);
-   
         fetch('/api/add-to-garden', {
                 method: 'POST',
-                body: JSON.stringify({ addPlant }),
+                body: JSON.stringify( {plant_id} ),
                 headers: { 'Content-Type': 'application/json' },
             })
     }    
@@ -353,7 +348,7 @@ function Back (props) {
 
 
 function ImageArea (props) {
-    const { image_url, common_name} = props;
+    const { image_url, common_name } = props;
     return (
         <div className="image-container">
             <img className="card-image"
@@ -363,7 +358,7 @@ function ImageArea (props) {
 }
 
 function MainArea (props) {
-    const { common_name, scientific_name} = props;
+    const { common_name, scientific_name } = props;
     return (
         <div className="main-area">
             <div className="plant-card">
@@ -412,7 +407,7 @@ function HomePlantContainer() {
 
     return (
         <React.Fragment>
-            <h1>Pollinator plants native to SESSION USER_REGION:</h1>
+            <h1>Pollinator plants native to {user_region}:</h1>
             <h2>Hover over plants to see more information, and click "Add to Garden".</h2>
             <h2>Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.</h2>
             {homePlants}
@@ -482,7 +477,7 @@ function MapPlantContainer() {
                     if (regions[region].includes(state)) {
                         console.log(state + ' in ' + region);
                               
-                        fetch('api/plants/'  + region)
+                        fetch('api/plants/' + region)
                             .then((response) => response.json())
                             .then((data) => setPlantData(data.plants));
 
@@ -521,6 +516,8 @@ function MapPlantContainer() {
 
     return (
         <React.Fragment>
+            <h1>You're viewing pollinator plants native to: {state}</h1>
+            <h2>Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.</h2>
             {plants}
         </React.Fragment>
     );
@@ -531,29 +528,20 @@ function MapPlantContainer() {
 function GardenPlants(props) {
     const { plant_id, common_name, scientific_name, region, plant_type,
     flower_color, bloom_period, life_cycle, max_height, notes, image_url } = props;
-    const user_id = document.getElementById('root').getAttribute('user_id')
-  
-    const [removePlant, setRemovePlant] = React.useState({plant_id: ''});
+    
+    const user_id = document.getElementById('root').getAttribute('user_id');
+    const fname = document.getElementById('root').getAttribute('fname');
 
-    // use user_id and plant_id
+    // OR render same cards as explore but toggle button to remove if in garden
     const removeFromGarden = (event) => {
         event.preventDefault();
-        
-        setRemovePlant({
-            [event.target.name]: value
-        })
-        
+     
         fetch('/remove-from-garden', {
                 method: 'POST',
-                body: JSON.stringify({ removePlant }),
+                body: JSON.stringify({ plant_id }),
                 headers: { 'Content-Type': 'application/json' },
-            })
-                .then(response => response.json())
-                .then(json => setRemovePlant(json.removePlant))
-                // does this make sense? possibly remove .thens
+            });
     }
-
-    // make sure plant card is removed from db and page after button is selected
 
     return (
         <React.Fragment>
@@ -578,44 +566,47 @@ function GardenContainer() {
     console.log(user_id)
     const fname = document.getElementById('root').getAttribute('fname')
     console.log(fname)
+    const url = '/api/garden/' + user_id
+    console.log(url)
+
     const [plantData, setPlantData] = React.useState([]);
 
     React.useEffect(() => {
         fetch('/api/garden/' + user_id)
         .then((response) => response.json())
-        .then((data) => setPlantData(data.plants));
-    }, []);
+        .then((data) => setPlantData(data.plants))
+    }, [])
+    console.log(plantData)
 
     const gardenPlants = [];
 
     // if (plantData.length === 0) {
-    //     return <div>Loading...</div>;
+    //      return <div>Your garden is empty. Search for pollinator plants in your region and add them.</div>;
+    // }
+    // if (!plantData) {
+    //     return <div>Your garden is empty. Explore plants native to your region.</div>;
     
-    if (!plantData) {
-        return <div>Your garden is empty. Explore plants native to your region.</div>;
-    } else {
-        for (const plant of plantData) {
-            gardenPlants.push(
-                <GardenPlants
-                key={plant.plant_id}
-                plant_id={plant.plant_id}
-                common_name={plant.common_name} 
-                scientific_name={plant.scientific_name}
-                region={plant.region}
-                plant_type={plant.plant_type}
-                flower_color={plant.flower_color}
-                bloom_period={plant.bloom_period}
-                life_cycle={plant.life_cycle}
-                max_height={plant.max_height}
-                notes={plant.notes}
-                image_url={plant.image_url} />
-            );
-        }
+    for (const plant of plantData) {
+        gardenPlants.push(
+            <GardenPlants
+            key={plant.plant_id}
+            plant_id={plant.plant_id}
+            common_name={plant.common_name} 
+            scientific_name={plant.scientific_name}
+            region={plant.region}
+            plant_type={plant.plant_type}
+            flower_color={plant.flower_color}
+            bloom_period={plant.bloom_period}
+            life_cycle={plant.life_cycle}
+            max_height={plant.max_height}
+            notes={plant.notes}
+            image_url={plant.image_url} />
+        );
     }
 
     return (
         <React.Fragment>
-            <h1>Message -- conditional ? </h1>
+            <h1>Welcome to your garden, { fname }.</h1>
             {gardenPlants}
         </React.Fragment>
     );

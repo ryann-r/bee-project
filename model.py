@@ -45,8 +45,8 @@ class User(db.Model):
     username = db.Column(db.String, nullable=False, unique=True)
     fname = db.Column(db.String(32), nullable=False)
     user_region = db.Column(db.String, nullable=False)
-    password = db.Column(db.String, nullable=False)
-    #password_hash = db.Column(db.String(128), nullable=False)
+    # password = db.Column(db.String, nullable=False)
+    password_hash = db.Column(db.String(256), nullable=False)
     #authenticated = db.Column(db.Boolean, default=False)
 
     # did password encryption in server.py
@@ -95,7 +95,7 @@ class Garden(db.Model):
     garden = db.relationship('UserGarden', backref=db.backref('gardens'))
 
     def __repr__(self):
-        return f'<User garden_id={self.garden_id} plant_id={self.plant_id}'
+        return f'<Garden_plant_id={self.garden_plant_id} user garden_id={self.garden_id} plant_id={self.plant_id}>'
 
 
 def connect_to_db(flask_app, db_uri='postgresql:///plantsdb', echo=True):

@@ -14,5 +14,6 @@ def hash_password(password):
     return pwd_context.encrypt(password)
 
 def check_hashed_password(password, hashed):
-
+    """Returns True if password matches hashed password."""
+    
     return pwd_context.verify(password, hashed)

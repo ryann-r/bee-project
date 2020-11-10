@@ -14,6 +14,7 @@ def get_plants_by_region(region):
 
     return Plant.query.filter(Plant.region == region).all()
 
+
 def get_plant_by_id(plant_id):
     """Return plant by plant_id."""
 
@@ -25,16 +26,20 @@ def get_user_by_id(user_id):
 
     return User.query.filter(User.user_id == user_id).first()
 
+
 def get_user_by_username(username):
     """Return a user by email."""
 
     return User.query.filter(User.username == username).first()
 
 
-def create_user(username, fname, password, user_region):
+def create_user(username, fname, password_hash, user_region):
     """Create and return a new user."""
 
-    user = User(username=username, fname=fname, password=password, user_region=user_region)
+    user = User(username=username,
+                fname=fname,
+                password_hash=password_hash,
+                user_region=user_region)
     db.session.add(user)
     db.session.commit()
 
@@ -58,6 +63,7 @@ def get_usergarden_id(user_id):
     usergarden_id = usergarden.usergarden_id
 
     return usergarden_id
+
 
 def get_garden_plants_data(user_id):
     """Returns a list of garden plant ids for a given user's garden."""

@@ -239,8 +239,6 @@ Southern Plains Region; Forbs; Late; Showy goldenrod; Solidago speciosa; Perenni
 Southern Plains Region; Shrubs & Trees; Early; Chickasaw plum; Prunus angustifolia; Perennial; White; 25; Medium; Thicket-forming shrub or tree with fragrant flowers that attract bees and butterflies. Larval host for several butterfly species.
 Southern Plains Region; Shrubs & Trees; Mid; False indigo bush; Amorpha fruticosa; Perennial; Purple; 12; Medium; Prefers moist soil. Attracts a diversity of bees and beneficial insects. Larval host for numerous butterfly and moth species.
 Southern Plains Region; Shrubs & Trees; Late; Buttonbush; Cephalanthus occidentalis; Perennial; White; 8; High; Prefers wet or moist soil. Attracts many long-tongued bees and butterflies. Larval host for numerous moths and butterflies.
-Alaska; Forbs; Mid-Late; Dwarf Fireweed; Chamerion latifolium; Perennial; Purple, Pink; 3; High; Easily grown from seed. Prefers moist soil. Important food source for the yellow-head bumble bee (Bombus flavifrons).
-
 Hawaii; Forbs; Year-round; Pua kala; Argemone glauca; Perennial; White, Yellow; 6; Low; Long-lived. Produces delicate, showy flowers and spiny blue-ish green foliage. Grows best in well-drained soil and full sun. Visited by bees and wasps.
 Hawaii; Forbs; Early-Mid; Pua'akuhinia; Astelia menziesiana; Perennial; Purple, Red, White, Yellow; 6; High; Produces small, orange-yellow berries. Grows best in well-drained soil and partial sun. Separate male and female plants, so pollinators are especially important. Visited by birds, bees, and flies.
 Hawaii; Forbs; Year-round; Water hyssop; Bacopa monnieri; Perennial; Pink, Purple, White; 1; High; Hawaiian name: Ae'ae. Long-lived. Needs regular moisture and full sun. Visited by bees and flies.
@@ -262,6 +260,7 @@ Hawaii; Forbs; Year-round; Shoreline seapurslane; Sesuvium portulacastrum; Peren
 Hawaii; Forbs; Year-round; 'Uhaloa; Waltheria indica; Perennial; Yellow; 6; Low; Drought, wind, salt spray, and heat tolerant. Leaves are silvery and fuzzy. Tiny yellow flowers resemble miniature hibiscus, and attract bees and butterflies.
 Hawaii; Shrubs & Trees; Early; Hiddenpetal Indian mallow; Abultilon eremitopetalum; Perennial; Green, Red; 10; Low; Drought tolerant shrub. Lime green fower petals are completely hidden from site, but a promenent red stamen is visible. Attracts bees, birds, and butterflies.
 Hawaii; Shrubs & Trees; Early; Koa; Acacia koa; Perennial; White, Yellow; 50; Low; The largest native tree in the Hawaiian Islands. Nitrogen-fixing. Great for erosion control. Showy powder puff flowers are visited by bees and flies.
+
 Southwest Region; Shrubs & Trees; Mid-Late; Prairie acacia; Acaciella angustissima; Perennial; White; 3; Low; A thornless acacia with lacy foliage. Makes good ground cover and erosion control. Attracts butterflies, bees, and moths.
 Southwest Region; Shrubs & Trees; Early-Late; Whitebrush; Aloysia gratissima; Perennial; White; 10; Medium; Blooms best in full sun. Produces strongly vanilla-scented flowers, attracting many bee species. Used as shelter by small birds and lizards.
 Southwest Region; Forbs; Early-Late; Pine-needle milkweed; Asclepias linaria; Perennial; White; 6; Medium; Grows well in full sun and well-draining soil. Attracts bees, and is a larval host for the Queen and Monarch butterflies.
@@ -301,3 +300,5 @@ Rocky Mountain Region; Forbs; Late; Thickstem aster; Eurybia integrifolia; Peren
 Rocky Mountain Region; Forbs; Late; Missouri goldenrod; Solidago missouriensis; Perennial; Yellow; 3; Low; The earliest of the goldenrods to bloom in late summer. Attracts honey bees, other native bees, and butterflies.
 Rocky Mountain Region; Forbs; Late; Swamp milkweed; Asclepias incarnata; Perennial; Red; 5; High; Valuable to native bumble and honey bees, butterflies, and hummingbirds. Larval host to monarch and queen butterflies.
 Rocky Mountain Region; Forbs; Late; Common sneezewood; Helenium autumnale; Perennial; Yellow; 5; Medium; Requires a damp site and full sun. Poisonous to humans. Visited by native bees, wasps, syrphid flies, butterflies, and beetles.
+
+Alaska; Forbs; Mid-Late; Dwarf Fireweed; Chamerion latifolium; Perennial; Purple, Pink; 3; High; Easily grown from seed. Prefers moist soil. Important food source for the yellow-head bumble bee (Bombus flavifrons).
