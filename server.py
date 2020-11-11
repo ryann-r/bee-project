@@ -19,7 +19,7 @@ app.jinja_env.undefined = StrictUndefined   # raises error for undefined variabl
 login_manager = LoginManager()              # instance of LoginManager for flask login security
 login_manager.init_app(app)
 
-# doing app.route with all pages here will 
+
 @app.route('/')
 @app.route('/about')
 @app.route('/explore')
@@ -54,35 +54,22 @@ def load_user(user_id):
 
 @app.route('/api/login', methods=['GET', 'POST'])
 def login():
-    """Log user into app. If already logged in, redirect to user garden.
+    """Log user into app, check credentials. If username not registered, 
     
-    If email not registered, redirect to login. If incorrect password,
-    redirect to homepage. If correct, add current user to session, and
-    redirect to user dashboard."""
-
-    # 1. user logging in, submit username, pw, fname in the FORM, grab from form save to session
-        # not username: redirect to login, retry
-        # pw incorrect: error message, try again
-        # redirect to garden
-    # 2. user is logged in, manually types in /login
-        # already in the session
-        # redirect to garden
-    # 3. someone who isn't logged in manually types in /login
-        # redirect to homepage
+    redirect to login. If incorrect password, redirect to login. 
+    If correct credentials, add current user to session, and
+    redirect to garden."""
 
     username = request.form.get('username')
     password = request.form.get('password')
 
-    # check hashed pw to hashed pw
-
-    if not username and password:   # scenario 2
+    # if user is logged in already
+    if not username and password:
         user_id = session.get('user_id')
         if user_id is not None:
             current_user = crud.get_user_by_id(user_id)
             fname = current_user.fname
             flash(f'Welcome back, { fname }!')
-    
-            # return redirect('/api/garden/' + str(user_id))
             return redirect('/garden')
 
     # user entered both username and password
@@ -99,8 +86,6 @@ def login():
             session['user_region'] = current_user.user_region
             flash(f'Welcome back, { fname }!')
             return redirect('/garden')
-            # return redirect('/api/garden/' + str(user_id))
-            # displays jsonified data, not the actual garden page
         
         # if password doesn't match hashed password
         flash("Incorrect username or password, please try again.")
@@ -138,15 +123,14 @@ def register():
     if password is not None:
         hashed = hash_password(password)
 
-    # ERROR: too many redirects. lots of GET requests and repeat flash messages in browser.
-    # infinite loop.
+    # cleared form in component after fetch, should resolve infinite loop
 
     # create new user in db
         new_user = crud.create_user(username=username,
                                     fname=fname,
                                     password_hash=hashed,
                                     user_region=user_region)
-        user_id = new_user.user_id  # for garden url
+    
         # create garden in db associated with new user
         new_usergarden = crud.create_user_garden(new_user.user_id)
 
@@ -159,9 +143,7 @@ def register():
         flash(f"Welcome, { fname }!")
 
     return redirect('/garden')
-    # ('/api/garden/' + str(user_id)) shows jsonify data, not component
-    # Question: will session data be passed to main.html if I do not redirect to the homepage?
-    # homepage is where session data is passed in with render_template
+
 
 @app.route('/api/logout', methods=['POST'])
 def logout():
