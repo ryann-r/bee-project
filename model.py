@@ -45,20 +45,8 @@ class User(db.Model):
     username = db.Column(db.String, nullable=False, unique=True)
     fname = db.Column(db.String(32), nullable=False)
     user_region = db.Column(db.String, nullable=False)
-    # password = db.Column(db.String, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
-    #authenticated = db.Column(db.Boolean, default=False)
 
-    # did password encryption in server.py
-    # def encrypt_password(self, password):
-    #     """Encrypt user password, set to self.password_hash."""
-
-    #     self.password_hash = pwd_context.encrypt(password)
-
-    # def verify_password(self, password):
-    #     """Verify user password."""
-
-    #     return pwd_context.verify(password, self.password_hash)
 
     def is_authenticated(self):
         """Return True if user is authenticated."""
@@ -68,7 +56,6 @@ class User(db.Model):
     def __repr__(self):
         return f'<User user_id={self.user_id} username={self.username}>'
 
-    #### ADD HASH PW & PYTHON FLASK SECURITY ADD-ON ####
 
 
 class UserGarden(db.Model):

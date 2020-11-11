@@ -1,6 +1,6 @@
 """Server for pollinator plants app."""
 import os
-from flask import Flask, render_template, request, flash, session, redirect, jsonify
+from flask import Flask, render_template, request, flash, session, redirect, jsonify, abort
 from jinja2 import StrictUndefined
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
@@ -19,11 +19,17 @@ app.jinja_env.undefined = StrictUndefined   # raises error for undefined variabl
 login_manager = LoginManager()              # instance of LoginManager for flask login security
 login_manager.init_app(app)
 
-
+# doing app.route with all pages here will 
 @app.route('/')
+@app.route('/about')
+@app.route('/explore')
+@app.route('/login')
+@app.route('/garden')
+@app.route('/register')
+@app.route('/logout')
 def index():
     """View homepage."""
-    
+
     if 'user_id' in session.keys():
         fname=session['fname']
         user_id=session['user_id']
@@ -38,13 +44,15 @@ def index():
         user_id=user_id,
         user_region=user_region)
 
+
+
 @login_manager.user_loader
 def load_user(user_id):
     """Given user_id, return associated User object."""
 
     return crud.get_user_by_id(user_id)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/api/login', methods=['GET', 'POST'])
 def login():
     """Log user into app. If already logged in, redirect to user garden.
     
@@ -73,7 +81,9 @@ def login():
             current_user = crud.get_user_by_id(user_id)
             fname = current_user.fname
             flash(f'Welcome back, { fname }!')
-            return redirect('/api/garden/' + str(user_id))
+    
+            # return redirect('/api/garden/' + str(user_id))
+            return redirect('/garden')
 
     # user entered both username and password
     if username and password:
@@ -88,7 +98,9 @@ def login():
             session['user_id'] = current_user.user_id
             session['user_region'] = current_user.user_region
             flash(f'Welcome back, { fname }!')
-            return redirect('/api/garden/' + str(user_id))
+            return redirect('/garden')
+            # return redirect('/api/garden/' + str(user_id))
+            # displays jsonified data, not the actual garden page
         
         # if password doesn't match hashed password
         flash("Incorrect username or password, please try again.")
@@ -99,7 +111,7 @@ def login():
     # do I need to pass current session data in here to use as props in Garden component?
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/api/register', methods=['POST', 'GET'])
 def register():
     """Create user, add to the database."""
 
@@ -108,53 +120,58 @@ def register():
     user_region = request.form.get('user_region')
     password = request.form.get('password')
     confirm_password = request.form.get('confirm_password')
-    hashed = hash_password(password)
+    
+    # submit button disabled if any field is left blank
 
     # check if username exists, if so redirect to register
     user = crud.get_user_by_username(username)
     if user:
-        flash("Username is already registered, please try again.")
+        flash("Username is already registered, please try another name.")
         return redirect('/register')
-
+    
     # if passwords entered don't match
     if password != confirm_password:
         flash("Passwords do not match, please try again.")
         return redirect('/register')
-    # if a field was left blank
-    if username is None or password is None or confirm_password is None or user_region is None:
-        flash('Incomplete registration, please try again.')
-        return redirect('/register')
-    # if the username is already associated with an account
     
-    new_user = crud.create_user(username=username, fname=fname, password_hash=hashed, user_region=user_region)
-    user_id = new_user.user_id  # for garden url
-    new_usergarden = crud.create_user_garden(new_user.user_id)  # create garden associated with new user
+    # if password, encrypt
+    if password is not None:
+        hashed = hash_password(password)
 
-    # save user_id, user_region, usergarden_id and fname to session
-    session['usergarden_id'] = new_usergarden.usergarden_id
-    session['user_id'] = new_user.user_id
-    session['user_region'] = new_user.user_region
-    session['fname'] = new_user.fname
+    # ERROR: too many redirects. lots of GET requests and repeat flash messages in browser.
+    # infinite loop.
 
-    flash(f"Welcome, { fname }!")
+    # create new user in db
+        new_user = crud.create_user(username=username,
+                                    fname=fname,
+                                    password_hash=hashed,
+                                    user_region=user_region)
+        user_id = new_user.user_id  # for garden url
+        # create garden in db associated with new user
+        new_usergarden = crud.create_user_garden(new_user.user_id)
 
-    return redirect('/garden') #  + str(user_id)
+        # save user_id, user_region, usergarden_id and fname to session
+        session['usergarden_id'] = new_usergarden.usergarden_id
+        session['user_id'] = new_user.user_id
+        session['user_region'] = new_user.user_region
+        session['fname'] = new_user.fname
+
+        flash(f"Welcome, { fname }!")
+
+    return redirect('/garden')
+    # ('/api/garden/' + str(user_id)) shows jsonify data, not component
     # Question: will session data be passed to main.html if I do not redirect to the homepage?
     # homepage is where session data is passed in with render_template
 
-@app.route('/logout')
+@app.route('/api/logout', methods=['POST'])
 def logout():
     """Log user out, clear session. Redirect to homepage."""
 
+    fname=session['fname']
+    flash(f"You're logged out { fname }, see you soon!")
     session.clear()
 
     return redirect('/')
-
-# @app.route('/explore')
-# def explore():
-#     """Display clickable map to view plants by region."""
-
-# conditionally render regions_div for map for this route
 
 
 @app.route('/api/plants')
@@ -231,31 +248,29 @@ def add_to_garden():
     """Add a new plant to a user's garden."""
 
     user_id = session.get('user_id')
-    plant_id = request.json.get('plant_id') #request.form.get?
+    plant_id = request.json.get('plant_id')
     plant = crud.get_plant_by_id(plant_id)
     common_name = plant.common_name
-
-    garden_id = crud.get_usergarden_id(user_id)
-    new_garden_plant = Garden(garden_id=garden_id, plant_id=plant_id)
-    db.session.add(new_garden_plant)
-    db.session.commit()
+    
+    crud.add_garden_plant(user_id=user_id, plant_id=plant_id)
 
     flash(f"{common_name} has been added to your garden!")
 
     return jsonify({'success': True})
 
-# @app.route('/api/remove-from-garden', methods=['POST', 'DELETE'])
-# def remove_from_garden(user_id, plant_id):
-#     """Remove a plant from a user's garden."""
+@app.route('/api/remove-from-garden', methods=['POST', 'DELETE'])
+def remove_from_garden():
+    """Remove a plant from a user's garden."""
 
-#     user_id = session.get('user_id')
-#     plant_id = request.json.get('plant_id') # is request.json correct?
+    user_id = session.get('user_id')
+    plant_id = request.json.get('plant_id')
+    plant = crud.get_plant_by_id(plant_id)
+    common_name = plant.common_name
 
-#     # plant_to_delete = query for garden_plant_id in Garden table
-#     # db.session.delete(plant_to_delete)
-#     # db.session.commit()
+    crud.remove_garden_plant(user_id, plant_id)
+    flash(f"{common_name} has been removed from your garden.")
 
-#     return jsonify({'success': True})
+    return jsonify({'success': True})
 
 
 

@@ -1,34 +1,21 @@
 function App() {
     return (
         <React.Fragment>
-        <img src='/static/img/plant/homepagebee.jpg' width='900px'></img>
-
         <nav>
             <ReactRouterDOM.BrowserRouter>
-                <p>
+                    <ReactRouterDOM.Link to='/'>Homepage</ReactRouterDOM.Link>
                     <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
-                </p>
-                <p>
-                    <ReactRouterDOM.Link to='/login'>Log In</ReactRouterDOM.Link>
-                </p>
-                <p>
-                    <ReactRouterDOM.Link to='/register'>Sign up</ReactRouterDOM.Link>
-                </p>
-                <p>
                     <ReactRouterDOM.Link to='/explore'>Explore Pollinator Plants</ReactRouterDOM.Link>
-                </p>
-                <p>
                     <ReactRouterDOM.Link to='/garden'>Garden</ReactRouterDOM.Link>
-                </p>
+                    <ReactRouterDOM.Link to='/register'>Sign Up</ReactRouterDOM.Link>
+                    <ReactRouterDOM.Link to='/login'>Log In</ReactRouterDOM.Link>
+                    <ReactRouterDOM.Link to='/logout'><button>Log Out</button></ReactRouterDOM.Link>
                 <ReactRouterDOM.Switch>
+                    <ReactRouterDOM.Route path='/' exact>
+                        <Home />
+                    </ReactRouterDOM.Route>
                     <ReactRouterDOM.Route path='/about'>
                         <About />
-                    </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/login'>
-                        <Login />
-                    </ReactRouterDOM.Route>
-                    <ReactRouterDOM.Route path='/register'>
-                        <Register />
                     </ReactRouterDOM.Route>
                     <ReactRouterDOM.Route path='/explore'>
                         <MapPlantContainer />
@@ -36,7 +23,20 @@ function App() {
                     <ReactRouterDOM.Route path='/garden'> 
                         <GardenContainer />
                     </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/register'>
+                        <Register />
+                    </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/login'>
+                        <Login />
+                    </ReactRouterDOM.Route>
+                    <ReactRouterDOM.Route path='/logout'>
+                        <Logout />
+                    </ReactRouterDOM.Route>
                 </ReactRouterDOM.Switch>
+                <footer>
+                    <p>Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.</p>
+                    <p>Other pollinator conservation information is from the United States Department of Agriculture.</p>
+                </footer>
             </ReactRouterDOM.BrowserRouter>
         </nav>
         </React.Fragment>
@@ -44,10 +44,19 @@ function App() {
 };
 
 // add dynamic routes
+// exact at the end of '/' route so it doesn't go to other pages with slash
+// can do a footer at end of switch, will appear on every page
+// script tags for ReactBootstrap -- look into navbars
+// <ReactBootstrap.Button>Log Out</ReactBootstrap.Button>
 
-//ReactDOM.render(<App />, document.getElementById('root'));
+function Home () {
+    return (
+            <img src='/static/img/plant/clover-bee.jpg' width='900px'></img>
+    )
+}
 
-function About() {
+
+function About () {
     return (
         <React.Fragment>
         <h1>Buzz buzz. Did you know...</h1>
@@ -80,7 +89,7 @@ function About() {
 };
 
 
-function Register() {
+function Register () {
     const [formData, setFormData] = React.useState({
         username: '',
         fname: '',
@@ -95,10 +104,24 @@ function Register() {
             [event.target.name]: value
         });
     }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        fetch('/api/register', {
+                method: 'POST',
+                body: JSON.stringify( {formData} ),
+                headers: { 'Content-Type': 'application/json' },
+            })
+        .then(() => setFormData({
+            username: '',
+            fname: '',
+            password: '',
+            confirm_password: '',
+            user_region: ''
+        }));
+    }
 
-    // don't really need to do handleSubmit because rendering new page after login
     return (
-        <form action='/register' method='POST'>
+        <form>
             <p>
             <label>Username:
             <input value={formData.username}
@@ -138,6 +161,7 @@ function Register() {
             <p>
             <label>State of Residence: 
                 <select name="user_region" value={formData.user_region} onChange={handleChange}>
+                    <option>Select State</option>
                     <option value="Southeast Region">Alabama</option>
                     <option value="Alaska">Alaska</option>
                     <option value="Southwest Region">Arizona</option>
@@ -191,8 +215,10 @@ function Register() {
                 </select>
             </label>
             </p>
-            {/* disabled={!formdata} should keep button disabled unless all input fields are filled out */}
-            <button disabled={!formData} type="submit">Submit</button>
+            <button onClick={handleSubmit} disabled={!formData.username || !formData.fname ||
+                    !formData.password || !formData.confirm_password ||
+                    !formData.user_region} type="submit">Submit
+            </button>
         </form>
     )
 }
@@ -200,7 +226,8 @@ function Register() {
 
 function Login () {
     const [formData, setFormData] = React.useState({ username: '', password: '' });
-    
+    const history = ReactRouterDOM.useHistory();
+
     const handleChange = (event) => {
         const value = event.target.value;
         setFormData({
@@ -208,9 +235,22 @@ function Login () {
             [event.target.name]: value
         });
     }
-    // don't need handleSubmit because login redirects
+    const handleSubmit = (event) => {
+        console.log(formData)
+        event.preventDefault();
+        fetch('/api/login', {
+                method: 'POST',
+                body: JSON.stringify( {formData} ),
+                headers: { 'Content-Type': 'application/json' }
+        })
+        .then(() => setFormData({
+            username: '',
+            password: '',
+        }))
+        .then(() => history.push('/garden'));
+    }
     return (
-        <form action='/login' method='POST'>
+        <form>
         <input value={formData.username}
             onChange={handleChange}
             name='username'
@@ -223,22 +263,38 @@ function Login () {
             name="password"
             placeholder="Password"
             />
-            <button type="submit">Submit</button>
+            <button disabled={!formData.username || !formData.password}
+            onClick={handleSubmit} type="submit">Submit</button>
         </form>
     );  
 }
+
+// can style logout link into a button
+
+function Logout () {
+
+//     handleLogOut = (event) => {
+//         event.preventDefault();
+//         fetch('/api/login', {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' }
+//         })
+//     }
+
+//     return <button onClick={handleLogOut}>Logout</button>
+
+}
+
+
 
 function DisplayPlantCards (props) {
     const { plant_id, common_name, scientific_name, region, plant_type,
     flower_color, bloom_period, life_cycle, max_height, notes, image_url } = props;
     const user_region = document.getElementById('root').getAttribute('user_region');
     const user_id = document.getElementById('root').getAttribute('user_id');
-    // do I have to explicitly call these props?
     
     return (
         <div className="page-container">
-            {/* above text appears above each plant card -- move so it's at the top of the page */}
-            {/* website link? */}
             <PlantCard
             plant_id={plant_id}
             common_name={common_name}
@@ -256,7 +312,7 @@ function DisplayPlantCards (props) {
             <footer>
             </footer>
         </div>
-    )
+    );
 }
 
 // add user_id to props
@@ -317,7 +373,7 @@ function Back (props) {
     flower_color, bloom_period, life_cycle, max_height, notes,
     region, user_region } = props;
     
-    // event necessary ?
+    // post request to add plant to user garden
     const addToGarden = (event) => {
         event.preventDefault();
         fetch('/api/add-to-garden', {
@@ -325,9 +381,19 @@ function Back (props) {
                 body: JSON.stringify( {plant_id} ),
                 headers: { 'Content-Type': 'application/json' },
             })
-    }    
-    // conditional button: if plant region != user_region disable button and print message
-    // disable button after click // change text "in garden"
+    }
+    // post request to remove plant from user garden
+    // current issue with CRUD function to fix (SQL error)
+    const removeFromGarden = (event) => {
+        event.preventDefault();
+        fetch('/api/remove-from-garden', {
+                method: 'POST',
+                body: JSON.stringify({ plant_id }),
+                headers: { 'Content-Type': 'application/json' },
+            });
+    }
+    // conditional button: if plant region != user_region hide button
+    // toggle between addToGarden and removeFromGarden buttons
 
     return (
         <div className="back">
@@ -341,6 +407,7 @@ function Back (props) {
             <p>Notes: {notes}</p>
             <p>plant_id: {plant_id}</p>
             <button onClick={addToGarden}>Add to garden</button>
+            <button onClick={removeFromGarden}>Remove from garden</button>
             {/* disabled={addPlant} --> will this disable after added to state? */}
         </div>
     )
@@ -370,55 +437,29 @@ function MainArea (props) {
     )
 }
 
+// MapPlantContainer:
+    // add useEffect, if user_id in session is not none, load user_region plants on first render
+    // otherwise, load nothing (maybe a message saying 'click map to see regional plants')
 
-function HomePlantContainer() {
-    
-    const [plantData, setPlantData] = React.useState([]);
-    const user_region = document.getElementById('root').getAttribute('user_region');
-
-    React.useEffect(() => {
-        fetch('api/plants/' + user_region)
-        .then((response) => response.json())
-        .then((data) => setPlantData(data.plants));
-    }, []);
-    
-
-    if (plantData.length === 0) {
-        return <div>Loading...</div>;
-    }
-    const homePlants = [];
-    for (const plant of plantData) {
-        homePlants.push(
-            <DisplayPlantCards
-            key={plant.plant_id}
-            plant_id={plant.plant_id}
-            common_name={plant.common_name} 
-            scientific_name={plant.scientific_name}
-            region={plant.region}
-            plant_type={plant.plant_type}
-            flower_color={plant.flower_color}
-            bloom_period={plant.bloom_period}
-            life_cycle={plant.life_cycle}
-            max_height={plant.max_height}
-            notes={plant.notes}
-            image_url={plant.image_url} />       
-        )
-    };
-
-    return (
-        <React.Fragment>
-            <h1>Pollinator plants native to {user_region}:</h1>
-            <h2>Hover over plants to see more information, and click "Add to Garden".</h2>
-            <h2>Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.</h2>
-            {homePlants}
-        </React.Fragment>
-    );
-};
-
-
+    // div: createElementById in component, or jinja conditional div in main.html
 function MapPlantContainer() {
 
     const [plantData, setPlantData] = React.useState([]);
+
+    const user_region = document.getElementById('root').getAttribute('user_region');
+
+    React.useEffect(() => {
+        if (user_region !== null) {
+            fetch('api/plants/' + user_region)
+            .then((response) => response.json())
+            .then((data) => setPlantData(data.plants));
+        }
+        }, []);
+
+    // above useEffect is rendering corrent user regional data on first loading /explore when logged in
+    // however Error: invalid hook call: 1. mismatching versions of React & ReactDOM
+    // 2. breaking the rules of hooks == not inside loops, conditionals, or nested functions
+    // 3. more than one copy of React in the same app
 
     google.charts.load('visualization', 'current', {
     'packages':['geochart'],
@@ -516,46 +557,9 @@ function MapPlantContainer() {
 
     return (
         <React.Fragment>
-            <h1>You're viewing pollinator plants native to: {state}</h1>
-            <h2>Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.</h2>
+            <h2>Click the map to view regional native plants!</h2>
+            <h2>You're viewing pollinator plants native to: {plants.region}</h2>
             {plants}
-        </React.Fragment>
-    );
-};
-
-// input: user garden plants (from back end), user name for greeting
-// possibly refactor with PlantCard to make less repetitive -- conditional rendering 
-function GardenPlants(props) {
-    const { plant_id, common_name, scientific_name, region, plant_type,
-    flower_color, bloom_period, life_cycle, max_height, notes, image_url } = props;
-    
-    const user_id = document.getElementById('root').getAttribute('user_id');
-    const fname = document.getElementById('root').getAttribute('fname');
-
-    // OR render same cards as explore but toggle button to remove if in garden
-    const removeFromGarden = (event) => {
-        event.preventDefault();
-     
-        fetch('/remove-from-garden', {
-                method: 'POST',
-                body: JSON.stringify({ plant_id }),
-                headers: { 'Content-Type': 'application/json' },
-            });
-    }
-
-    return (
-        <React.Fragment>
-            <h1>{common_name}</h1>
-            <img src={image_url} width='400px' />
-            <p>{region}</p>
-            <p>{scientific_name}</p>
-            <p>Plant type: {plant_type}</p>
-            <p>Flower color: {flower_color}</p>
-            <p>Bloom period: {bloom_period}</p>
-            <p>Life cycle: {life_cycle}</p>
-            <p>Maximum height: {max_height}</p>
-            <p>Notes: {notes}</p>
-            <button value={plant_id} onClick={removeFromGarden}>Remove from garden</button>
         </React.Fragment>
     );
 };
@@ -571,6 +575,7 @@ function GardenContainer() {
 
     const [plantData, setPlantData] = React.useState([]);
 
+    // if user_id is none, don't fetch data but give message, possibly reroute
     React.useEffect(() => {
         fetch('/api/garden/' + user_id)
         .then((response) => response.json())
@@ -580,15 +585,16 @@ function GardenContainer() {
 
     const gardenPlants = [];
 
-    // if (plantData.length === 0) {
-    //      return <div>Your garden is empty. Search for pollinator plants in your region and add them.</div>;
-    // }
+    if (plantData.length === 0) {
+         return <div>Your garden is empty. Search for pollinator plants in your region and add them.</div>;
+    }
     // if (!plantData) {
     //     return <div>Your garden is empty. Explore plants native to your region.</div>;
     
-    for (const plant of plantData) {
+
+        for (const plant of plantData) {
         gardenPlants.push(
-            <GardenPlants
+            <DisplayPlantCards
             key={plant.plant_id}
             plant_id={plant.plant_id}
             common_name={plant.common_name} 
@@ -603,7 +609,9 @@ function GardenContainer() {
             image_url={plant.image_url} />
         );
     }
-
+    
+    // conditional message: if session user is None, give message to sign up
+    // if session user, Welcome message
     return (
         <React.Fragment>
             <h1>Welcome to your garden, { fname }.</h1>
@@ -624,3 +632,9 @@ ReactDOM.render(
 // how to access session elements passed into html as attributes:
 //    1.  username=document.getElementById('root').getAttribute('user_id')
 //    2.  $('#root').attr('user_id')
+
+
+
+const [plantData, setPlantData] = React.useState([]);
+const user_region = document.getElementById('root').getAttribute('user_region');
+

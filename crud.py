@@ -87,14 +87,28 @@ def get_garden_plants_data(user_id):
 def add_garden_plant(user_id, plant_id):
     """Add a plant to a user's garden."""
 
-    # query UserGarden table with user_id for garden_id
-    garden_id = UserGarden.query.filter(UserGarden.user_id == user_id).first()
-    garden_plant = Garden(garden_id, plant_id)
-
-    db.session.add(garden_plant)
+    garden_id = get_usergarden_id(user_id)
+    new_garden_plant = Garden(garden_id=garden_id, plant_id=plant_id)
+    db.session.add(new_garden_plant)
     db.session.commit()
 
-    return garden_plant
+    return new_garden_plant
+
+
+def remove_garden_plant(user_id, plant_id):
+    """Delete a plant from a user's garden."""
+
+    garden_id = UserGarden.query.filter(UserGarden.user_id == user_id).first()
+    plant_to_remove = Garden.query.filter(Garden.garden_id == garden_id, Garden.plant_id == plant_id).first()
+    delete_gardenplant_id = plant_to_remove.garden_plant_id
+    
+    db.session.delete(delete_gardenplant_id)
+    db.session.commit()
+
+    return delete_gardenplant_id
+
+    # error: object <Usergarden_id=1 user_id=1> is not legal as a sql literal value
+    # fix query
 
 
 if __name__ == '__main__':
