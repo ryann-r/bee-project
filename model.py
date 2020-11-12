@@ -1,7 +1,6 @@
 """Models for pollinator plants app."""
 
 from flask_sqlalchemy import SQLAlchemy
-from security import pwd_context, hash_password, check_hashed_password
 
 db = SQLAlchemy()
 

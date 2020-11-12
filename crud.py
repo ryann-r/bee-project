@@ -66,7 +66,7 @@ def get_usergarden_id(user_id):
 
 
 def get_garden_plants_data(user_id):
-    """Returns a list of garden plant ids for a given user's garden."""
+    """Returns json data for all plants in a given user's garden."""
 
     usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()
     if usergarden is None:
@@ -83,6 +83,20 @@ def get_garden_plants_data(user_id):
 
     return garden_plant_data
 
+def get_garden_plants(user_id):
+    """Returns a list of plant_id's in a user's garden."""
+
+    usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()
+    usergardenid = usergarden.usergarden_id
+    garden_plants = Garden.query.filter(Garden.garden_id == usergardenid).all()
+
+    garden_plant_ids = []
+    for garden_plant in garden_plants:
+        plant_id = garden_plant.plant_id
+        garden_plant_ids.append(plant_id)
+
+    return garden_plant_ids
+    
 
 def add_garden_plant(user_id, plant_id):
     """Add a plant to a user's garden."""
@@ -98,17 +112,16 @@ def add_garden_plant(user_id, plant_id):
 def remove_garden_plant(user_id, plant_id):
     """Delete a plant from a user's garden."""
 
-    garden_id = UserGarden.query.filter(UserGarden.user_id == user_id).first()
-    plant_to_remove = Garden.query.filter(Garden.garden_id == garden_id, Garden.plant_id == plant_id).first()
-    delete_gardenplant_id = plant_to_remove.garden_plant_id
-    
-    db.session.delete(delete_gardenplant_id)
+    usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()
+    usergarden_id = usergarden.usergarden_id
+    plant_object = Garden.query.filter(Garden.garden_id == usergarden_id, Garden.plant_id == plant_id).first()
+    gardenplant_id = plant_object.garden_plant_id
+    plant_to_delete = Garden.query.filter(Garden.garden_plant_id == gardenplant_id).first()
+
+    db.session.delete(plant_to_delete)
     db.session.commit()
 
-    return delete_gardenplant_id
-
-    # error: object <Usergarden_id=1 user_id=1> is not legal as a sql literal value
-    # fix query
+    return plant_to_delete
 
 
 if __name__ == '__main__':
