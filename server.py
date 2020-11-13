@@ -245,10 +245,6 @@ def add_to_garden():
     plant = crud.get_plant_by_id(plant_id)
     common_name = plant.common_name
 
-    # garden_id = crud.get_usergarden_id(user_id)
-    # new_garden_plant = Garden(garden_id=garden_id, plant_id=plant_id)
-    # db.session.add(new_garden_plant)
-    # db.session.commit()
     crud.add_garden_plant(user_id=user_id, plant_id=plant_id)
 
     flash(f"{common_name} has been added to your garden!")
@@ -270,6 +266,16 @@ def remove_from_garden():
     return redirect('/garden')
     # return jsonify({'success': True})
 
+@app.route('/api/garden-plant-ids')
+def get_garden_plant_ids():
+    """Returns a list of plant_ids of plants in a user's garden."""
+
+    user_id = session.get('user_id')
+    garden_plant_ids = []
+    for plant_id in crud.get_garden_plant_ids(user_id):
+        garden_plant_ids.append(plant_id)
+    
+    return jsonify({'garden_plant_ids': garden_plant_ids})
 
 
 if __name__ == '__main__':

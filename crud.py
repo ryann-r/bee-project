@@ -83,7 +83,7 @@ def get_garden_plants_data(user_id):
 
     return garden_plant_data
 
-def get_garden_plants(user_id):
+def get_garden_plant_ids(user_id):
     """Returns a list of plant_id's in a user's garden."""
 
     usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()

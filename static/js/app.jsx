@@ -1,3 +1,5 @@
+// const { useEffect } = require("react");
+
 const UserContext = React.createContext();
 function App() {
     const userRegion = document.getElementById('root').getAttribute('user_region');
@@ -14,7 +16,8 @@ function App() {
     // UserContext gives back object userId, userRegion, and fname.
     // syntax is destructured. shorthand for writing out UserContext has a key called userId.
 
-    const history = ReactRouterDOM.useHistory();
+    // const history = ReactRouterDOM.useHistory();
+    // this didn't work
 
     const handleLogout = (event) => {
         event.preventDefault();
@@ -132,6 +135,7 @@ function Register () {
             [event.target.name]: value
         });
     }
+    // on click of submit button, send formData to register route, reset formData to empty strings
     const handleSubmit = (event) => {
         event.preventDefault();
         fetch('/api/register', {
@@ -264,6 +268,7 @@ function Login () {
             [event.target.name]: value
         });
     }
+    // on submit button click, send formData to login route, reset form to empty strings
     const handleSubmit = (event) => {
         console.log(formData)
         event.preventDefault();
@@ -302,39 +307,57 @@ function Login () {
 function DisplayPlantCards (props) {
     const { plant_id, common_name, scientific_name, region, plant_type,
     flower_color, bloom_period, life_cycle, max_height, notes, image_url, isGarden } = props;
+    // get session user region
     const {userRegion} = React.useContext(UserContext);
+    // isAdded initial state is true if from garden component, false if from map component
+    // updated based on add / remove activity, used to show add / remove buttons conditionally
     const [isAdded, setIsAdded] = React.useState(isGarden);
+    // isAddClicked is true if add button is clicked; used to deactivate add button after click
     const [isAddClicked, setIsAddClicked] = React.useState(false);
+    // isRemoveClicked is true if remove button is clicked; used to deactivate remove button after click
     const [isRemoveClicked, setIsRemoveClicked] = React.useState(false);
-    // const [inGarden, setInGarden] = React.useState(false);
+    // inGardenPlants is an array of plant_ids of plants in a users garden
+    const [inGardenPlants, setInGardenPlants] = React.useState([]);
+
     const history = ReactRouterDOM.useHistory();
 
-    // below: to not allow user to add the same plant twice (either an alert if they click it, or no button but a message instead)
-    // React.useEffect (() => {
-    //     // create server route that gets plant ids of plants in usergarden
-    //     // if plant_id in the list, set inGarden to true
-    //     // otherwise set it to false
-    //     // use to set message and prevent adding the same plant twice
-    // }), []);
+    // check if plant is in user's garden on first render
+    // if so, set isInGarden to true to prevent adding the same plant repeatedly
+    // need useEffect -- without it infinite loop checking
+    React.useEffect(() => {
+        fetch('/api/garden-plant-ids')
+            .then((response) => response.json())
+            .then((data) => setInGardenPlants(data.garden_plant_ids))
+    }, []);
 
+    console.log({inGardenPlants});
+    console.log({plant_id});
+    console.log("IN GARDEN PLANTS INCLUDES", inGardenPlants.includes(plant_id));
 
     // post request to add plant to user garden
+    // set IsAdded to true to record that plant is now in user garden, to show remove button
+    // set IsAddClicked to true to disable add button after added
     const addToGarden = (event) => {
         event.preventDefault();
         // assuming request is successful and show remove button
-        setIsAdded(true);
-        setIsAddClicked(true);
-        fetch('/api/add-to-garden', {
-                method: 'POST',
-                body: JSON.stringify( { plant_id } ),
-                headers: { 'Content-Type': 'application/json' },
-            })
-            // .then(() => setIsAdded(true));
-            // if you want to do error handling, do setIsAdded here
-            // alert message saying sucess or not
-        
-    }
+        // check if plant is in user garden, if so alert that plant is already in garden
+        if (inGardenPlants.includes(plant_id)) {
+            alert("This plant is already in your garden.")
+        } else {
+            setIsAdded(true);
+            setIsAddClicked(true);
+            fetch('/api/add-to-garden', {
+                    method: 'POST',
+                    body: JSON.stringify( { plant_id } ),
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                // .then(() => setIsAdded(true));
+                // if you want to do error handling, do setIsAdded here
+                // alert message saying sucess or not 
+        }}
     // post request to remove plant from user garden
+    // set isRemoveClicked to true to disable remove button after removed from garden
+    // set isAdded to false to record that the plant is no longer in the garden, to show add to garden button again
     const removeFromGarden = (event) => {
         event.preventDefault();
         // assuming request is successful and show add button
@@ -347,22 +370,17 @@ function DisplayPlantCards (props) {
             })
             .then(() => {
                 if (isGarden) {
-                    history.push('/garden');
-                }})
-            }
-            // above: did not force the page to reload to show plant removed...maybe that's okay because button changes
+                window.location.reload();
+            }});
             // .then(() => setIsAdded(false));
             // if you want to do error handling, do setIsAdded here
-
+    }
     let message;
-    if (isGarden) {
-        message = <p>This plant is already in your garden.</p>
-        // this message is displaying IN garden; not what you want.
-        // use inGarden for this
-    };
     if (region !== userRegion) {
         message = <p>This plant is not native to your region.</p>
+        // message to display when exploring plants not in a users region
     };
+
 
 
     // add alert messages 
@@ -370,7 +388,6 @@ function DisplayPlantCards (props) {
     // REMOVE: query the db to see if plant is there.
         // allow to click, and handle it correctly on the backend
         // alert // message on front end
-        // have parent component pass prop, use it to decide what to do
         // inGarden: True and False
     
     return (        
@@ -393,8 +410,8 @@ function DisplayPlantCards (props) {
         </ReactBootstrap.ListGroup>
         <ReactBootstrap.Card.Body>
             {/* if plant is in user region and has not been added to garden, show button, otherwise show message */}
-            {/* disable if it has been clicked with isAddClicked */}
-            {region === userRegion && !isAdded ? <button disabled={isAddClicked} variant="outline-dark" onClick={addToGarden}>Add to garden</button> : <p>{message}</p> }
+            {/* disable if it has been clicked with isAddClicked removed */}
+            {region === userRegion && !isAdded ? <button disabled={isAddClicked} variant="outline-dark" onClick={addToGarden}>Add to garden</button> : <div>{message}</div> }
             {/* if in the /garden page, show the remove from garden button, otherwise no button */}
             {/* disable if it has been clicked with isRemoveClicked */}
             {isAdded && <button disabled={isRemoveClicked} variant="outline-danger" onClick={removeFromGarden}>Remove from garden</button>}
@@ -419,20 +436,22 @@ function DisplayPlantCards (props) {
 function MapPlantContainer() {
     const isGarden = false;
     const [plantData, setPlantData] = React.useState([]);
-    const [printRegion, setPrintRegion] = React.useState('');
-    console.log({printRegion})
+    // printRegion is set to userRegion on first render if logged in or clicked region upon subsequent renders
+    const [isRegion, setIsRegion] = React.useState('');
     const { userRegion: user_region, userId: user_id } = React.useContext(UserContext);
     // change to snake_case if sending to backend
 
+    // if user is logged in, render plants from userRegion and set printRegion to userRegion
     React.useEffect(() => {
         if (user_id !== null) {
             fetch('api/plants/' + user_region)
             .then((response) => response.json())
             .then((data) => setPlantData(data.plants))
-            .then(setPrintRegion(user_region));
+            .then(setIsRegion(user_region));
         }
         }, []);
 
+    // below: geocharts clickable map
     google.charts.load('visualization', 'current', {
     'packages':['geochart'],
     'callback': drawRegionsMap,
@@ -488,7 +507,7 @@ function MapPlantContainer() {
                 for (let region in regions) {
                     if (regions[region].includes(state)) {
                         console.log(state + ' in ' + region);
-                        setPrintRegion(region);
+                        setIsRegion(region);
                         
                               
                         fetch('api/plants/' + region)
@@ -507,6 +526,7 @@ function MapPlantContainer() {
     google.visualization.events.addListener(chart, 'select', selectHandler);   
     };
 
+    // push plant data to plants array, return plants
     const plants = [];
     
     for (const plant of plantData) {
@@ -528,12 +548,18 @@ function MapPlantContainer() {
         )
     };
 
+    // let message;
+    // if (isRegion) {
+    //     message = <div>You're viewing pollinator plants native to: {isRegion}</div>
+    // } else {
+        
+    // }
+
     return (
         <React.Fragment>
-            <h2>Click the map to view regional native plants from anywhere</h2>
-            {printRegion === false && <h2>You're viewing pollinator plants native to: {printRegion}</h2>}
+            {isRegion && <h1>You're viewing pollinator plants native to: {isRegion}</h1>}
+            <h2>Click the map to view regional native plants</h2>
             {plants}
-            {/* maybe include second statement for first render actually */}
         </React.Fragment>
     );
 };
@@ -558,10 +584,8 @@ function GardenContainer() {
 
     const gardenPlants = [];
 
-    // if (plantData.length === 0) {
-    //      return <div>Your garden is empty. Explore pollinator plants in your region and add them.</div>;
-    // }
-    // the above prints even if user is NOT logged in. test.
+
+
 
     for (const plant of plantData) {
         gardenPlants.push(
@@ -581,10 +605,17 @@ function GardenContainer() {
             isGarden={isGarden} />
             );
     }
+    let message;
+    if (user_id && plantData.length === 0) {
+        message = <div>Your garden is empty. Explore pollinator plants native to your region and add them.</div>;
+    } if (!user_id) {
+        message = <div>Please log in or sign up to continue.</div>
+    }
     
     return (
         <React.Fragment>
-            {user_id ? <h1>{ fname }'s Garden</h1> : <h1>Please log in or sign up to continue</h1> }
+            <h1>{ fname }'s Garden</h1>
+            <h2>{message}</h2>
             {gardenPlants}
         </React.Fragment>
     );
