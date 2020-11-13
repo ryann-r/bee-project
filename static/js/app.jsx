@@ -66,8 +66,7 @@ function App() {
     );
 }
 
-// add dynamic routes
-// exact at the end of '/' route so it doesn't go to other pages with slash
+// exact at the end of '/' route so it doesn't go to other pages that start with slash
 // can do a footer at end of switch, will appear on every page
 // script tags for ReactBootstrap -- look into navbars
 
@@ -76,7 +75,7 @@ function Home () {
 
     return (
         <React.Fragment>
-            {userId === true ? <div>Welcome, {fname}</div> : <div>Welcome, visitor</div>}
+            {userId ? <div>Welcome, {fname}</div> : <div>Welcome, visitor</div>}
             <img src='/static/img/plant/clover-bee.jpg' width='900px'></img>
         </React.Fragment> 
     );
@@ -302,27 +301,71 @@ function Login () {
 
 function DisplayPlantCards (props) {
     const { plant_id, common_name, scientific_name, region, plant_type,
-    flower_color, bloom_period, life_cycle, max_height, notes, image_url, inGarden } = props;
+    flower_color, bloom_period, life_cycle, max_height, notes, image_url, isGarden } = props;
     const {userRegion} = React.useContext(UserContext);
+    const [isAdded, setIsAdded] = React.useState(isGarden);
+    const [isAddClicked, setIsAddClicked] = React.useState(false);
+    const [isRemoveClicked, setIsRemoveClicked] = React.useState(false);
+    // const [inGarden, setInGarden] = React.useState(false);
+    const history = ReactRouterDOM.useHistory();
+
+    // below: to not allow user to add the same plant twice (either an alert if they click it, or no button but a message instead)
+    // React.useEffect (() => {
+    //     // create server route that gets plant ids of plants in usergarden
+    //     // if plant_id in the list, set inGarden to true
+    //     // otherwise set it to false
+    //     // use to set message and prevent adding the same plant twice
+    // }), []);
+
 
     // post request to add plant to user garden
     const addToGarden = (event) => {
         event.preventDefault();
+        // assuming request is successful and show remove button
+        setIsAdded(true);
+        setIsAddClicked(true);
         fetch('/api/add-to-garden', {
                 method: 'POST',
                 body: JSON.stringify( { plant_id } ),
                 headers: { 'Content-Type': 'application/json' },
-            });
+            })
+            // .then(() => setIsAdded(true));
+            // if you want to do error handling, do setIsAdded here
+            // alert message saying sucess or not
+        
     }
     // post request to remove plant from user garden
     const removeFromGarden = (event) => {
         event.preventDefault();
+        // assuming request is successful and show add button
+        setIsAdded(false);
+        setIsRemoveClicked(true);
         fetch('/api/remove-from-garden', {
                 method: 'POST',
                 body: JSON.stringify({ plant_id }),
                 headers: { 'Content-Type': 'application/json' },
-            });
-    }
+            })
+            .then(() => {
+                if (isGarden) {
+                    history.push('/garden');
+                }})
+            }
+            // above: did not force the page to reload to show plant removed...maybe that's okay because button changes
+            // .then(() => setIsAdded(false));
+            // if you want to do error handling, do setIsAdded here
+
+    let message;
+    if (isGarden) {
+        message = <p>This plant is already in your garden.</p>
+        // this message is displaying IN garden; not what you want.
+        // use inGarden for this
+    };
+    if (region !== userRegion) {
+        message = <p>This plant is not native to your region.</p>
+    };
+
+
+    // add alert messages 
 
     // REMOVE: query the db to see if plant is there.
         // allow to click, and handle it correctly on the backend
@@ -332,7 +375,7 @@ function DisplayPlantCards (props) {
     
     return (        
         <ReactBootstrap.CardDeck>
-        <ReactBootstrap.Card border="dark" style={{ width: '18rem' }}>
+        <ReactBootstrap.Card border="dark" style={{ width: '10rem' }}>
         <ReactBootstrap.Card.Img variant="top" src={image_url} />
         <ReactBootstrap.Card.Body>
             <ReactBootstrap.Card.Title><p>{common_name}</p> <p>{scientific_name}</p></ReactBootstrap.Card.Title>
@@ -349,8 +392,12 @@ function DisplayPlantCards (props) {
             <ReactBootstrap.ListGroupItem>Maximum height (ft): {max_height}</ReactBootstrap.ListGroupItem>
         </ReactBootstrap.ListGroup>
         <ReactBootstrap.Card.Body>
-            {region === userRegion ? <button variant="outline-dark" onClick={addToGarden}>Add to garden</button> : <p>Plant is not native to your region</p> }
-            {inGarden === true && <button variant="outline-danger" onClick={removeFromGarden}>Remove from garden</button>}
+            {/* if plant is in user region and has not been added to garden, show button, otherwise show message */}
+            {/* disable if it has been clicked with isAddClicked */}
+            {region === userRegion && !isAdded ? <button disabled={isAddClicked} variant="outline-dark" onClick={addToGarden}>Add to garden</button> : <p>{message}</p> }
+            {/* if in the /garden page, show the remove from garden button, otherwise no button */}
+            {/* disable if it has been clicked with isRemoveClicked */}
+            {isAdded && <button disabled={isRemoveClicked} variant="outline-danger" onClick={removeFromGarden}>Remove from garden</button>}
         </ReactBootstrap.Card.Body>
         </ReactBootstrap.Card>
         </ReactBootstrap.CardDeck>
@@ -369,9 +416,8 @@ function DisplayPlantCards (props) {
     // add useEffect, if user_id in session is not none, load user_region plants on first render
     // otherwise, load nothing (maybe a message saying 'click map to see regional plants')
 
-    // div: createElementById in component, or jinja conditional div in main.html
 function MapPlantContainer() {
-    const inGarden = false;
+    const isGarden = false;
     const [plantData, setPlantData] = React.useState([]);
     const [printRegion, setPrintRegion] = React.useState('');
     console.log({printRegion})
@@ -478,23 +524,23 @@ function MapPlantContainer() {
             max_height={plant.max_height}
             notes={plant.notes}
             image_url={plant.image_url}
-            inGarden={inGarden} />
+            isGarden={isGarden} />
         )
     };
 
     return (
         <React.Fragment>
-            <h2>Click the map to view regional native plants!</h2>
+            <h2>Click the map to view regional native plants from anywhere</h2>
             {printRegion === false && <h2>You're viewing pollinator plants native to: {printRegion}</h2>}
             {plants}
-            {/* not printing second h2 with this statement, but printRegion is defined after click */}
+            {/* maybe include second statement for first render actually */}
         </React.Fragment>
     );
 };
 
 
 function GardenContainer() {
-    const inGarden = true;
+    const isGarden = true;
     const {userId: user_id, fname} = React.useContext(UserContext);
 
     const [plantData, setPlantData] = React.useState([]);
@@ -515,7 +561,7 @@ function GardenContainer() {
     // if (plantData.length === 0) {
     //      return <div>Your garden is empty. Explore pollinator plants in your region and add them.</div>;
     // }
-    // make sure the above is rendering only if a user is logged in. if not logged in, not.
+    // the above prints even if user is NOT logged in. test.
 
     for (const plant of plantData) {
         gardenPlants.push(
@@ -532,13 +578,13 @@ function GardenContainer() {
             max_height={plant.max_height}
             notes={plant.notes}
             image_url={plant.image_url}
-            inGarden={inGarden} />
+            isGarden={isGarden} />
             );
     }
     
     return (
         <React.Fragment>
-            {user_id === false ? <h1>Welcome to your garden, { fname }.</h1> : <h1>Please log in or sign up to continue</h1> }
+            {user_id ? <h1>{ fname }'s Garden</h1> : <h1>Please log in or sign up to continue</h1> }
             {gardenPlants}
         </React.Fragment>
     );
