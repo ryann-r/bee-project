@@ -42,8 +42,7 @@
     {% endwith %}
     <!-- jinja to only have regions_div for map pages -->
     <div id='regions_div' style='width: 900px; height: 500px'></div>
-    <div id='root' fname='{{fname}}' user_id='{{user_id}}' user_region='{{user_region}}'></div>
-
+    <div id='root'></div>
 
     <!-- loads script tags in order, so make sure they're in order -->
     <script type='text/jsx' src='static/js/about.jsx'></script>
@@ -51,6 +50,3 @@
     
 </body>
 </html>
-
-<!-- use css or javascript to hide regions_div
-    check with daphne -->

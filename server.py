@@ -7,6 +7,9 @@ from flask_login import LoginManager
 from model import db, connect_to_db, User, Plant, Garden, UserGarden
 import crud
 from security import pwd_context, hash_password, check_hashed_password
+from random import choice
+from pollinatorfacts import POLLINATOR_FACTS
+from gardentips import GARDEN_TIPS
 
 
 app = Flask(__name__)                       # instance of the flask app
@@ -29,7 +32,7 @@ login_manager.init_app(app)
 def index():
     """View homepage."""
 
-    if 'user_id' in session.keys():
+    if session.get('user_id'):
         fname=session['fname']
         user_id=session['user_id']
         user_region=session['user_region']
@@ -44,36 +47,49 @@ def index():
         user_region=user_region)
 
 
+@app.route('/api/user-info')
+def send_session_data():
+    if 'user_id' in session.keys():
+        fname=session['fname']
+        user_id=session['user_id']
+        user_region=session['user_region']
+    else:
+        fname=None
+        user_id=None
+        user_region=None
+
+    return jsonify({'fname': fname, 'userId': user_id, 'userRegion': user_region})
+
+
 @login_manager.user_loader
 def load_user(user_id):
     """Given user_id, return associated User object."""
 
     return crud.get_user_by_id(user_id)
 
+
 @app.route('/api/login', methods=['GET', 'POST'])
 def login():
-    """Log user into app, check credentials. If username not registered, 
+    """Log user into app, check credentials. If username not registered
     
-    redirect to login. If incorrect password, redirect to login. 
-    If correct credentials, add current user to session, and
-    redirect to garden."""
+    or incorrect password, redirect to login. If correct credentials,
+    add current user to session, and redirect to garden."""
 
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
-    # if user is logged in already
-    if not username and password:
-        user_id = session.get('user_id')
-        if user_id is not None:
-            current_user = crud.get_user_by_id(user_id)
-            fname = current_user.fname
-            flash(f'Welcome back, { fname }!')
-            return redirect('/garden')
+    # if user is already logged in
+    if session.get('user_id'):
+        flash("You're already logged in!")
+        return jsonify({'response': 'success'})
 
     # user entered both username and password
     if username and password:
         current_user = User.query.filter(User.username == username, password == password).first()
+        if not current_user:
+            flash("Incorrect username or password, please try again.")
+            return jsonify({'response': 'failed'})
         saved_hash = current_user.password_hash
 
         # if correct password associated with username was entered
@@ -84,17 +100,13 @@ def login():
             session['user_id'] = current_user.user_id
             session['user_region'] = current_user.user_region
             flash(f'Welcome back, { fname }!')
-            return redirect('/garden')
+            return jsonify({'response': 'success'})
+
         
-        # if password doesn't match hashed password
-        flash("Incorrect username or password, please try again.")
-        return redirect('/login')
-
-
-    return redirect('/')
+    # if password doesn't match hashed password
+    flash("Incorrect username or password, please try again.")
+    return jsonify({'response': 'failed'})
      
-    # do I need to pass current session data in here to use as props in Garden component?
-
 
 @app.route('/api/register', methods=['POST', 'GET'])
 def register():
@@ -106,6 +118,8 @@ def register():
     user_region = data.get('user_region')
     password = data.get('password')
     confirm_password = data.get('confirm_password')
+
+    # CHANGE SERVER & FRONT END similar to login route & component
     
     # submit button disabled if any field is left blank
     # just check if they're logged in; if not they can register
@@ -156,15 +170,16 @@ def register():
 # CONTEXT in React, makes it available to all components to store user stuff
 
 
-@app.route('/api/logout', methods=['POST'])
+@app.route('/api/logout', methods=['POST', 'GET'])
 def logout():
     """Log user out, clear session. Redirect to homepage."""
 
-    flash(f"You're logged out, see you soon!")
-    session.clear()
-    # test and make sure react clears user_id and user_region from the context
+    flash("You're logged out, see you soon!")
+    session['fname'] = None
+    session['user_region'] = None
+    session['user_id'] = None
 
-    return redirect('/')
+    # redirect to '/' in logout component app.jsx
 
 
 @app.route('/api/plants')
@@ -218,10 +233,10 @@ def get_garden_plants(user_id):
         flash("Please sign up or log in to continue.")
         return redirect('/')
 
-    garden_plants = []
+    plants = []
 
     for plant in crud.get_garden_plants_data(user_id):
-        garden_plants.append({'plant_id': plant.plant_id,
+        plants.append({'plant_id': plant.plant_id,
         'region': plant.region,
         'common_name': plant.common_name,
         'scientific_name': plant.scientific_name,
@@ -233,7 +248,7 @@ def get_garden_plants(user_id):
         'notes': plant.notes,
         'image_url': plant.image_url})
 
-    return jsonify({'plants': garden_plants})
+    return jsonify({'plants': plants})
 
 
 @app.route('/api/add-to-garden', methods=['POST'])
@@ -265,17 +280,37 @@ def remove_from_garden():
 
     return redirect('/garden')
     # return jsonify({'success': True})
+    # reloaded page on react side, so try switching this back to success: True
 
 @app.route('/api/garden-plant-ids')
 def get_garden_plant_ids():
     """Returns a list of plant_ids of plants in a user's garden."""
 
     user_id = session.get('user_id')
+
     garden_plant_ids = []
+    
     for plant_id in crud.get_garden_plant_ids(user_id):
         garden_plant_ids.append(plant_id)
     
     return jsonify({'garden_plant_ids': garden_plant_ids})
+
+@app.route('/api/pollinator-facts')
+def generate_bee_fact():
+    """Returns a random bee fact as a jsonified string."""
+
+    pollinator_fact = choice(POLLINATOR_FACTS)
+
+    return jsonify({'pollinator_fact': pollinator_fact})
+
+@app.route('/api/garden-tips')
+def generate_garden_tip():
+    """Returns a random garden tip as a jsonified string."""
+
+    garden_tip = choice(GARDEN_TIPS)
+
+    return jsonify({'garden_tip': garden_tip})
+
 
 
 if __name__ == '__main__':

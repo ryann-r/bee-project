@@ -1,34 +1,44 @@
-// const { useEffect } = require("react");
-
 const UserContext = React.createContext();
 function App() {
-    const userRegion = document.getElementById('root').getAttribute('user_region');
-    const userId = document.getElementById('root').getAttribute('user_id');
-    const fname = document.getElementById('root').getAttribute('fname');
-    console.log(userRegion);
-    console.log(userId);
-    console.log(fname);
-
+    // useEffect fetches session data, set it to userData
+    // passed setUserDatainto userContext so you can update userData from any child component of app
+    const [userData, setUserData] = React.useState({});
+    const [loading, setLoading] = React.useState(false);
+    React.useEffect (() => {
+        setLoading(true);
+        fetch('/api/user-info')
+        .then(result => result.json())
+        .then(data => {
+            setUserData(data)
+            setLoading(false);
+        })
+    }, []);
     
-    // const {userId, userRegion, fname} = React.useContext(UserContext);
-    // gives everything in app access to userRegion, userId, and fname instead of passing props to every component.
-    // use commented line at the top of each component you need this data in.
-    // UserContext gives back object userId, userRegion, and fname.
-    // syntax is destructured. shorthand for writing out UserContext has a key called userId.
+    let {userRegion, userId, fname} = userData
+    // converting 'None' to null, if user is not logged in
+    userRegion = userRegion === 'None' ? null : userRegion;
+    userId = userId === 'None' ? null : userId;
+    fname = fname === 'None' ? null : fname;
 
-    // const history = ReactRouterDOM.useHistory();
-    // this didn't work
-
-    const handleLogout = (event) => {
-        event.preventDefault();
-        fetch('/api/logout', {
+    // await -- waits until fetch is done before window.location
+    async function handleLogout() {
+        await fetch('/api/logout', {
             method: 'POST',
         });
-        // .then(() => history.push('/'));
+        window.location = '/';
     }
+
+    if (loading) {
+        return <div>Loading...</div>
+    }
+
+    // UserContext.Provider passes useContext data (session data and function to update them) 
+        // to all child components == everything in the fragment
+        // instead of passing props to every component
+
     return (
         <React.Fragment>
-            <UserContext.Provider value={{userRegion, userId, fname}}>
+            <UserContext.Provider value={{setUserData, userRegion, userId, fname}}>
                 <nav>
                     <ReactRouterDOM.BrowserRouter>
                             <ReactRouterDOM.Link to='/'>Home</ReactRouterDOM.Link>
@@ -37,7 +47,7 @@ function App() {
                             <ReactRouterDOM.Link to='/garden'>Garden</ReactRouterDOM.Link>
                             <ReactRouterDOM.Link to='/register'>Sign Up</ReactRouterDOM.Link>
                             <ReactRouterDOM.Link to='/login'>Log In</ReactRouterDOM.Link>
-                            <ReactBootstrap.Button onClick={handleLogout}> Log Out</ReactBootstrap.Button>
+                            <ReactBootstrap.Button onClick={handleLogout}>Log Out</ReactBootstrap.Button>
                         <ReactRouterDOM.Switch>
                             <ReactRouterDOM.Route path='/' exact>
                                 <Home />
@@ -70,22 +80,41 @@ function App() {
 }
 
 // exact at the end of '/' route so it doesn't go to other pages that start with slash
-// can do a footer at end of switch, will appear on every page
-// script tags for ReactBootstrap -- look into navbars
+// footer will appear on every page
 
-function Home () {
+function Home() {
+    $('#regions_div')[0].style.display='none';
     const {userId, fname} = React.useContext(UserContext);
+    console.log(fname)
+    const [pollinatorFact, setPollinatorFact] = React.useState('');
 
+    // fetch initial pollinator fact on first render
+    React.useEffect(() => {
+        event.preventDefault();
+        fetch('/api/pollinator-facts')
+            .then((response) => response.json())
+            .then((data) => setPollinatorFact(data.pollinator_fact))
+    }, []);
+    // fetch pollinator fact with button click
+    const handleClick = (event) => {
+        event.preventDefault();
+        fetch('/api/pollinator-facts')
+            .then((response) => response.json())
+            .then((data) => setPollinatorFact(data.pollinator_fact));
+    }
     return (
         <React.Fragment>
             {userId ? <div>Welcome, {fname}</div> : <div>Welcome, visitor</div>}
             <img src='/static/img/plant/clover-bee.jpg' width='900px'></img>
+            <div>{pollinatorFact}</div>
+            <button onClick={handleClick}>Click to see more pollinator facts.</button>
         </React.Fragment> 
     );
 }
 
 
-function About () {
+function About() {
+    $('#regions_div')[0].style.display='none';
     return (
         <React.Fragment>
         <h1>Buzz buzz. Did you know...</h1>
@@ -118,7 +147,9 @@ function About () {
 };
 
 
-function Register () {
+function Register() {
+    // hides the regions_div
+    $('#regions_div')[0].style.display='none';
     const [formData, setFormData] = React.useState({
         username: '',
         fname: '',
@@ -151,6 +182,8 @@ function Register () {
             user_region: '',
         }))
         .then(() => history.push('/explore'));
+        // pushes reroute
+        // possibly change to window.location and server changes like login -- test errors
     }
 
     return (
@@ -257,9 +290,9 @@ function Register () {
 }
 
 
-function Login () {
+function Login() {
+    $('#regions_div')[0].style.display='none';
     const [formData, setFormData] = React.useState({ username: '', password: '' });
-    const history = ReactRouterDOM.useHistory();
 
     const handleChange = (event) => {
         const value = event.target.value;
@@ -269,6 +302,8 @@ function Login () {
         });
     }
     // on submit button click, send formData to login route, reset form to empty strings
+    // window.location reroutes based on server response: successful login reroutes to garden page,
+    // unsuccessful login reroutes to login page
     const handleSubmit = (event) => {
         console.log(formData)
         event.preventDefault();
@@ -277,11 +312,14 @@ function Login () {
                 body: JSON.stringify( formData ),
                 headers: { 'Content-Type': 'application/json' }
         })
-        .then(() => setFormData({
-            username: '',
-            password: '',
-        }))
-        .then(() => history.push('/garden'));
+        .then(response => response.json())
+        .then(data => {
+            if (data.response == 'success') {
+                window.location = '/garden';
+            } else {
+                window.location = '/login';
+            }
+        });
     }
     return (
         <form>
@@ -319,30 +357,24 @@ function DisplayPlantCards (props) {
     // inGardenPlants is an array of plant_ids of plants in a users garden
     const [inGardenPlants, setInGardenPlants] = React.useState([]);
 
-    const history = ReactRouterDOM.useHistory();
-
     // check if plant is in user's garden on first render
     // if so, set isInGarden to true to prevent adding the same plant repeatedly
-    // need useEffect -- without it infinite loop checking
     React.useEffect(() => {
         fetch('/api/garden-plant-ids')
             .then((response) => response.json())
             .then((data) => setInGardenPlants(data.garden_plant_ids))
     }, []);
 
-    console.log({inGardenPlants});
-    console.log({plant_id});
-    console.log("IN GARDEN PLANTS INCLUDES", inGardenPlants.includes(plant_id));
-
     // post request to add plant to user garden
-    // set IsAdded to true to record that plant is now in user garden, to show remove button
-    // set IsAddClicked to true to disable add button after added
+    // set IsAdded to true to record that plant is now in user garden, used to show remove button
+    // set IsAddClicked to true to disable add button
     const addToGarden = (event) => {
         event.preventDefault();
         // assuming request is successful and show remove button
         // check if plant is in user garden, if so alert that plant is already in garden
+        // and don't add. otherwise POST to add plant to users garden in db.
         if (inGardenPlants.includes(plant_id)) {
-            alert("This plant is already in your garden.")
+            alert("This plant is already in your garden!");
         } else {
             setIsAdded(true);
             setIsAddClicked(true);
@@ -354,10 +386,13 @@ function DisplayPlantCards (props) {
                 // .then(() => setIsAdded(true));
                 // if you want to do error handling, do setIsAdded here
                 // alert message saying sucess or not 
+            alert(common_name + " was added to your garden.");
         }}
+
     // post request to remove plant from user garden
     // set isRemoveClicked to true to disable remove button after removed from garden
     // set isAdded to false to record that the plant is no longer in the garden, to show add to garden button again
+    // CHANGE: confirm remove popupbefore actually removing
     const removeFromGarden = (event) => {
         event.preventDefault();
         // assuming request is successful and show add button
@@ -374,21 +409,30 @@ function DisplayPlantCards (props) {
             }});
             // .then(() => setIsAdded(false));
             // if you want to do error handling, do setIsAdded here
-    }
+            alert(common_name + " removed from your garden.");
+        }
     let message;
     if (region !== userRegion) {
         message = <p>This plant is not native to your region.</p>
         // message to display when exploring plants not in a users region
+        // add 'click to learn more' --> raises a bootstrap alert with explanation
     };
-
-
+    // STYLE ALERT USING BOOTSTRAP
+    // const InGardenAlert () {
+    //     const [show, setShow] = useState(true);
+    
+    //     if (show) {
+    //         return (
+    //             <ReactBootstrap.Alert variant="warning" onClose={() => setShow(false)} dismissible>
+    //                 <ReactBootstrap.Alert.Heading>This plant is already in your garden!</ReactBootstrap.Alert.Heading>
+    //                 <p>Add other plants to keep a diverse array pollinators happy.</p>
+    //             </ReactBootstrap.Alert>
+    //         );
+    //     }
+    //     return <ReactBootstrap.Button onClick={() => setShow(true)}></ReactBootstrap.Button>
+    // }
 
     // add alert messages 
-
-    // REMOVE: query the db to see if plant is there.
-        // allow to click, and handle it correctly on the backend
-        // alert // message on front end
-        // inGarden: True and False
     
     return (        
         <ReactBootstrap.CardDeck>
@@ -396,6 +440,7 @@ function DisplayPlantCards (props) {
         <ReactBootstrap.Card.Img variant="top" src={image_url} />
         <ReactBootstrap.Card.Body>
             <ReactBootstrap.Card.Title><p>{common_name}</p> <p>{scientific_name}</p></ReactBootstrap.Card.Title>
+            {/* italicize scientific name */}
             <ReactBootstrap.Card.Text>
                 {notes}
             </ReactBootstrap.Card.Text>
@@ -429,17 +474,23 @@ function DisplayPlantCards (props) {
 // react won't render what's false
 // OR put null in p tag
 
-// MapPlantContainer:
-    // add useEffect, if user_id in session is not none, load user_region plants on first render
-    // otherwise, load nothing (maybe a message saying 'click map to see regional plants')
-
 function MapPlantContainer() {
+    $('#regions_div')[0].style.display='block';
     const isGarden = false;
     const [plantData, setPlantData] = React.useState([]);
     // printRegion is set to userRegion on first render if logged in or clicked region upon subsequent renders
     const [isRegion, setIsRegion] = React.useState('');
-    const { userRegion: user_region, userId: user_id } = React.useContext(UserContext);
+    const { setUserData, userRegion: user_region, userId: user_id } = React.useContext(UserContext);
     // change to snake_case if sending to backend
+
+    // get user session data from server, set state and user context
+    React.useEffect (() => {
+        fetch('/api/user-info')
+        .then(result => result.json())
+        .then(data => {
+            setUserData(data)
+        })
+    }, []);
 
     // if user is logged in, render plants from userRegion and set printRegion to userRegion
     React.useEffect(() => {
@@ -526,7 +577,7 @@ function MapPlantContainer() {
     google.visualization.events.addListener(chart, 'select', selectHandler);   
     };
 
-    // push plant data to plants array, return plants
+    // push plant data as DisplayPlantCards to plants array, return plants and text
     const plants = [];
     
     for (const plant of plantData) {
@@ -548,13 +599,6 @@ function MapPlantContainer() {
         )
     };
 
-    // let message;
-    // if (isRegion) {
-    //     message = <div>You're viewing pollinator plants native to: {isRegion}</div>
-    // } else {
-        
-    // }
-
     return (
         <React.Fragment>
             {isRegion && <h1>You're viewing pollinator plants native to: {isRegion}</h1>}
@@ -566,26 +610,49 @@ function MapPlantContainer() {
 
 
 function GardenContainer() {
+    // hides regions_div from page
+    $('#regions_div')[0].style.display='none';
     const isGarden = true;
-    const {userId: user_id, fname} = React.useContext(UserContext);
-
+    const {setUserData, userId: user_id, fname} = React.useContext(UserContext);
     const [plantData, setPlantData] = React.useState([]);
+    const [gardenTip, setGardenTip] = React.useState([]);
 
-    // if user_id is none, don't fetch data but give message, possibly reroute
+    // get user session data from server, set state and user context
+    React.useEffect (() => {
+        fetch('/api/user-info')
+        .then(result => result.json())
+        .then(data => {
+            setUserData(data)
+        })
+    }, []);
+
+    // if user_id is none, don't fetch data but display message
+    // if user_id, fetch garden plants, set to plantData
     React.useEffect(() => {
         if (user_id) {
             fetch('/api/garden/' + user_id)
                 .then((response) => response.json())
                 .then((data) => setPlantData(data.plants))
         }}, [])
-            // if (plantData.length === 0) --> move here?
+    
+    // fetch random garden tip on first render
+    React.useEffect(() => {
+        event.preventDefault();
+        fetch('/api/garden-tips')
+            .then((response) => response.json())
+            .then((data) => setGardenTip(data.garden_tip))
+    }, []);
 
-    console.log(plantData)
+    //fetch random garden tip on button click
+    const handleClick = (event) => {
+        event.preventDefault();
+        fetch('/api/garden-tips')
+            .then((response) => response.json())
+            .then((data) => setGardenTip(data.garden_tip))
+    };
 
+    // push plant data as DisplayPlantCards to gardenPlants array, return gardenPlants
     const gardenPlants = [];
-
-
-
 
     for (const plant of plantData) {
         gardenPlants.push(
@@ -603,19 +670,23 @@ function GardenContainer() {
             notes={plant.notes}
             image_url={plant.image_url}
             isGarden={isGarden} />
-            );
+        );
     }
     let message;
+    // if a user is signed in and has 0 plants in their garden
     if (user_id && plantData.length === 0) {
         message = <div>Your garden is empty. Explore pollinator plants native to your region and add them.</div>;
-    } if (!user_id) {
+    } // if a user is not logged in
+    if (!user_id) {
         message = <div>Please log in or sign up to continue.</div>
     }
     
     return (
         <React.Fragment>
-            <h1>{ fname }'s Garden</h1>
+            {user_id && <h1>{ fname }'s Garden</h1>}
             <h2>{message}</h2>
+            <p>{gardenTip}</p>
+            <button disabled={!user_id} onClick={handleClick}>Click to see more tips</button>
             {gardenPlants}
         </React.Fragment>
     );
@@ -624,7 +695,3 @@ function GardenContainer() {
 ReactDOM.render(
     <App />,
     document.getElementById('root'));
-
-// global variable set to true only when explore is clicked; defaults to 
-// false for every other condition
-// if explore is true, render regions div

@@ -19,8 +19,6 @@ class Plant(db.Model):
     life_cycle = db.Column(db.String, nullable=False)
     flower_color = db.Column(db.String, nullable=False)
     max_height = db.Column(db.String, nullable=False)
-    # made this a string because issue with ints and floats due to ranges
-    # check if issue for searching later
     water_needs = db.Column(db.String, nullable=False)
     notes = db.Column(db.String, nullable=False)
     image_url = db.Column(db.String(250), nullable=True)
@@ -30,10 +28,6 @@ class Plant(db.Model):
     def __repr__(self):
         return f'<plant_id={self.plant_id} common_name={self.common_name}>'
 
-    # foreign key: location
-
-# native bee table -- implement later (location)
-# randomizing data is an option
 
 class User(db.Model):
     """A user."""
@@ -60,28 +54,29 @@ class User(db.Model):
 class UserGarden(db.Model):
     """Associates a user and a garden."""
 
-    __tablename__ = 'usergarden'
+    __tablename__ = 'usergardens'
 
-    usergarden_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    usergarden_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
 
     def __repr__(self):
         return f'<Usergarden_id={self.usergarden_id} user_id={self.user_id}>'
+
 
 class Garden(db.Model):
     """Plants in a user's garden."""
 
     __tablename__ = 'gardens'
 
-    garden_plant_id = db.Column(db.Integer, primary_key=True)
-    garden_id = db.Column(db.Integer, db.ForeignKey('usergarden.usergarden_id'))
-    plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'))
+    garden_plant_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    garden_id = db.Column(db.Integer, db.ForeignKey('usergardens.usergarden_id'), nullable=False)
+    plant_id = db.Column(db.Integer, db.ForeignKey('plants.plant_id'), nullable=False)
 
     plant = db.relationship('Plant', backref=db.backref('gardens'))
     garden = db.relationship('UserGarden', backref=db.backref('gardens'))
 
     def __repr__(self):
-        return f'<Garden_plant_id={self.garden_plant_id} user garden_id={self.garden_id} plant_id={self.plant_id}>'
+        return f'<Garden_id={self.garden_id} Garden_plant_id={self.garden_plant_id}>'
 
 
 def connect_to_db(flask_app, db_uri='postgresql:///plantsdb', echo=True):
