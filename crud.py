@@ -64,16 +64,19 @@ def get_usergarden_id(user_id):
 
     return usergarden_id
 
+def get_garden_plants(user_id):
+    """Return garden plants for a user."""
+
+    usergardenid = get_usergarden_id(user_id)
+    garden_plants = Garden.query.filter(Garden.garden_id == usergardenid).all()
+
+    return garden_plants
+
 
 def get_garden_plants_data(user_id):
     """Returns json data for all plants in a given user's garden."""
 
-    usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()
-    if usergarden is None:
-        return {}
-
-    usergardenid = usergarden.usergarden_id
-    garden_plants = Garden.query.filter(Garden.garden_id == usergardenid).all()
+    garden_plants = get_garden_plants(user_id)
 
     garden_plant_data = []
     for garden_plant in garden_plants:
@@ -86,9 +89,7 @@ def get_garden_plants_data(user_id):
 def get_garden_plant_ids(user_id):
     """Returns a list of plant_id's in a user's garden."""
 
-    usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()
-    usergardenid = usergarden.usergarden_id
-    garden_plants = Garden.query.filter(Garden.garden_id == usergardenid).all()
+    garden_plants = get_garden_plants(user_id)
 
     garden_plant_ids = []
     for garden_plant in garden_plants:
@@ -96,7 +97,7 @@ def get_garden_plant_ids(user_id):
         garden_plant_ids.append(plant_id)
 
     return garden_plant_ids
-    
+
 
 def add_garden_plant(user_id, plant_id):
     """Add a plant to a user's garden."""
@@ -114,7 +115,8 @@ def remove_garden_plant(user_id, plant_id):
 
     usergarden = UserGarden.query.filter(UserGarden.user_id == user_id).first()
     usergarden_id = usergarden.usergarden_id
-    plant_object = Garden.query.filter(Garden.garden_id == usergarden_id, Garden.plant_id == plant_id).first()
+    plant_object = Garden.query.filter(Garden.garden_id == usergarden_id,
+                                    Garden.plant_id == plant_id).first()
     gardenplant_id = plant_object.garden_plant_id
     plant_to_delete = Garden.query.filter(Garden.garden_plant_id == gardenplant_id).first()
 
@@ -122,6 +124,39 @@ def remove_garden_plant(user_id, plant_id):
     db.session.commit()
 
     return plant_to_delete
+
+def get_garden_bloom_periods(user_id):
+    """Returns a dictionary of bloom periods (early, mid, late, year-round),
+
+    and plant common name values for plants in a user's garden."""
+
+    bloom_periods = { 'Early': [], 'Mid': [], 'Late': [], 'Year-round': [] }
+    for plant in get_garden_plants_data(user_id):
+        common_name = plant.common_name
+        bloom_periods_string = plant.bloom_period
+        plant_bloom_periods_list = [item.strip() for item in bloom_periods_string.split(',')]
+        for period in plant_bloom_periods_list:
+            bloom_periods[period].append(common_name)
+
+    return bloom_periods
+
+def get_garden_flower_colors(user_id):
+    """Returns a dictionary of flower colors (early, mid, late, year-round),
+
+    and plant common name values for plants in a user's garden."""
+
+    flower_colors = { 'Blue': [], 'Purple': [], 'Yellow': [],
+                    'Green': [], 'Orange': [], 'Red': [],
+                    'Pink': [], 'White': [], 'Brown': []}
+
+    for plant in get_garden_plants_data(user_id):
+        common_name = plant.common_name
+        flower_colors_string = plant.flower_color
+        plant_flower_colors_list = [item.strip() for item in flower_colors_string.split(',')]
+        for color in plant_flower_colors_list:
+            flower_colors[color].append(common_name)
+
+    return flower_colors
 
 
 if __name__ == '__main__':

@@ -1,5 +1,6 @@
 """Server for pollinator plants app."""
 import os
+from random import choice
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from jinja2 import StrictUndefined
 from flask_debugtoolbar import DebugToolbarExtension
@@ -7,7 +8,6 @@ from flask_login import LoginManager
 from model import db, connect_to_db, User, Plant, Garden, UserGarden
 import crud
 from security import pwd_context, hash_password, check_hashed_password
-from random import choice
 from pollinatorfacts import POLLINATOR_FACTS
 from gardentips import GARDEN_TIPS
 
@@ -49,6 +49,8 @@ def index():
 
 @app.route('/api/user-info')
 def send_session_data():
+    """Session data to send to app.jsx for useContext."""
+
     if 'user_id' in session.keys():
         fname=session['fname']
         user_id=session['user_id']
@@ -71,9 +73,10 @@ def load_user(user_id):
 @app.route('/api/login', methods=['GET', 'POST'])
 def login():
     """Log user into app, check credentials. If username not registered
-    
-    or incorrect password, redirect to login. If correct credentials,
-    add current user to session, and redirect to garden."""
+
+    or incorrect password, redirect to login ('response': 'failed').
+    If correct credentials, add current user to session, and
+    redirect to garden ('response': 'success')."""
 
     data = request.get_json()
     username = data.get('username')
@@ -94,14 +97,12 @@ def login():
 
         # if correct password associated with username was entered
         if check_hashed_password(password, saved_hash):
-            fname = current_user.fname
-            user_id = current_user.user_id
+            # fname = current_user.fname
             session['fname'] = current_user.fname
             session['user_id'] = current_user.user_id
             session['user_region'] = current_user.user_region
-            flash(f'Welcome back, { fname }!')
+            flash(f'Welcome back, { current_user.fname }!')
             return jsonify({'response': 'success'})
-
         
     # if password doesn't match hashed password
     flash("Incorrect username or password, please try again.")
@@ -112,41 +113,36 @@ def login():
 def register():
     """Create user, add to the database."""
     
+    # submit button disabled if any field is left blank
+    # cleared form in component after fetch to resolve infinite loop
+
     data = request.get_json()
     username = data.get('username')
     fname = data.get('fname')
     user_region = data.get('user_region')
     password = data.get('password')
     confirm_password = data.get('confirm_password')
-
-    # CHANGE SERVER & FRONT END similar to login route & component
     
-    # submit button disabled if any field is left blank
-    # just check if they're logged in; if not they can register
+    # check if a user is logged in, if so redirect to /garden
+    current_user = session.get('user_id')
+    if current_user is not None:
+        flash("You're already logged in.")
+        return jsonify({'response': 'success'})
 
-    # current_user = session.get('user_id')
-    # if current_user is not None:
-    #     flash("You're already logged in.")
-    #     redirect('/')
-
-    # check if username exists, if so redirect to register
+    # check if username exists in db, if so redirect to /register
     user = crud.get_user_by_username(username)
-    
     if user:
         flash("Username is already registered, please try another name.")
-        return redirect('/register')
-        # redirected to register but flash message didn't appear
+        return jsonify({'response': 'failed'})
     
-    # if passwords entered don't match
+    # if passwords entered don't match, redirect to /register
     if password != confirm_password:
         flash("Passwords do not match, please try again.")
-        return redirect('/register')
+        return jsonify({'response': 'failed'})
     
     # if password, encrypt
     if password is not None:
         hashed = hash_password(password)
-
-    # cleared form in component after fetch, should resolve infinite loop
 
         # create new user in db
         new_user = crud.create_user(username=username,
@@ -165,21 +161,22 @@ def register():
 
         flash(f"Welcome, { fname }!")
 
-    return redirect('/explore')
-
-# CONTEXT in React, makes it available to all components to store user stuff
+        # redirect to /garden
+        return jsonify({'response': 'success'})
 
 
 @app.route('/api/logout', methods=['POST', 'GET'])
 def logout():
-    """Log user out, clear session. Redirect to homepage."""
+    """Log user out, set session data to None. Redirect to homepage."""
 
     flash("You're logged out, see you soon!")
+    # reset session data to None
     session['fname'] = None
     session['user_region'] = None
     session['user_id'] = None
 
-    # redirect to '/' in logout component app.jsx
+    return jsonify({'success': True})
+    # redirected to '/' in logout component app.jsx
 
 
 @app.route('/api/plants')
@@ -187,6 +184,7 @@ def get_plants_json():
     """Return all plants."""
 
     plants_list = []
+
     for plant in crud.get_all_plants():
         plants_list.append({'plant_id': plant.plant_id,
         'region': plant.region,
@@ -208,6 +206,7 @@ def get_regional_plants_json(region):
     """Return plants of a given region."""
 
     regional_plants_list = []
+
     for plant in crud.get_plants_by_region(region):
         regional_plants_list.append({'plant_id': plant.plant_id,
         'region': plant.region,
@@ -266,6 +265,7 @@ def add_to_garden():
 
     return jsonify({'success': True})
 
+
 @app.route('/api/remove-from-garden', methods=['POST', 'DELETE'])
 def remove_from_garden():
     """Remove a plant from a user's garden."""
@@ -295,13 +295,15 @@ def get_garden_plant_ids():
     
     return jsonify({'garden_plant_ids': garden_plant_ids})
 
+
 @app.route('/api/pollinator-facts')
 def generate_bee_fact():
-    """Returns a random bee fact as a jsonified string."""
+    """Returns a random pollinator fact as a jsonified string."""
 
     pollinator_fact = choice(POLLINATOR_FACTS)
 
     return jsonify({'pollinator_fact': pollinator_fact})
+
 
 @app.route('/api/garden-tips')
 def generate_garden_tip():
@@ -311,6 +313,29 @@ def generate_garden_tip():
 
     return jsonify({'garden_tip': garden_tip})
 
+
+@app.route('/api/garden-plant-bloom-periods')
+def get_garden_plant_bloom_periods():
+    """Returns a dictionary of key bloom times (early, mid, late, year-round),
+
+    and plant common_name values."""
+
+    user_id = session.get('user_id')
+    garden_bloom_periods = crud.get_garden_bloom_periods(user_id)
+
+    return jsonify({'garden_bloom_periods': garden_bloom_periods})
+    # note: bloom_times is a dictionary of periods and lists of common_names
+
+
+@app.route('/api/garden-plant-flower-colors')
+def get_garden_plant_flower_colors():
+    """Returns a dictionary of key flower colors and common_name values."""
+
+    user_id = session.get('user_id')
+    garden_flower_colors = crud.get_garden_flower_colors(user_id)
+
+    return jsonify({'garden_flower_colors': garden_flower_colors})
+    # note: flower_colors is a dictionary
 
 
 if __name__ == '__main__':

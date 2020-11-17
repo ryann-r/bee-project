@@ -22,7 +22,6 @@ class Plant(db.Model):
     water_needs = db.Column(db.String, nullable=False)
     notes = db.Column(db.String, nullable=False)
     image_url = db.Column(db.String(250), nullable=True)
-    # pollinators = db.Column(db.String)
 
 
     def __repr__(self):

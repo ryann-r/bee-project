@@ -27,6 +27,13 @@
 
     <!-- custom css below bootstrap: -->
 
+    <!-- chartjs script tags -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <!-- <script src="script.js"></script> -->
+
+    <!-- canvasjs below -->
+    <!-- <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> -->
+
     <!-- below: for flavicon error -->
     <link rel="icon" href="data:,">
 
@@ -40,13 +47,25 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
-    <!-- jinja to only have regions_div for map pages -->
+    <!-- regions_div for geochart map -->
     <div id='regions_div' style='width: 900px; height: 500px'></div>
     <div id='root'></div>
+    <!-- pie_chart for chartjs -->
+    <div id='bloom_pie_chart' style='width: 400px; height: 200px'></div>
 
     <!-- loads script tags in order, so make sure they're in order -->
+    <script type='text/jsx' src='static/js/plantcards.jsx'></script>
+    <script type='text/jsx' src='static/js/garden.jsx'></script>
+    <script type='text/jsx' src='static/js/map.jsx'></script>
+    <script type='text/jsx' src='static/js/garden.jsx'></script>
+    <script type='text/jsx' src='static/js/register.jsx'></script>
+    <script type='text/jsx' src='static/js/login.jsx'></script>
+    <script type='text/jsx' src='static/js/home.jsx'></script>
     <script type='text/jsx' src='static/js/about.jsx'></script>
     <script type='text/jsx' src='static/js/app.jsx'></script>
+
+    <!-- chartjs script tags -->
+    
     
 </body>
 </html>

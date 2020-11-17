@@ -4,10 +4,16 @@ POLLINATOR_FACTS = [
     """There are approximately 20,000 species of bees worldwide, and
     3,600 in the United States.""",
 
-    """More than 90 percent of bee species live solitary lives, in which each
-    female builds her own nest alone.""",
+    """Bees can be organized into two groups based on their nesting lifestyle:
+    solitary or social. About three-quarters of native bees in North America
+    are solitary nest builders.""",
 
     """Most solitary bee species are non-aggressive and many are stingless.""",
+
+    """Tomatoes, peppers, and cranberries require a special bee behavior
+    called 'buzz pollination', in which the bumble bee grabs the flower in
+    her jaws and vibrates her wings to dislodge pollen trapped in the
+    flower's anthers.""",
 
     """Bees possess hairs that collect and transfer pollen grains from flower
     to flower.""",
@@ -75,4 +81,48 @@ POLLINATOR_FACTS = [
     only a fraction of the population remains -- a decline of 99 percent has been
     observed in coastal California since.""",
 
+    """Pollination is when a pollen grain moves from the anther (male part) of
+    a flower to the stigma (female part) of flowers of the same species.""",
+
+    """Modes of pollination include self-pollination, wind and water
+    pollination, or by vectors that move pollen within a single flower
+    and from bloom to bloom.""",
+
+    """Between 75 and 95 percent of all flowering plants on the planet
+    require pollinators to reproduce.""",
+
+    """Pollinators serve over 180,000 different plant species and more
+    than 1200 crops.""",
+
+    """Pollinators add 217 billion dollars to the global economy.""",
+
+    """Honeybees alone are responsible for between 1.2 and 5.4 billion
+    dollars in agricultural productivity in the US.""",
+
+    """In addition to food, pollinators support healthy ecosystems that
+    clean the air, stabilize soils, protect from severe weather, and
+    support other wildlife.""",
+
+    """Support local bees and beekeepers by buying locally produced
+    honey.""",
+
+    """Conserve all resources, use less, and reduce your environmental
+    impact. Pollinators are dramatically affected by extremes of weather,
+    and climate change puts pressure on native ranges.""",
+
+    """Bees are attracted to sweet, flowery scents. This includes perfumes, shampoos,
+    soap, lipstick, and other cosmetic products used by humans.""",
+
+    """Moths and bats only come out at night, and are attracted to fragrant
+    flowers.""",
+
+    """Different bee species have varying tongue lengths. Long tongues fit long,
+    tubular flowers like penstemons, and short tongues fit short-tubed flowers
+    like sunflowers.""",
+
+    """Bumble bees groom pollen from their body hairs into 'pollen baskets' on
+    their legs for transport to the nest.""",
+
+    """Just 250 mason bees can pollinate an acre of apple trees. It would take
+    10,000-250,000 honey bees to do the same work."""
 ]
