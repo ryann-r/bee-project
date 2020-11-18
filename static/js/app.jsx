@@ -4,6 +4,7 @@ function App() {
     // passed setUserDatainto userContext so you can update userData from any child component of app
     const [userData, setUserData] = React.useState({});
     const [loading, setLoading] = React.useState(false);
+    
     React.useEffect (() => {
         setLoading(true);
         fetch('/api/user-info')

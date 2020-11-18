@@ -30,7 +30,7 @@ function DisplayPlantCards (props) {
         // check if plant is in user garden, if so alert that plant is already in garden
         // and don't add. otherwise POST to add plant to users garden in db.
         if (inGardenPlants.includes(plant_id)) {
-            alert("This plant is already in your garden!");
+            alert("This plant is already in your garden.");
         } else {
             setIsAdded(true);
             setIsAddClicked(true);
@@ -48,7 +48,6 @@ function DisplayPlantCards (props) {
     // post request to remove plant from user garden
     // set isRemoveClicked to true to disable remove button after removed from garden
     // set isAdded to false to record that the plant is no longer in the garden, to show add to garden button again
-    // CHANGE: confirm remove popupbefore actually removing
     const removeFromGarden = (event) => {
         event.preventDefault();
         // assuming request is successful and show add button
@@ -65,7 +64,7 @@ function DisplayPlantCards (props) {
             }});
             // .then(() => setIsAdded(false));
             // if you want to do error handling, do setIsAdded here
-            alert(common_name + " removed from your garden.");
+            // flash message says "{common_name} was removed from your garden"
         }
     let message;
     if (region !== userRegion) {
@@ -92,7 +91,7 @@ function DisplayPlantCards (props) {
     
     return (        
         <ReactBootstrap.CardDeck>
-        <ReactBootstrap.Card border="dark" style={{ width: '10rem' }}>
+        <ReactBootstrap.Card border="dark" style={{ width: '8rem' }}>
         <ReactBootstrap.Card.Img variant="top" src={image_url} />
         <ReactBootstrap.Card.Body>
             <ReactBootstrap.Card.Title><p>{common_name}</p> <p>{scientific_name}</p></ReactBootstrap.Card.Title>
@@ -118,7 +117,8 @@ function DisplayPlantCards (props) {
             {/* if in the /garden page, show the remove from garden button, otherwise no button */}
             {/* disable if it has been clicked with isRemoveClicked */}
             {isAdded && <button disabled={isRemoveClicked} variant="outline-danger"
-            onClick={removeFromGarden}>Remove from garden</button>}
+            onClick={(event) => { if (window.confirm("Are you sure you want to remove " + common_name + " from your garden?"))
+            removeFromGarden(event)}}>Remove from garden</button>}
         </ReactBootstrap.Card.Body>
         </ReactBootstrap.Card>
         </ReactBootstrap.CardDeck>

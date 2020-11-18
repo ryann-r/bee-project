@@ -21,7 +21,7 @@ function Home() {
             {userId ? <div>Welcome, {fname}</div> : <div>Welcome, visitor</div>}
             <img src='/static/img/plant/clover-bee.jpg' width='900px'></img>
             <div>{pollinatorFact}</div>
-            <button onClick={handleClick}>Click to see more pollinator facts.</button>
+            <button onClick={handleClick}>Tell me more about pollinators!</button>
         </React.Fragment> 
     );
 }

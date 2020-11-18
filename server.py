@@ -276,9 +276,9 @@ def remove_from_garden():
     common_name = plant.common_name
 
     crud.remove_garden_plant(user_id, plant_id)
-    flash(f"{common_name} has been removed from your garden.")
+    flash(f"{common_name} was removed from your garden.")
 
-    return redirect('/garden')
+    return jsonify({'success': True})
     # return jsonify({'success': True})
     # reloaded page on react side, so try switching this back to success: True
 

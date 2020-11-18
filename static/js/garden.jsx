@@ -4,13 +4,12 @@ function GardenContainer() {
     const {setUserData, userId: user_id, fname} = React.useContext(UserContext);
     const [plantData, setPlantData] = React.useState([]);
     const [gardenTip, setGardenTip] = React.useState([]);
+    // get data (array) from server and pass to GardenBloomChart component as prop
     const [bloomChartData, setBloomChartData] = React.useState([]);
-    console.log(bloomChartData);
+    // get data (array) from server and pass to FlowerColorChart component as prop
+    // const [flowerColorData, setFlowerColorData] = React.useState([]);
     
-    // above: {Early: ["Plant name 1", "plant name 2"], Late: ["Plant"], Year-round: []}
-    // const [bloomPeriodValues, setBloomPeriodValues] = React.useState([]);
-
-    // get user session data from server, set state and user context
+    // get user session data from server, set user context
     React.useEffect (() => {
         fetch('/api/user-info')
         .then(result => result.json())
@@ -34,7 +33,6 @@ function GardenContainer() {
         .then((response) => response.json())
         .then((data) => setGardenTip(data.garden_tip))
     }, []);
-
 
     //fetch random garden tip on button click
     const handleClick = (event) => {
@@ -66,14 +64,21 @@ function GardenContainer() {
         );
     }
 
-    // BLOOM TIME CHART
-    // fetch garden plant bloom times for chart on first render
+    // fetch garden plant bloom periods for chart, set to bloomChartData
+    // dictionary {'bloom_period': number}
     React.useEffect(() => {
         fetch('/api/garden-plant-bloom-periods')
         .then((response) => response.json())
         .then((data) => setBloomChartData(data.garden_bloom_periods))
     }, []);
 
+    // fetch garden flower color data for chart, set to flowerColorData
+    // dictionary {'bloom_period': number}
+    React.useEffect(() => {
+        fetch('/api/garden-plant-flower-colors')
+        .then((response) => response.json())
+        .then((data) => setFlowerColorData(data.garden_flower_colors))
+    }, []);
 
     let message;
     // if a user is signed in and has 0 plants in their garden
@@ -88,10 +93,12 @@ function GardenContainer() {
         <React.Fragment>
             {user_id && <h1>{ fname }'s Garden</h1>}
             <h2>{message}</h2>
-            <p>{gardenTip}</p>
-            <button disabled={!user_id} onClick={handleClick}>Click to see more tips</button>
+            {user_id && <p>{gardenTip}</p>}
+            <button disabled={!user_id} onClick={handleClick}>Give me another tip!</button>
             {gardenPlants}
-            {/* <GardenBloomChart /> */}
+            {/* send bloomChartData and flowerColorData to respective chart components as props */}
+            <BloomPeriodChart bloomChartData={bloomChartData}/>
+            {/* <FlowerColorChart flowerColorData={flowerColorData} /> */}
         </React.Fragment>
     );
 }

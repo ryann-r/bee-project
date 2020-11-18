@@ -130,13 +130,15 @@ def get_garden_bloom_periods(user_id):
 
     and plant common name values for plants in a user's garden."""
 
-    bloom_periods = { 'Early': [], 'Mid': [], 'Late': [], 'Year-round': [] }
+    # bloom_periods = { 'Early': [], 'Mid': [], 'Late': [], 'Year-round': [] }
+    bloom_periods = { 'Early': 0, 'Mid': 0, 'Late': 0, 'Year-round': 0}
     for plant in get_garden_plants_data(user_id):
-        common_name = plant.common_name
+        # common_name = plant.common_name
         bloom_periods_string = plant.bloom_period
         plant_bloom_periods_list = [item.strip() for item in bloom_periods_string.split(',')]
         for period in plant_bloom_periods_list:
-            bloom_periods[period].append(common_name)
+            bloom_periods[period] += 1
+            # bloom_periods[period].append(common_name)
 
     return bloom_periods
 
@@ -145,16 +147,21 @@ def get_garden_flower_colors(user_id):
 
     and plant common name values for plants in a user's garden."""
 
-    flower_colors = { 'Blue': [], 'Purple': [], 'Yellow': [],
-                    'Green': [], 'Orange': [], 'Red': [],
-                    'Pink': [], 'White': [], 'Brown': []}
+    # flower_colors = { 'Blue': [], 'Purple': [], 'Yellow': [],
+    #                 'Green': [], 'Orange': [], 'Red': [],
+    #                 'Pink': [], 'White': [], 'Brown': []}
+
+    flower_colors = { 'Blue': 0, 'Purple': 0, 'Yellow': 0,
+                'Green': 0, 'Orange': 0, 'Red': 0,
+                'Pink': 0, 'White': 0, 'Brown': 0}
 
     for plant in get_garden_plants_data(user_id):
-        common_name = plant.common_name
+        # common_name = plant.common_name
         flower_colors_string = plant.flower_color
         plant_flower_colors_list = [item.strip() for item in flower_colors_string.split(',')]
         for color in plant_flower_colors_list:
-            flower_colors[color].append(common_name)
+            # flower_colors[color].append(common_name)
+            flower_colors[color] += 1
 
     return flower_colors
 
