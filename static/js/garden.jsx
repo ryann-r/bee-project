@@ -5,7 +5,7 @@ function GardenContainer() {
     const [plantData, setPlantData] = React.useState([]);
     const [gardenTip, setGardenTip] = React.useState([]);
     // get data (array) from server and pass to GardenBloomChart component as prop
-    const [bloomChartData, setBloomChartData] = React.useState([]);
+    // const [bloomChartData, setBloomChartData] = React.useState([]);
     // get data (array) from server and pass to FlowerColorChart component as prop
     // const [flowerColorData, setFlowerColorData] = React.useState([]);
     
@@ -64,22 +64,6 @@ function GardenContainer() {
         );
     }
 
-    // fetch garden plant bloom periods for chart, set to bloomChartData
-    // dictionary {'bloom_period': number}
-    React.useEffect(() => {
-        fetch('/api/garden-plant-bloom-periods')
-        .then((response) => response.json())
-        .then((data) => setBloomChartData(data.garden_bloom_periods))
-    }, []);
-
-    // fetch garden flower color data for chart, set to flowerColorData
-    // dictionary {'bloom_period': number}
-    React.useEffect(() => {
-        fetch('/api/garden-plant-flower-colors')
-        .then((response) => response.json())
-        .then((data) => setFlowerColorData(data.garden_flower_colors))
-    }, []);
-
     let message;
     // if a user is signed in and has 0 plants in their garden
     if (user_id && plantData.length === 0) {
@@ -94,11 +78,10 @@ function GardenContainer() {
             {user_id && <h1>{ fname }'s Garden</h1>}
             <h2>{message}</h2>
             {user_id && <p>{gardenTip}</p>}
-            <button disabled={!user_id} onClick={handleClick}>Give me another tip!</button>
-            {gardenPlants}
-            {/* send bloomChartData and flowerColorData to respective chart components as props */}
-            <BloomPeriodChart bloomChartData={bloomChartData}/>
-            {/* <FlowerColorChart flowerColorData={flowerColorData} /> */}
+            <button onClick={handleClick}>Give me another tip!</button>
+            {user_id && gardenPlants}
+            {user_id && <BloomPeriodChart />}
+            {user_id && <FlowerColorChart />}
         </React.Fragment>
     );
 }

@@ -153,7 +153,7 @@ def get_garden_flower_colors(user_id):
 
     flower_colors = { 'Blue': 0, 'Purple': 0, 'Yellow': 0,
                 'Green': 0, 'Orange': 0, 'Red': 0,
-                'Pink': 0, 'White': 0, 'Brown': 0}
+                'Pink': 0, 'White': 0, 'Brown': 0 }
 
     for plant in get_garden_plants_data(user_id):
         # common_name = plant.common_name

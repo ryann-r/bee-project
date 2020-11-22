@@ -72,6 +72,22 @@ function DisplayPlantCards (props) {
         // message to display when exploring plants not in a users region
         // add 'click to learn more' --> raises a bootstrap alert with explanation
     };
+
+    const popover = (
+        <ReactBootstrap.Popover id="non-native-popover">
+            <ReactBootstrap.Popover.Title as="h3">Use native plants!</ReactBootstrap.Popover.Title>
+            <ReactBootstrap.Popover.Content>
+                You're only able to add plants native to your region to your garden,
+                to best serve your local pollinators and ecosystem.
+            </ReactBootstrap.Popover.Content>
+        </ReactBootstrap.Popover>
+    );
+
+    const NonNativePopover = () => (
+        <ReactBootstrap.OverlayTrigger trigger="click" placement="right" overlay={popover}>
+            <ReactBootstrap.Button variant="info">Click for more info</ReactBootstrap.Button>
+        </ReactBootstrap.OverlayTrigger>
+    );
     // STYLE ALERT USING BOOTSTRAP
     // const InGardenAlert () {
     //     const [show, setShow] = useState(true);
@@ -111,9 +127,11 @@ function DisplayPlantCards (props) {
         <ReactBootstrap.Card.Body>
             {/* if plant is in user region and has not been added to garden, show button, otherwise show message */}
             {/* disable if it has been clicked with isAddClicked removed */}
-            {region === userRegion && !isAdded ? <button disabled={isAddClicked}
+            {/* popover displays info */}
+            {/* CHANGE: popover button appears in user garden !isGarden didn't solve */}
+            {region === userRegion && !isAdded && !isGarden ? <button disabled={isAddClicked}
             variant="outline-dark" onClick={addToGarden}>Add to garden</button> :
-            <div>{message}</div> }
+            <div>{message} <NonNativePopover /></div> }
             {/* if in the /garden page, show the remove from garden button, otherwise no button */}
             {/* disable if it has been clicked with isRemoveClicked */}
             {isAdded && <button disabled={isRemoveClicked} variant="outline-danger"
