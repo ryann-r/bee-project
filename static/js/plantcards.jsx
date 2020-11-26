@@ -1,8 +1,8 @@
-function DisplayPlantCards (props) {
+function PlantCards (props) {
     const { plant_id, common_name, scientific_name, region, plant_type,
     flower_color, bloom_period, life_cycle, max_height, notes, image_url, isGarden } = props;
     // get session user region
-    const {userRegion} = React.useContext(UserContext);
+    const {userId, userRegion} = React.useContext(UserContext);
     // isAdded initial state is true if from garden component, false if from map component
     // updated based on add / remove activity, used to show add / remove buttons conditionally
     const [isAdded, setIsAdded] = React.useState(isGarden);
@@ -66,12 +66,6 @@ function DisplayPlantCards (props) {
             // if you want to do error handling, do setIsAdded here
             // flash message says "{common_name} was removed from your garden"
         }
-    let message;
-    if (region !== userRegion) {
-        message = <p>This plant is not native to your region.</p>
-        // message to display when exploring plants not in a users region
-        // add 'click to learn more' --> raises a bootstrap alert with explanation
-    };
 
     const popover = (
         <ReactBootstrap.Popover id="non-native-popover">
@@ -88,6 +82,12 @@ function DisplayPlantCards (props) {
             <ReactBootstrap.Button variant="info">Click for more info</ReactBootstrap.Button>
         </ReactBootstrap.OverlayTrigger>
     );
+
+    let message;
+    if (userId && region !== userRegion) {
+        message = <p>This plant is not native to your region. <NonNativePopover /></p>
+        // message to display when exploring plants not in a users region
+    };
     // STYLE ALERT USING BOOTSTRAP
     // const InGardenAlert () {
     //     const [show, setShow] = useState(true);
@@ -106,47 +106,41 @@ function DisplayPlantCards (props) {
     // add alert messages 
     
     return (        
-        <ReactBootstrap.CardDeck>
-        <ReactBootstrap.Card border="dark" style={{ width: '8rem' }}>
-        <ReactBootstrap.Card.Img variant="top" src={image_url} />
-        <ReactBootstrap.Card.Body>
-            <ReactBootstrap.Card.Title><p>{common_name}</p> <p>{scientific_name}</p></ReactBootstrap.Card.Title>
-            {/* italicize scientific name */}
-            <ReactBootstrap.Card.Text>
-                {notes}
-            </ReactBootstrap.Card.Text>
-        </ReactBootstrap.Card.Body>
-        <ReactBootstrap.ListGroup className="list-group-flush">
-            <ReactBootstrap.ListGroupItem>Native to: {region}</ReactBootstrap.ListGroupItem>
-            <ReactBootstrap.ListGroupItem>Plant type: {plant_type}</ReactBootstrap.ListGroupItem>
-            <ReactBootstrap.ListGroupItem>Bloom period: {bloom_period}</ReactBootstrap.ListGroupItem>
-            <ReactBootstrap.ListGroupItem>Life cycle: {life_cycle}</ReactBootstrap.ListGroupItem>
-            <ReactBootstrap.ListGroupItem>Flower color: {flower_color}</ReactBootstrap.ListGroupItem>
-            <ReactBootstrap.ListGroupItem>Maximum height (ft): {max_height}</ReactBootstrap.ListGroupItem>
-        </ReactBootstrap.ListGroup>
-        <ReactBootstrap.Card.Body>
-            {/* if plant is in user region and has not been added to garden, show button, otherwise show message */}
-            {/* disable if it has been clicked with isAddClicked removed */}
-            {/* popover displays info */}
-            {/* CHANGE: popover button appears in user garden !isGarden didn't solve */}
-            {region === userRegion && !isAdded && !isGarden ? <button disabled={isAddClicked}
-            variant="outline-dark" onClick={addToGarden}>Add to garden</button> :
-            <div>{message} <NonNativePopover /></div> }
-            {/* if in the /garden page, show the remove from garden button, otherwise no button */}
-            {/* disable if it has been clicked with isRemoveClicked */}
-            {isAdded && <button disabled={isRemoveClicked} variant="outline-danger"
-            onClick={(event) => { if (window.confirm("Are you sure you want to remove " + common_name + " from your garden?"))
-            removeFromGarden(event)}}>Remove from garden</button>}
-        </ReactBootstrap.Card.Body>
+        // add className to bootstrap components
+        <ReactBootstrap.Card className="h-100 shadow-sm bg-white rounded" border="dark" style={{ width: '18rem' }}>
+            <ReactBootstrap.Card.Img variant="top" src={image_url} />
+            <ReactBootstrap.Card.Body className="d-flex flex-column">
+                <div className="d-flex mb-2 justify-content-between"></div>
+                    <ReactBootstrap.Card.Title className="mb-0 font-weight-bold">{common_name}</ReactBootstrap.Card.Title>
+                    <ReactBootstrap.Card.Subtitle className="mb-0 font-italic">{scientific_name}</ReactBootstrap.Card.Subtitle>
+                    {notes}
+            <ReactBootstrap.Card.Text>Plant type: {plant_type}</ReactBootstrap.Card.Text>
+            <ReactBootstrap.Card.Text>Bloom period: {bloom_period}</ReactBootstrap.Card.Text>
+            <ReactBootstrap.Card.Text>Flower color: {flower_color}</ReactBootstrap.Card.Text>
+            <ReactBootstrap.Card.Text>Life cycle: {life_cycle}</ReactBootstrap.Card.Text>
+            <ReactBootstrap.Card.Text>Maximum height (ft): {max_height}</ReactBootstrap.Card.Text>
+            <ReactBootstrap.Card.Text>Native to: {region}</ReactBootstrap.Card.Text>
+                {/* if plant is in user region and has not been added to garden, show button, otherwise show message */}
+                {/* disable if it has been clicked with isAddClicked removed */}
+                {/* message & info popover is displayed if not in a user's region */}
+                {region === userRegion && !isAdded ?
+                    <button
+                    className="mt-auto font-weight-bold"
+                    disabled={isAddClicked}
+                    variant="success"
+                    onClick={addToGarden}>Add to garden</button> :
+                    <div>{message}</div> }
+                {/* if in the /garden page, show the remove from garden button, otherwise no button */}
+                {/* disable if it has been clicked with isRemoveClicked */}
+                {isAdded && <button
+                    className="mt-auto font-weight-bold"
+                    variant="success"
+                    block="true"
+                    //above: display all the way across card
+                    disabled={isRemoveClicked}
+                    onClick={(event) => { if (window.confirm("Are you sure you want to remove " + common_name + " from your garden?"))
+                    removeFromGarden(event)}}>Remove from garden</button>}
+            </ReactBootstrap.Card.Body>
         </ReactBootstrap.Card>
-        </ReactBootstrap.CardDeck>
     );
 }
-
-// TERNARY button: conditional button. can't use if / else inside of jsx. basically like an if/else. 
-// saying: if condition is true, do the first thing before the colon, if false do the thing after the colon
-// if you want it to be conditionally rendered, not an alternative:
-    // {region === userRegion && <button variant="primary" onClick={addToGarden}>Add to garden</button>}
-// conditional does "short circuiting". if you have &&, if the first is false, it'll only do the second if the first is true
-// react won't render what's false
-// OR put null in p tag

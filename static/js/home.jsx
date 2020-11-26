@@ -20,8 +20,15 @@ function Home() {
         <React.Fragment>
             {userId ? <div>Welcome, {fname}</div> : <div>Welcome, visitor</div>}
             <img src='/static/img/plant/clover-bee.jpg' width='900px'></img>
-            <div>{pollinatorFact}</div>
-            <button onClick={handleClick}>Tell me more about pollinators!</button>
+            <ReactBootstrap.Card>
+                <ReactBootstrap.Card.Header>Did you know?</ReactBootstrap.Card.Header>
+                <ReactBootstrap.Card.Body>
+                <blockquote className="blockquote mb-0">
+                    <p>{pollinatorFact}</p>
+                </blockquote>
+                <button variant="success" onClick={handleClick}>Tell me more about pollinators!</button>
+                </ReactBootstrap.Card.Body>
+            </ReactBootstrap.Card>
         </React.Fragment> 
     );
 }

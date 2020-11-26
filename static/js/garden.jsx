@@ -4,10 +4,6 @@ function GardenContainer() {
     const {setUserData, userId: user_id, fname} = React.useContext(UserContext);
     const [plantData, setPlantData] = React.useState([]);
     const [gardenTip, setGardenTip] = React.useState([]);
-    // get data (array) from server and pass to GardenBloomChart component as prop
-    // const [bloomChartData, setBloomChartData] = React.useState([]);
-    // get data (array) from server and pass to FlowerColorChart component as prop
-    // const [flowerColorData, setFlowerColorData] = React.useState([]);
     
     // get user session data from server, set user context
     React.useEffect (() => {
@@ -47,7 +43,7 @@ function GardenContainer() {
 
     for (const plant of plantData) {
         gardenPlants.push(
-            <DisplayPlantCards
+            <PlantCards
             key={plant.plant_id}
             plant_id={plant.plant_id}
             common_name={plant.common_name} 
@@ -72,13 +68,22 @@ function GardenContainer() {
     if (!user_id) {
         message = <div>Please log in or sign up to continue.</div>
     }
+
+    
     
     return (
         <React.Fragment>
             {user_id && <h1>{ fname }'s Garden</h1>}
             <h2>{message}</h2>
-            {user_id && <p>{gardenTip}</p>}
-            <button onClick={handleClick}>Give me another tip!</button>
+            <ReactBootstrap.Card>
+                <ReactBootstrap.Card.Header>Gardening Tip:</ReactBootstrap.Card.Header>
+                <ReactBootstrap.Card.Body>
+                    <blockquote className="blockquote mb-0">
+                        <p>{gardenTip}</p>
+                    </blockquote>
+                    <button variant="primary" onClick={handleClick}>Give me another tip!</button>
+                </ReactBootstrap.Card.Body>
+            </ReactBootstrap.Card>
             {user_id && gardenPlants}
             {user_id && <BloomPeriodChart />}
             {user_id && <FlowerColorChart />}

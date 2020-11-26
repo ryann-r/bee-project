@@ -106,7 +106,7 @@ function MapPlantContainer() {
     
     for (const plant of plantData) {
         plants.push(
-            <DisplayPlantCards
+            <PlantCards
             key={plant.plant_id}
             plant_id={plant.plant_id}
             common_name={plant.common_name} 
@@ -127,6 +127,7 @@ function MapPlantContainer() {
         <React.Fragment>
             {isRegion && <h1>You're viewing pollinator plants native to: {isRegion}</h1>}
             <h2>Click the map to view regional native plants</h2>
+            {!user_id && <h2>Please log in or sign up to collect your favorite native plants in a garden!</h2>}
             {plants}
         </React.Fragment>
     );
