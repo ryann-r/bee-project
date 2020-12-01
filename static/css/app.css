@@ -1,0 +1,248 @@
+/* FONTS */
+/* font-family: 'Cantarell', sans-serif; */
+/* font-family: 'Fjalla One', sans-serif; */
+/* font-family: 'Lato', sans-serif; */
+
+/* COLORS */
+/* DARK GREEN  #233A19 (35, 58, 25) */
+/* MOSS GREEN  #788977 */
+/* COMPLEMENTARY PURPLE #887788 */
+/* YELLOWISH WHITE: #fdf8e1  */
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fjalla One', sans-serif;
+    color: #233A19
+}
+
+p {
+    font-family: 'Lato', sans-serif;
+    color: #233A19
+}
+
+/* it's actually yellow */
+.white-text {
+    color: #fdf8e1 !important;
+}
+
+.btn-primary, .btn {
+    font-family: 'Lato', sans-serif;
+}
+
+.orange-text {
+    color: #CB923A !important;
+}
+
+.purple-text {
+    color: #887788;
+}
+
+/* BACKGROUND IMG */
+.background-image {
+    background: #788977 url('/static/img/b&w-bee.jpg') no-repeat center center fixed;
+    background-size: cover;
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: auto;
+    margin-left: 0;
+    width: auto;
+    height: 100vh;
+    position: relative;
+    /* min-height: 100%;
+    min-width: 1024px; */
+    /* position: absolute; */
+    /* text-align: center; */
+}
+
+.background-fixed {
+    background: #788977 url('/static/img/b&w-bee.jpg') no-repeat center center fixed;
+    background-size: cover;
+    width: auto;
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.bottom-left {
+    position: absolute;
+    bottom: 8px;
+    left: 16px;
+}
+
+/* navbar color */
+.navbar-custom {
+    /* background-color: #5C6D70 */
+    background-color: #788977;
+}
+
+/*  navbar brand color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+    color: #fdf8e1;
+    font-family: 'Cantarell', sans-serif;
+}
+
+/* navbar link color */
+.navbar-custom .navbar-nav .nav-link {
+    color: #fdf8e1;
+    font-family: 'Cantarell', sans-serif;
+}
+
+/* navbar link hover color */
+.navbar-custom .navbar-brand:hover,
+.navbar-custom .nav-link:hover {
+    color: #233A19 !important;
+}
+
+
+/* FOOTER */
+.footer {
+    /* margin-top: 1rem; */
+    padding: 1rem;
+    background-color: #A294A2;
+    position: bottom;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+
+/* LOGIN PAGE */
+.login {
+    max-width: 350px;
+    width: 90%;
+    /* background-color: #5C6D70; */
+    background-color: #788977;
+    opacity: 0.8;
+    padding: 40px;
+    border-radius: 4px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #fff;
+    box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+}
+
+.login .btn-primary {
+    background: #233A19;
+    font-family: 'Lato', sans-serif;
+    border: none;
+    border-radius: 4px;
+    padding: 11px;
+    box-shadow: none;
+    margin-top: 26px;
+    text-shadow: none;
+    outline: none;
+}
+
+.login .form-control {
+    font-family: 'Lato', sans-serif;
+}
+
+.login .illustration {
+    text-align:center;
+    padding:15px 0 20px;
+    font-size:100px;
+    color:#233A19;;
+  }
+
+/* LOGOUT */
+.logout-btn:hover {
+    color: #233A19 !important;
+    background-color: #fdf8e1 !important;
+}
+
+.logout-btn {
+    color: #fdf8e1;
+    border-color: #fdf8e1 !important;
+}
+
+/* REGISTRATION */
+.register {
+    max-width: 350px;
+    width: 90%;
+    /* background-color: #5C6D70; */
+    background-color: #788977;
+    opacity: 0.8;
+    padding: 40px;
+    border-radius: 4px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #fdf8e1;
+    box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+}
+.register .btn-primary {
+    background: #5C6D70;
+    font-family: 'Lato', sans-serif;
+    border: none;
+    border-radius: 4px;
+    padding: 11px;
+    box-shadow: none;
+    margin-top: 26px;
+    text-shadow: none;
+    outline: none;
+}
+
+.register .form-control {
+    font-family: 'Lato', sans-serif;
+}
+
+
+/* PLANT CARDS */
+.plantcards {
+    padding: 10px;
+    background-color: #fdf8e1;
+    border: 3px solid #233A19;
+}
+
+.plantcards .plant-image {
+    border: 3px solid #233A19;
+}
+.plantcards .text-secondary {
+    line-height: 25px;
+}
+
+.plantcards .btn-primary,
+.gardening-tip .btn-primary,
+.btn-popover,
+.btn-nonnative {
+    background-color: #788977 !important;
+    color: #fdf8e1;
+    border: none;
+    border-radius: 4px;
+    padding: 11px;
+    box-shadow: none;
+    margin-top: 26px;
+    text-shadow: none;
+    outline: none;
+}
+
+.plantcards .btn-primary:hover,
+.gardening-tip .btn-primary:hover,
+.btn-popover:hover
+.btn-nonnative:hover {
+    background-color: #233A19 !important;
+    color: #fdf8e1
+}
+
+.embed-responsive .card-img-top {
+    width: 100%;
+
+    object-fit: cover;
+}
+
+/* TIPS / FACTS CARDS */
+.gardening-tip {
+    color: #fdf8e1 !important;
+    background-color: #887788;
+    border-color: #fdf8e1 !important;
+}
+
+.gardening-tip .btn-tip:hover {
+    color: #233A19 !important;
+    background-color: #fdf8e1 !important;
+}

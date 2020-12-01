@@ -1,34 +1,42 @@
 function Home() {
     $('#regions_div')[0].style.display='none';
     const {userId, fname} = React.useContext(UserContext);
-    const [pollinatorFact, setPollinatorFact] = React.useState('');
 
-    // fetch initial pollinator fact on first render
-    React.useEffect(() => {
-        fetch('/api/pollinator-facts')
-        .then((response) => response.json())
-        .then((data) => setPollinatorFact(data.pollinator_fact))
-    }, []);
-    // fetch pollinator fact with button click
-    const handleClick = (event) => {
-        event.preventDefault();
-        fetch('/api/pollinator-facts')
-        .then((response) => response.json())
-        .then((data) => setPollinatorFact(data.pollinator_fact));
-    }
     return (
         <React.Fragment>
-            {userId ? <div>Welcome, {fname}</div> : <div>Welcome, visitor</div>}
-            <img src='/static/img/plant/clover-bee.jpg' width='900px'></img>
-            <ReactBootstrap.Card>
-                <ReactBootstrap.Card.Header>Did you know?</ReactBootstrap.Card.Header>
-                <ReactBootstrap.Card.Body>
-                <blockquote className="blockquote mb-0">
-                    <p>{pollinatorFact}</p>
-                </blockquote>
-                <button variant="success" onClick={handleClick}>Tell me more about pollinators!</button>
-                </ReactBootstrap.Card.Body>
-            </ReactBootstrap.Card>
+            <ReactBootstrap.Container className="background-image">
+                {/* <img className="img-responsive" src='/static/img/blackandwhitehome.jpg'></img> */}
+                <ReactBootstrap.Row>
+                    <ReactBootstrap.Col className="col-sm home-welcome">
+                        <span>{userId ? <h1 className="white-text">Welcome back, {fname}!</h1> : <h1 className="white-text">Welcome, visitor</h1>}</span>
+                    </ReactBootstrap.Col>
+                </ReactBootstrap.Row>
+            </ReactBootstrap.Container> 
+            <ReactBootstrap.Container>
+                <ReactBootstrap.Row className="row justify-content-center">
+                    <h2>Pollinator Plant Finder</h2>
+                </ReactBootstrap.Row>
+                <ReactBootstrap.Row>
+                    <ReactBootstrap.Col className="col-lg-4 col-md-4">
+                        <h4>Explore</h4>
+                        <p>Discover plants native to anywhere in the US that support hard-working pollinators.
+                            Get informed about pollinator conservation status across the country.
+                        </p>
+                    </ReactBootstrap.Col>
+                    <ReactBootstrap.Col className="col-lg-4 col-md-4">
+                        <h4>Collect</h4>
+                        <p>Save your favorite plants to a virtual garden space! In the interest of conservation,
+                            you'll only be able to add plants native to your region.
+                        </p>
+                    </ReactBootstrap.Col>
+                    <ReactBootstrap.Col className="col-lg-4 col-md-4">
+                        <h4>Learn</h4>
+                        <p>Receive feedback about your garden plant selection, so that you can create a haven for a diverse
+                            array of pollinators throughout the year.
+                        </p>
+                    </ReactBootstrap.Col>
+                </ReactBootstrap.Row>    
+            </ReactBootstrap.Container>
         </React.Fragment> 
     );
 }

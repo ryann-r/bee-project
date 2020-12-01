@@ -30,21 +30,38 @@ function Login() {
         });
     }
     return (
-        <form>
-        <input value={formData.username}
-            onChange={handleChange}
-            name='username'
-            type='text'
-            placeholder='Username' 
-            />
-            <input value={formData.password}
-            onChange={handleChange}
-            type="password"
-            name="password"
-            placeholder="Password"
-            />
-            <button disabled={!formData.username || !formData.password}
-            onClick={handleSubmit} type="submit">Submit</button>
-        </form>
+        <ReactBootstrap.Container className="background-image">
+            {/* <ReactBootstrap.Row> */}
+            {/* GET SVG ICON */}
+            <div className="illustration icon ion-ios-locked-outline"></div>
+            <ReactBootstrap.Form className="login">
+                <ReactBootstrap.Form.Group controlId="login.Username">
+                    {/* <ReactBootstrap.Form.Label>Username</ReactBootstrap.Form.Label> */}
+                    <ReactBootstrap.Form.Control
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        onChange={handleChange}
+                        value={formData.username} />
+                </ReactBootstrap.Form.Group>
+
+                <ReactBootstrap.Form.Group controlId="login.Password">
+                    {/* <ReactBootstrap.Form.Label>Password</ReactBootstrap.Form.Label> */}
+                    <ReactBootstrap.Form.Control
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        value={formData.password} />
+                </ReactBootstrap.Form.Group>
+
+                <ReactBootstrap.Button
+                    disabled={!formData.username || !formData.password}
+                    onClick={handleSubmit}
+                    variant="outline-light"
+                    type="submit">Log In</ReactBootstrap.Button>
+            </ReactBootstrap.Form>
+            {/* </ReactBootstrap.Row> */}
+        </ReactBootstrap.Container>
     );  
 }

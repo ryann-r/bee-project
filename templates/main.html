@@ -19,6 +19,12 @@
             integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
             crossorigin="anonymous"></script>
 
+    <!--  GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Cantarell:ital@0;1&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet"> 
+    
     <!-- REACT BOOTSTRAP CSS -->
     <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
@@ -26,7 +32,7 @@
         crossorigin="anonymous" />
 
     <!-- custom css below bootstrap: -->
-    <script rel="stylesheet" src="/static/css/app.css"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css"></script>
 
     <!-- chartjs script tags -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -39,19 +45,25 @@
 
 </head>
 <body>
-    {% with messages = get_flashed_messages() %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- categories: success(green), info(blue), warning(yellow), danger(red) -->
         {% if messages %}
-            {% for message in messages %}
-                {{ message }}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                        <strong>Title</strong>{{ message }}
+                </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
     <!-- regions_div for geochart map -->
-    <div id='regions_div' style='width: 900px; height: 500px'></div>
+    <div id='regions_div' class="background-fixed" style='width: 900px; height: 500px'></div>
     <div id='root'></div>
 
     <!-- jsx react app files -->
-    <script type='text/jsx' src='static/js/plantcards.jsx'></script>
+    <script type='text/jsx' src='static/js/plantcard.jsx'></script>
     <script type='text/jsx' src='static/js/bloom-period-chart.jsx'></script>
     <script type='text/jsx' src='static/js/flower-color-chart.jsx'></script>
     <script type='text/jsx' src='static/js/garden.jsx'></script>

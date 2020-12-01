@@ -257,11 +257,11 @@ def add_to_garden():
     user_id = session.get('user_id')
     plant_id = request.json.get('plant_id')
     plant = crud.get_plant_by_id(plant_id)
-    common_name = plant.common_name
+    # common_name = plant.common_name
 
     crud.add_garden_plant(user_id=user_id, plant_id=plant_id)
 
-    flash(f"{common_name} has been added to your garden!")
+    # flash(f"{common_name} has been added to your garden!")
 
     return jsonify({'success': True})
 
@@ -273,10 +273,10 @@ def remove_from_garden():
     user_id = session.get('user_id')
     plant_id = request.json.get('plant_id')
     plant = crud.get_plant_by_id(plant_id)
-    common_name = plant.common_name
+    # common_name = plant.common_name
 
     crud.remove_garden_plant(user_id, plant_id)
-    flash(f"{common_name} was removed from your garden.")
+    # flash(f"{common_name} was removed from your garden.")
 
     return jsonify({'success': True})
     # return jsonify({'success': True})

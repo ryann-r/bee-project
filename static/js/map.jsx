@@ -54,7 +54,8 @@ function MapPlantContainer() {
             region: 'US',
             displayMode: 'regions',
             resolution: 'provinces',
-            colorAxis: { colors: ['#FFB6C1', '#b11226'] }
+            colorAxis: { colors: ['#887788', '#e81cff'],
+            backgroundColor: '#788977' }
         };
 
         const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
@@ -106,7 +107,7 @@ function MapPlantContainer() {
     
     for (const plant of plantData) {
         plants.push(
-            <PlantCards
+            <PlantCard
             key={plant.plant_id}
             plant_id={plant.plant_id}
             common_name={plant.common_name} 
@@ -125,10 +126,12 @@ function MapPlantContainer() {
 
     return (
         <React.Fragment>
-            {isRegion && <h1>You're viewing pollinator plants native to: {isRegion}</h1>}
-            <h2>Click the map to view regional native plants</h2>
-            {!user_id && <h2>Please log in or sign up to collect your favorite native plants in a garden!</h2>}
-            {plants}
+            <ReactBootstrap.Container className="background-fixed">
+                <ReactBootstrap.Row>{isRegion && <h1>You're viewing pollinator plants native to: {isRegion}</h1>}</ReactBootstrap.Row>
+                <ReactBootstrap.Row><h2>Click the map to view native plants by region</h2></ReactBootstrap.Row>
+                <ReactBootstrap.Row>{!user_id && <h2>Please log in or sign up to collect your favorite native plants in a garden!</h2>}</ReactBootstrap.Row>
+                <ReactBootstrap.Row className="row justify-content-md-center">{plants}</ReactBootstrap.Row>
+            </ReactBootstrap.Container>
         </React.Fragment>
     );
 };

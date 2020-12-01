@@ -41,20 +41,29 @@ function App() {
         <React.Fragment>
             <UserContext.Provider value={{setUserData, userRegion, userId, fname}}>
                 <nav>
+                    <ReactBootstrap.Navbar className="navbar navbar-expand-md navbar-custom">
+                        {/* scrolling="true" dark="true" expand="md" fixed="top" */}
+                            <ReactBootstrap.Navbar.Brand href='/'>Pollinator Plants Finder</ReactBootstrap.Navbar.Brand>
+                            <ReactBootstrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
+                            <ReactBootstrap.Navbar.Collapse id="basic-navbar-nav">
+                                <ReactBootstrap.Nav className="mr-auto">
+                                    <ReactBootstrap.Nav.Link href='/about'>About Pollinators</ReactBootstrap.Nav.Link>
+                                    <ReactBootstrap.Nav.Link href='/explore'>Explore Plants</ReactBootstrap.Nav.Link>
+                                    <ReactBootstrap.Nav.Link href='/garden'>Garden</ReactBootstrap.Nav.Link>
+                                    <ReactBootstrap.Nav.Link href='/register'>Sign Up</ReactBootstrap.Nav.Link>
+                                    <ReactBootstrap.Nav.Link href='/login'>Log In</ReactBootstrap.Nav.Link>
+                                    <ReactBootstrap.Button className='logout-btn' variant="outline-light" onClick={handleLogout}>Log Out</ReactBootstrap.Button>
+                                </ReactBootstrap.Nav>
+                            </ReactBootstrap.Navbar.Collapse>
+                    </ReactBootstrap.Navbar>
+
                     <ReactRouterDOM.BrowserRouter>
-                            <ReactRouterDOM.Link to='/'>Home</ReactRouterDOM.Link>
-                            <ReactRouterDOM.Link to='/about'>About</ReactRouterDOM.Link>
-                            <ReactRouterDOM.Link to='/explore'>Explore Pollinator Plants</ReactRouterDOM.Link>
-                            <ReactRouterDOM.Link to='/garden'>Garden</ReactRouterDOM.Link>
-                            <ReactRouterDOM.Link to='/register'>Sign Up</ReactRouterDOM.Link>
-                            <ReactRouterDOM.Link to='/login'>Log In</ReactRouterDOM.Link>
-                            <ReactBootstrap.Button onClick={handleLogout}>Log Out</ReactBootstrap.Button>
                         <ReactRouterDOM.Switch>
                             <ReactRouterDOM.Route path='/' exact>
                                 <Home />
                             </ReactRouterDOM.Route>
                             <ReactRouterDOM.Route path='/about'>
-                                <About />
+                                <AboutPollinators />
                             </ReactRouterDOM.Route>
                             <ReactRouterDOM.Route path='/explore'>
                                 <MapPlantContainer />
@@ -69,9 +78,8 @@ function App() {
                                 <Login />
                             </ReactRouterDOM.Route>
                         </ReactRouterDOM.Switch>
-                        <footer>
-                            <p>Pollinator plant data is sourced from the Xerces Society for Invertebrate Conservation.</p>
-                            <p>Other pollinator conservation information is from the United States Department of Agriculture.</p>
+                        <footer className="footer">
+                            Data and information is from the Xerces Society for Invertebrate Conservation and the US Dept of Agriculture.
                         </footer>
                     </ReactRouterDOM.BrowserRouter>
                 </nav>

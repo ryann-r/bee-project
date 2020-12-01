@@ -1,5 +1,5 @@
 """CRUD operations."""
-
+import collections
 from model import db, connect_to_db, User, Plant, Garden, UserGarden
 
 
@@ -131,6 +131,7 @@ def get_garden_bloom_periods(user_id):
     and plant common name values for plants in a user's garden."""
 
     # bloom_periods = { 'Early': [], 'Mid': [], 'Late': [], 'Year-round': [] }
+    bloom_periods = collections.OrderedDict()
     bloom_periods = { 'Early': 0, 'Mid': 0, 'Late': 0, 'Year-round': 0}
     for plant in get_garden_plants_data(user_id):
         # common_name = plant.common_name
@@ -150,7 +151,7 @@ def get_garden_flower_colors(user_id):
     # flower_colors = { 'Blue': [], 'Purple': [], 'Yellow': [],
     #                 'Green': [], 'Orange': [], 'Red': [],
     #                 'Pink': [], 'White': [], 'Brown': []}
-
+    
     flower_colors = { 'Blue': 0, 'Purple': 0, 'Yellow': 0,
                 'Green': 0, 'Orange': 0, 'Red': 0,
                 'Pink': 0, 'White': 0, 'Brown': 0 }

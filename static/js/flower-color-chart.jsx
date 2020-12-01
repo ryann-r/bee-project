@@ -12,7 +12,8 @@ function FlowerColorChart () {
             let values = [];
             colors = Object.keys(data.garden_flower_colors);
             values = Object.values(data.garden_flower_colors);
-            
+            console.log(colors)
+            // order: blue, brown, green, orange, pink, purple, red, white, yellow
             const flowerColorChart = {
                 type: 'doughnut',
                 data: {
@@ -20,25 +21,26 @@ function FlowerColorChart () {
                     datasets: [{
                         label: 'Number of plants',
                         backgroundColor: [
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(248, 202, 250, 0.2',
-                            'rgba(255, 255, 255, 0.2)',
-                            'rgba(145, 132, 132, 0.2)'
+                            '#C6DEF1',
+                            '#E2CFC4',
+                            '#C9E4DE',
+                            '#F7D9C4',
+                            '#F2C6DE',
+                            '#DBCDF0',
+                            '#F9C6C9',
+                            '#FFFFFF',
+                            '#FAEDCB'
                         ],
                         data: values,
-                        borderColor: [],
+                        borderColor: '#788977',
                         borderWidth: 1,
+                        hoverBorderColor: '#233A19'
                     }]
                 },
                 options: {
                     title: {
                         display: true,
-                        text: 'Garden Flower Color Distribution'
+                        text: 'Flower Color Distribution'
                     }
                 }
             };
@@ -50,9 +52,6 @@ function FlowerColorChart () {
         });
     }, []);
 
-    // { 'Blue': 0, 'Purple': 0, 'Yellow': 0,
-    //   'Green': 0, 'Orange': 0, 'Red': 0,
-    //   'Pink': 0, 'White': 0, 'Brown': 0 }
     return (
         <div>
             <canvas ref={chartContainer} />
