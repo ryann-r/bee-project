@@ -41,9 +41,10 @@ function Register() {
     }
 
     return (
-        <ReactBootstrap.Container className="background-image">
+        <ReactBootstrap.Container fluid className="background-image">
         <ReactBootstrap.Form className="register">
-            <p className="white-text">Please enter your information below:</p>
+        <span className="m-4"><i className="fas fa-user"></i></span>
+            <p className="white-text mt-2">Please enter your information below:</p>
             <ReactBootstrap.Form.Group controlId="register.Username">
                 {/* <ReactBootstrap.Form.Label>Username</ReactBootstrap.Form.Label> */}
                 <ReactBootstrap.Form.Control
@@ -85,14 +86,14 @@ function Register() {
             </ReactBootstrap.Form.Group>
 
             <ReactBootstrap.Form.Group controlId="register.StateOfResidence">
-                <ReactBootstrap.Form.Label><p>State of Residence</p></ReactBootstrap.Form.Label>
                 <ReactBootstrap.Form.Control
-                    placeholder="Select state"
+                    placeholder="State of Residence"
                     as="select"
+                    select="true"
                     name="user_region"
                     onChange={handleChange}
                     value={formData.user_region}>
-                        <option value="" selected disabled>Select State</option>
+                        <option value="" select disabled>Select State</option>
                         <option value="Southeast Region">Alabama</option>
                         <option value="Alaska">Alaska</option>
                         <option value="Southwest Region">Arizona</option>
@@ -145,9 +146,12 @@ function Register() {
                         <option value="Northern Plains Region">Wyoming</option>
                 </ReactBootstrap.Form.Control>
             </ReactBootstrap.Form.Group>
-            <ReactBootstrap.Button className="btn-register waves-effect waves-light"
-                onClick={handleSubmit}
+            <ReactBootstrap.Button 
                 disabled={!formData.username || !formData.fname || !formData.password || !formData.confirm_password || !formData.user_region}
+
+                className="btn-register"
+                // className="btn-register waves-effect waves-light"
+                onClick={handleSubmit}
                 variant="outline-light"
                 type="submit">Register</ReactBootstrap.Button>
         </ReactBootstrap.Form>

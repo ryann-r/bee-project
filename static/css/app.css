@@ -1,13 +1,12 @@
 /* FONTS */
-/* font-family: 'Cantarell', sans-serif; */
-/* font-family: 'Fjalla One', sans-serif; */
-/* font-family: 'Lato', sans-serif; */
+/* TITLE: font-family: 'Fjalla One', sans-serif; */
+/* PARAGRAPH: font-family: 'Lato', sans-serif; */
 
 /* COLORS */
-/* DARK GREEN  #233A19 (35, 58, 25) */
-/* MOSS GREEN  #788977 */
-/* COMPLEMENTARY PURPLE #887788 */
-/* YELLOWISH WHITE: #fdf8e1  */
+/* DARK GREEN #233A19 (text, icons, button hover) */
+/* MOSS GREEN  #788977 (navbar, button color) */
+/* LIGHT YELLOW #F5F3EA (navbar text, default background)  */
+/* LIGHT LAVENDER GREY: #E7E4EE (cards and map background color, button text, footer) */
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Fjalla One', sans-serif;
@@ -19,42 +18,54 @@ p {
     color: #233A19
 }
 
-/* it's actually yellow */
+.lato-font {
+    font-family: 'Lato', sans-serif !important;
+}
+
+/* it's actually light-yellow / cream */
 .white-text {
-    color: #fdf8e1 !important;
+    color: #F5F3EA !important;
+}
+
+.purple-text {
+    color: #E7E4EE !important;
 }
 
 .btn-primary, .btn {
     font-family: 'Lato', sans-serif;
 }
 
-.orange-text {
-    color: #CB923A !important;
+/* icons */
+i.fas {
+    color: #233A19;
+    font-size: 48px;
 }
 
-.purple-text {
-    color: #887788;
+i.fab {
+    color: #233A19;
+    font-size: 24px;
 }
+
+.purple-background {
+    background-color: #E7E4EE !important;
+}
+
 
 /* BACKGROUND IMG */
 .background-image {
-    background: #788977 url('/static/img/b&w-bee.jpg') no-repeat center center fixed;
+    background: #788977 url('/static/img/bw-bee.jpg') no-repeat center center fixed;
     background-size: cover;
     padding-right: 0;
     padding-left: 0;
-    margin-right: auto;
+    margin-right: 0;
     margin-left: 0;
     width: auto;
     height: 100vh;
     position: relative;
-    /* min-height: 100%;
-    min-width: 1024px; */
-    /* position: absolute; */
-    /* text-align: center; */
 }
 
 .background-fixed {
-    background: #788977 url('/static/img/b&w-bee.jpg') no-repeat center center fixed;
+    background: #788977 url('/static/img/bw-bee.jpg') no-repeat center center fixed;
     background-size: cover;
     width: auto;
     padding-right: 0;
@@ -69,22 +80,37 @@ p {
     left: 16px;
 }
 
+/* CREAM BACKGROUND */
+.cream-background {
+    background-color: #F5F3EA;
+    margin-top: #F5F3EA;
+}
+
+/* make default background color cream */
+html body {
+    background-color: #F5F3EA;
+
+}
+
+.align-text-end {
+    text-align: right;
+}
+
 /* navbar color */
 .navbar-custom {
-    /* background-color: #5C6D70 */
     background-color: #788977;
 }
 
 /*  navbar brand color */
 .navbar-custom .navbar-brand,
 .navbar-custom .navbar-text {
-    color: #fdf8e1;
+    color: #F5F3EA;
     font-family: 'Cantarell', sans-serif;
 }
 
 /* navbar link color */
 .navbar-custom .navbar-nav .nav-link {
-    color: #fdf8e1;
+    color: #F5F3EA;
     font-family: 'Cantarell', sans-serif;
 }
 
@@ -97,12 +123,12 @@ p {
 
 /* FOOTER */
 .footer {
-    /* margin-top: 1rem; */
     padding: 1rem;
-    background-color: #A294A2;
+    background-color: #E7E4EE;
     position: bottom;
-    left: 0;
+    position: relative;
     bottom: 0;
+    left: 0;
     width: 100%;
     text-align: center;
 }
@@ -111,23 +137,23 @@ p {
 /* LOGIN PAGE */
 .login {
     max-width: 350px;
+    text-align: center;
     width: 90%;
-    /* background-color: #5C6D70; */
     background-color: #788977;
-    opacity: 0.8;
     padding: 40px;
     border-radius: 4px;
     transform: translate(-50%, -50%);
     position: absolute;
     top: 50%;
     left: 50%;
-    color: #fff;
+    color: #E7E4EE;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
 }
 
 .login .btn-primary {
     background: #233A19;
     font-family: 'Lato', sans-serif;
+    color: #F5F3EA !important;
     border: none;
     border-radius: 4px;
     padding: 11px;
@@ -141,44 +167,40 @@ p {
     font-family: 'Lato', sans-serif;
 }
 
-.login .illustration {
-    text-align:center;
-    padding:15px 0 20px;
-    font-size:100px;
-    color:#233A19;;
-  }
-
 /* LOGOUT */
 .logout-btn:hover {
     color: #233A19 !important;
-    background-color: #fdf8e1 !important;
+    background-color: #F5F3EA !important;
 }
 
 .logout-btn {
-    color: #fdf8e1;
-    border-color: #fdf8e1 !important;
+    color: #F5F3EA;
+    border-color: #F5F3EA !important;
 }
 
 /* REGISTRATION */
 .register {
     max-width: 350px;
+    text-align: center;
     width: 90%;
-    /* background-color: #5C6D70; */
     background-color: #788977;
-    opacity: 0.8;
     padding: 40px;
     border-radius: 4px;
     transform: translate(-50%, -50%);
     position: absolute;
     top: 50%;
     left: 50%;
-    color: #fdf8e1;
+    color: #F5F3EA;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
 }
-.register .btn-primary {
-    background: #5C6D70;
+
+/* BUTTON MOSS, */
+.register .btn-register,
+.login .btn-login {
+    background: #788977;
     font-family: 'Lato', sans-serif;
-    border: none;
+    color: #F5F3EA;
+    border-color: #F5F3EA !important;
     border-radius: 4px;
     padding: 11px;
     box-shadow: none;
@@ -187,31 +209,51 @@ p {
     outline: none;
 }
 
+.register .btn-register:hover,
+.login .btn-login:hover {
+    color: #F5F3EA !important;
+    border-color: #F5F3EA !important;
+    background-color: #233A19 !important;
+}
+
+
 .register .form-control {
     font-family: 'Lato', sans-serif;
 }
 
-
 /* PLANT CARDS */
 .plantcards {
     padding: 10px;
-    background-color: #fdf8e1;
-    border: 3px solid #233A19;
+    background-color: #E7E4EE;
+    border: 2px solid #233A19;
 }
 
 .plantcards .plant-image {
     border: 3px solid #233A19;
 }
 .plantcards .text-secondary {
-    line-height: 25px;
+    line-height: 20px;
 }
 
-.plantcards .btn-primary,
+/* MOSS BUTTON, PURPLE TEXT */
+.plantcards .btn-primary {
+    background-color: #788977 !important;
+    color: #E7E4EE;
+    border: none;
+    border-radius: 4px;
+    padding: 11px;
+    box-shadow: none;
+    margin-top: 20px;
+    text-shadow: none;
+    outline: none;
+}
+/* MOSS GREEN BUTTON, CREAM TEXT */
 .gardening-tip .btn-primary,
 .btn-popover,
-.btn-nonnative {
+.btn-nonnative,
+.btn-tip {
     background-color: #788977 !important;
-    color: #fdf8e1;
+    color: #F5F3EA;
     border: none;
     border-radius: 4px;
     padding: 11px;
@@ -221,28 +263,78 @@ p {
     outline: none;
 }
 
-.plantcards .btn-primary:hover,
-.gardening-tip .btn-primary:hover,
-.btn-popover:hover
-.btn-nonnative:hover {
+/* NO TOP MARGIN, light green button, lavender text */
+.map-popover-btn {
+    background-color: #788977 !important;
+    color: #E7E4EE;
+    border: none;
+    border-radius: 4px;
+    padding: 11px;
+    box-shadow: none;
+    margin-top: 0;
+    text-shadow: none;
+    outline: none;
+}
+
+/* on hover dark green button, lavender text */
+.map-popover-btn:hover,
+.plantcards .btn-primary:hover {
     background-color: #233A19 !important;
-    color: #fdf8e1
+    color: #E7E4EE
+}
+
+/* on hover dark green button, cream text  */
+.gardening-tip .btn-primary:hover,
+.btn-popover:hover,
+.btn-nonnative:hover,
+.btn-tip:hover {
+    background-color: #233A19 !important;
+    color: #F5F3EA;
 }
 
 .embed-responsive .card-img-top {
     width: 100%;
-
     object-fit: cover;
 }
 
-/* TIPS / FACTS CARDS */
-.gardening-tip {
-    color: #fdf8e1 !important;
-    background-color: #887788;
-    border-color: #fdf8e1 !important;
+/* TIPS / FACTS */
+.garden-tip,
+.pollinator-fact {
+    height: 40px;
+    padding-left: 32px;
+    padding-right: 32px;
 }
 
-.gardening-tip .btn-tip:hover {
-    color: #233A19 !important;
-    background-color: #fdf8e1 !important;
+/* POPOVERS */
+.flower-color-popover,
+.bloom-period-popover
+
+/* MAP */
+.regions-div {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    background-color: #E7E4EE; 
+}
+
+/* HORIZONTAL GREEN LINE */
+.hr-green {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 2px solid #233A19;
+}
+
+/* ALERT STYLING */
+.alert {
+    font-family: 'Lato', sans-serif;
+    color: #233A19;
+    background-color: #E7E4EE;
+    margin: 0;
+}
+
+/* TO KEEP FOOTER AT BOTTOM */
+.garden-page {
+    min-height: 100vh;
+    position: relative;
 }

@@ -23,7 +23,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet"> 
     <link href="https://fonts.googleapis.com/css2?family=Cantarell:ital@0;1&display=swap" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+
+    <!-- AWESOME FONT FOR ICONS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.11/css/all.css">
     
     <!-- REACT BOOTSTRAP CSS -->
     <link rel="stylesheet"
@@ -46,22 +49,24 @@
 </head>
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
-    <!-- categories: success(green), info(blue), warning(yellow), danger(red) -->
         {% if messages %}
             {% for category, message in messages %}
                 <div class="alert alert-{{ category }} alert-dismissible" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                        <strong>Title</strong>{{ message }}
+                        <strong>{{ message }}</strong>
                 </div>
             {% endfor %}
         {% endif %}
     {% endwith %}
+    
+    <!-- div for navbar -->
+    <div id='nav_bar'></div>
     <!-- regions_div for geochart map -->
-    <div id='regions_div' class="background-fixed" style='width: 900px; height: 500px'></div>
+    <div id='regions_div' class="regions-div"></div>
     <div id='root'></div>
-
+    
     <!-- jsx react app files -->
     <script type='text/jsx' src='static/js/plantcard.jsx'></script>
     <script type='text/jsx' src='static/js/bloom-period-chart.jsx'></script>

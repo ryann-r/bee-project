@@ -27,9 +27,9 @@ function BloomPeriodChart () {
                             '#F2C6DE'
                             ],
                         data: values,
-                        borderColor: '#788977',
+                        borderColor: '#233A19',
                         borderWidth: 1,
-                        hoverBorderColor: '#233A19'
+                        hoverBorderColor: '#788977'
 
                     }]
                 },
@@ -41,8 +41,8 @@ function BloomPeriodChart () {
                 }
             };
             Chart.defaults.global.defaultFontFamily = 'Lato, sans-serif';
-            Chart.defaults.global.defaultFontColor = '#fdf8e1';
-            Chart.defaults.global.defaultFontSize = 14;
+            Chart.defaults.global.defaultFontColor = '#233A19';
+            Chart.defaults.global.defaultFontSize = 16;
             if (chartContainer && chartContainer.current) {
                 const newChartInstance = new Chart(chartContainer.current, bloomChart);
                 setChartInstance(newChartInstance);

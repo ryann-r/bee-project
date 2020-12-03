@@ -1,5 +1,6 @@
 function MapPlantContainer() {
     $('#regions_div')[0].style.display='block';
+
     const isGarden = false;
     const [plantData, setPlantData] = React.useState([]);
     // printRegion is set to userRegion on first render if logged in or clicked region upon subsequent renders
@@ -36,26 +37,37 @@ function MapPlantContainer() {
 
     function drawRegionsMap() {
         const data = google.visualization.arrayToDataTable([
-            ['US State', 'Color'],
-            ['US-AK', 1], ['US-AL', 2], ['US-AR', 3], ['US-AZ', 4], ['US-CA', 5],
-            ['US-CO', 6], ['US-CT', 7], ['US-DE', 8], ['US-FL', 9], ['US-GA', 10],
-            ['US-HI', 11], ['US-IA', 12], ['US-ID', 13], ['US-IL', 14], ['US-IN', 15],
-            ['US-KS', 16], ['US-KY', 17], ['US-LA', 18], ['US-MA', 19], ['US-MD', 20],
-            ['US-ME', 21], ['US-MI', 22], ['US-MN', 23], ['US-MO', 24], ['US-MS', 25],
-            ['US-MT', 26], ['US-NC', 27], ['US-ND', 28], ['US-NE', 29], ['US-NH', 30],
-            ['US-NJ', 31], ['US-NM', 32], ['US-NV', 33], ['US-NY', 34], ['US-OH', 35],
-            ['US-OK', 36], ['US-OR', 37], ['US-PA', 38], ['US-RI', 39], ['US-SC', 40],
-            ['US-SD', 41], ['US-TN', 42], ['US-TX', 43], ['US-UT', 44], ['US-VA', 45],
-            ['US-VT', 46], ['US-WA', 47], ['US-WI', 48], ['US-WV', 49], ['US-WY', 50]
+            ['US State', 'Number of colonies lost April-June 2020'],
+            ['US-AK', null], ['US-AL', 4100], ['US-AR', 1900], ['US-AZ', 1300], ['US-CA', 74000],
+            ['US-CO', 2100], ['US-CT', 30], ['US-DE', 8], ['US-FL', 39000], ['US-GA', 10000],
+            ['US-HI', 40], ['US-IA', 3600], ['US-ID', 14500], ['US-IL', 1500], ['US-IN', 12000],
+            ['US-KS', 440], ['US-KY', 1200], ['US-LA', 1800], ['US-MA', 740], ['US-MD', 680],
+            ['US-ME', 1300], ['US-MI', 2600], ['US-MN', 6500], ['US-MO', 390], ['US-MS', 3000],
+            ['US-MT', 3800], ['US-NC', 1600], ['US-ND', 17500], ['US-NE', 1800], ['US-NH', null],
+            ['US-NJ', 760], ['US-NM', 50], ['US-NV', null], ['US-NY', 4900], ['US-OH', 16500],
+            ['US-OK', 16000], ['US-OR', 2500], ['US-PA', 1000], ['US-RI', null], ['US-SC', 1700],
+            ['US-SD', 4600], ['US-TN', 1200], ['US-TX', 25000], ['US-UT', 2700], ['US-VA', 1200],
+            ['US-VT', 260], ['US-WA', 3100], ['US-WI', 1700], ['US-WV', 570], ['US-WY', 1600]
         ]);
         
         const options = {
-            title: 'North American bees and pollinator plants',
+            title: 'Hives Lost To Colony Collapse Disorder April-June 2020',
             region: 'US',
             displayMode: 'regions',
             resolution: 'provinces',
-            colorAxis: { colors: ['#887788', '#e81cff'],
-            backgroundColor: '#788977' }
+            colorAxis: { colors: ['#9181B1', '#1E1929']},
+            datalessRegionColor: '#E7E4EE',
+            backgroundColor: '#E7E4EE',
+            legend: {textStyle:
+                {color: '#233A19', fontSize: 14, fontName: 'Lato'}
+            },
+            tooltip: {textStyle: {
+                color: '#233A19',
+                fontName: 'Lato',
+                fontSize: 14
+            }
+                
+            }
         };
 
         const chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
@@ -91,7 +103,12 @@ function MapPlantContainer() {
                             .then((data) => setPlantData(data.plants));
 
                         if (plantData.length === 0) {
-                            return <div>Loading...</div>;
+                            return (
+                                <ReactBootstrap.Row className="row justify-content-center m-4">
+                                    <span className="m-2"><i className="fas fa-leaf"></i></span>
+                                    <h3>Loading...</h3>
+                                </ReactBootstrap.Row>
+                            );
                         }
                     }
                 }
@@ -124,14 +141,37 @@ function MapPlantContainer() {
         )
     };
 
+    const mapPopover = (
+        <ReactBootstrap.Popover id="map-popover" className="purple-background">
+            <ReactBootstrap.Popover.Title className="purple-background" as="h3">It's when worker bees suddenly disappear and the hive dies.</ReactBootstrap.Popover.Title>
+            <ReactBootstrap.Popover.Content>
+            There are a variety of causes, including the overuse of agricultural neonicotinoid pesticides. 
+            Since 2006, about 30% of hives are lost each winter.
+            </ReactBootstrap.Popover.Content>
+        </ReactBootstrap.Popover>
+    );
+
+    const MapPopover = () => (
+        <ReactBootstrap.OverlayTrigger trigger="click" placement="top" overlay={mapPopover}>
+            <ReactBootstrap.Button className="map-popover-btn btn-sm">What is Colony Collapse Disorder?</ReactBootstrap.Button>
+        </ReactBootstrap.OverlayTrigger>
+    );
+
     return (
         <React.Fragment>
-            <ReactBootstrap.Container className="background-fixed">
-                <ReactBootstrap.Row>{isRegion && <h1>You're viewing pollinator plants native to: {isRegion}</h1>}</ReactBootstrap.Row>
-                <ReactBootstrap.Row><h2>Click the map to view native plants by region</h2></ReactBootstrap.Row>
-                <ReactBootstrap.Row>{!user_id && <h2>Please log in or sign up to collect your favorite native plants in a garden!</h2>}</ReactBootstrap.Row>
-                <ReactBootstrap.Row className="row justify-content-md-center">{plants}</ReactBootstrap.Row>
+            <ReactBootstrap.Container fluid>
+                    <ReactBootstrap.Row className="purple-background pb-2">
+                        <ReactBootstrap.Col className="pl-4">Number of bee colonies lost to Colony Collapse Disorder April-June 2020</ReactBootstrap.Col>
+                        <ReactBootstrap.Col className="col-4 mt-0"><MapPopover /></ReactBootstrap.Col>
+                    </ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="ml-2 pt-2 pb-2">{!user_id && <h2>Please log in or sign up to collect your favorite native plants in a garden!</h2>}</ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="ml-2 pb-2"><h2>Click the map to view native plants by region</h2></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="m-2 pt-4 pb-2">{isRegion && <h1>You're viewing pollinator plants native to: {isRegion}</h1>}</ReactBootstrap.Row>
+                    
+                    <ReactBootstrap.Row className="row justify-content-md-center mb-4 mt-4">{plants}</ReactBootstrap.Row>
+
             </ReactBootstrap.Container>
         </React.Fragment>
     );
 };
+

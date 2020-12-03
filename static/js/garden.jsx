@@ -61,10 +61,10 @@ function GardenContainer() {
     }
 
     const bloomPopover = (
-        <ReactBootstrap.Popover id="bloom-period-popover">
-            <ReactBootstrap.Popover.Title as="h3">Why bloom period?</ReactBootstrap.Popover.Title>
+        <ReactBootstrap.Popover id="bloom-period-popover" className="purple-background">
+            <ReactBootstrap.Popover.Title className="purple-background" as="h3">Help pollinators year-round</ReactBootstrap.Popover.Title>
             <ReactBootstrap.Popover.Content>
-                Keep pollinators happy all year long by including plants that bloom in all seasons.
+                Include plants that bloom in all seasons.
                 Aim for an even distribution of Early, Mid, and Late blooming plants.
             </ReactBootstrap.Popover.Content>
         </ReactBootstrap.Popover>
@@ -72,16 +72,16 @@ function GardenContainer() {
 
     const BloomPopover = () => (
         <ReactBootstrap.OverlayTrigger trigger="click" placement="right" overlay={bloomPopover}>
-            <ReactBootstrap.Button className="btn-popover btn-sm">Why bloom time?</ReactBootstrap.Button>
+            <ReactBootstrap.Button className="btn-popover btn-sm">Why bloom period?</ReactBootstrap.Button>
         </ReactBootstrap.OverlayTrigger>
     );
 
     const colorPopover = (
-        <ReactBootstrap.Popover id="flower-color-popover">
-            <ReactBootstrap.Popover.Title as="h3">Why flower color?</ReactBootstrap.Popover.Title>
+        <ReactBootstrap.Popover id="flower-color-popover" className="purple-background">
+            <ReactBootstrap.Popover.Title className="purple-background" as="h3">Pollinators like different colors</ReactBootstrap.Popover.Title>
             <ReactBootstrap.Popover.Content>
-                Different pollinators are attracted to different colors. For example, bees tend to like
-                blues and yellows. Attract diverse pollinators by including a variety of flower colors.
+                Bees are attracted to blues and yellows. Hummingbirds can't resist red.
+                Attract diverse pollinators by including a variety of flower colors.
             </ReactBootstrap.Popover.Content>
         </ReactBootstrap.Popover>
     );
@@ -92,7 +92,6 @@ function GardenContainer() {
         </ReactBootstrap.OverlayTrigger>
     );
 
-
     let message;
     // if a user is signed in and has 0 plants in their garden
     if (user_id && plantData.length === 0) {
@@ -101,26 +100,21 @@ function GardenContainer() {
     if (!user_id) {
         message = <div>Please log in or sign up to continue.</div>
     }
-    // else {
-    //     message = <div>Explore pollinator plants to add to your garden!</div>
-    // }
 
-    
     
     return (
         <React.Fragment>
-            <ReactBootstrap.Container className="background-fixed">
-                <ReactBootstrap.Row className="row justify-content-md-center">{user_id && <h1 className="white-text">{ fname }'s Garden</h1>}</ReactBootstrap.Row>
-                <ReactBootstrap.Row className="row justify-content-md-center"><h2 className="white-text">{message}</h2></ReactBootstrap.Row>
-                
+            <ReactBootstrap.Container fluid className="garden-page">
+            <ReactBootstrap.Container fluid>
+                <ReactBootstrap.Row className="row justify-content-md-center mt-4">{user_id && <h1>{ fname }'s Garden</h1>}</ReactBootstrap.Row>
+                <ReactBootstrap.Row className="row justify-content-md-center pt-4"><h2>{message}</h2></ReactBootstrap.Row>
+            
                 <ReactBootstrap.Row className="mb-2">
-                    
-                    <ReactBootstrap.Col>
-                        
+                    <ReactBootstrap.Col className="mb-4">
                         {user_id && plantData.length !== 0 && <BloomPeriodChart />}
                         <ReactBootstrap.Row className="row justify-content-md-center">{user_id && plantData.length !==0 && <BloomPopover />}</ReactBootstrap.Row>
                     </ReactBootstrap.Col>
-                    <ReactBootstrap.Col>
+                    <ReactBootstrap.Col className="mb-4">
                         {user_id && plantData.length !== 0 && <FlowerColorChart />}
                         <ReactBootstrap.Row className="row justify-content-md-center">{user_id && plantData.length !== 0 && <ColorPopover />}</ReactBootstrap.Row>
                     </ReactBootstrap.Col>
@@ -128,21 +122,22 @@ function GardenContainer() {
                 <ReactBootstrap.Row className="row justify-content-md-center">{user_id && gardenPlants}
                     <ReactBootstrap.Col xs={3} className="col-md-auto card-title mb-4" key={`${gardenPlants.plant_id}`}/>
                 </ReactBootstrap.Row>
-                <ReactBootstrap.Row className="row justify-content-md-center">
-                    <ReactBootstrap.Card className="gardening-tip shadow-sm rounded mt-4" border="dark" style={{ width: '40rem' }}>
-                        <ReactBootstrap.Card.Header><h3 className="white-text mb-2">Gardening Tip:</h3></ReactBootstrap.Card.Header>
-                        <ReactBootstrap.Card.Body>
-                            <blockquote className="blockquote mb-2">
-                                <p className="white-text">{gardenTip}</p>
-                            </blockquote>
-                            <ReactBootstrap.Button
-                                className="btn-tip"
-                                variant="outline-light"
-                                onClick={handleClick}>Give me another tip!
-                            </ReactBootstrap.Button>
-                        </ReactBootstrap.Card.Body>
-                    </ReactBootstrap.Card>
-                </ReactBootstrap.Row>
+            </ReactBootstrap.Container>
+
+            <ReactBootstrap.Container fluid>
+                <ReactBootstrap.Col>
+                    <ReactBootstrap.Row className="row justify-content-center m-4"><span className="m-2"><i className="fas fa-leaf"></i></span></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center m-4"><h2>Gardening Tip:</h2></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center text-center m-2 garden-tip"><p>{gardenTip}</p></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center mb-4">
+                        <ReactBootstrap.Button
+                            className="btn-tip"
+                            variant="outline-light"
+                            onClick={handleClick}>Give me another tip!
+                        </ReactBootstrap.Button>
+                    </ReactBootstrap.Row>
+                </ReactBootstrap.Col>
+            </ReactBootstrap.Container>
             </ReactBootstrap.Container>
         </React.Fragment>
     );

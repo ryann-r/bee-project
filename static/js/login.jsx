@@ -30,12 +30,10 @@ function Login() {
         });
     }
     return (
-        <ReactBootstrap.Container className="background-image">
-            {/* <ReactBootstrap.Row> */}
-            {/* GET SVG ICON */}
-            <div className="illustration icon ion-ios-locked-outline"></div>
+        <ReactBootstrap.Container fluid className="background-image">
             <ReactBootstrap.Form className="login">
-                <ReactBootstrap.Form.Group controlId="login.Username">
+                <span className="m-2"><i className="fas fa-unlock"></i></span>
+                <ReactBootstrap.Form.Group className="m-2" controlId="login.Username">
                     {/* <ReactBootstrap.Form.Label>Username</ReactBootstrap.Form.Label> */}
                     <ReactBootstrap.Form.Control
                         type="text"
@@ -45,7 +43,7 @@ function Login() {
                         value={formData.username} />
                 </ReactBootstrap.Form.Group>
 
-                <ReactBootstrap.Form.Group controlId="login.Password">
+                <ReactBootstrap.Form.Group className="m-2" controlId="login.Password">
                     {/* <ReactBootstrap.Form.Label>Password</ReactBootstrap.Form.Label> */}
                     <ReactBootstrap.Form.Control
                         type="password"
@@ -56,12 +54,12 @@ function Login() {
                 </ReactBootstrap.Form.Group>
 
                 <ReactBootstrap.Button
+                    className="btn-login"
                     disabled={!formData.username || !formData.password}
                     onClick={handleSubmit}
                     variant="outline-light"
                     type="submit">Log In</ReactBootstrap.Button>
             </ReactBootstrap.Form>
-            {/* </ReactBootstrap.Row> */}
         </ReactBootstrap.Container>
     );  
 }

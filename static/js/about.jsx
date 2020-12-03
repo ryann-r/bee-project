@@ -18,82 +18,63 @@ function AboutPollinators() {
     }
 
     return (
-        <ReactBootstrap.Card>
-            <ReactBootstrap.Card.Header>Did you know?</ReactBootstrap.Card.Header>
-            <ReactBootstrap.Card.Body>
-                <blockquote className="blockquote mb-0">
-                    <p>{pollinatorFact}</p>
-                </blockquote>
-                <button variant="success" onClick={handleClick}>Tell me more about pollinators!</button>
-            </ReactBootstrap.Card.Body>
-        </ReactBootstrap.Card>
-    )
+        <React.Fragment>
+            <ReactBootstrap.Container>
+                <ReactBootstrap.Col>
+                    <ReactBootstrap.Row className="row justify-content-center m-4"><span className="m-2"><i className="fas fa-leaf"></i></span></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center m-4 pb-5"><h2>Did you know?</h2></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center text-center m-2 pollinator-fact"><p>{pollinatorFact}</p></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center mb-4 pb-5">
+                        <ReactBootstrap.Button
+                            className="btn-tip"
+                            variant="outline-light"
+                            onClick={handleClick}>Tell me more about pollinators!
+                        </ReactBootstrap.Button>
+                    </ReactBootstrap.Row>
+                </ReactBootstrap.Col>
+            </ReactBootstrap.Container>
 
-        //     <ReactBootstrap.Accordion defaultActiveKey="0">
-        //     {/* SECTION 1 */}
-        //         <ReactBootstrap.Card>
-        //             <ReactBootstrap.Header>
-        //                 <ReactBootstrap.Toggle as={ReactBootstrap.Card.Header} eventKey="0">
-        //                     Buzz buzz buzz. Did you know...
-        //                 </ReactBootstrap.Toggle>
-        //             </ReactBootstrap.Header>
-        //             <ReactBootstrap.Accordion.Collapse eventKey="0">
-        //                 <ReactBootstrap.Card.Body>One in three bites of food exists in great thanks
-        //                     to the hard work of pollinators like bees, butterflies, beetles,
-        //                     flies, moths, bats, and birds.
-        //                 </ReactBootstrap.Card.Body>
-        //             </ReactBootstrap.Accordion.Collapse>
-        //         </ReactBootstrap.Card>
-        //     {/* SECTION 2 */}
-        //         <ReactBootstrap.Card>
-        //             <ReactBootstrap.Header>
-        //                 <ReactBootstrap.Toggle as={ReactBootstrap.Card.Header} eventKey="1">
-        //                     I like food. How are they doing in this changing world?
-        //                 </ReactBootstrap.Toggle>
-        //             </ReactBootstrap.Header>
-        //             <ReactBootstrap.Accordion.Collapse eventKey="1">
-        //                 <ReactBootstrap.Card.Body>
-        //                     Not great. Habitat loss, disease, parasites, and pollutants threaten
-        //                     all varieties of pollinators.
-        //                 </ReactBootstrap.Card.Body>
-        //             </ReactBootstrap.Accordion.Collapse>
+            <ReactBootstrap.Container fluid className="cream-background">
+                <ReactBootstrap.Col className="text-center mt-4 mb-4">
+                    <ReactBootstrap.Row className="m-8 hr-green"></ReactBootstrap.Row>
+                <ReactBootstrap.Row className="row justify-content-center pt-5 mb-4"><h2>Buzz buzz buzz.</h2></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center m-4">
+                        <p className="m-2">One in three bites of food exists in great thanks
+                            to the hard work of pollinators like bees, butterflies, beetles,
+                            flies, moths, bats, and birds.</p>
+                    </ReactBootstrap.Row>
+                </ReactBootstrap.Col>
 
-        //         </ReactBootstrap.Card>
+                <ReactBootstrap.Col className="text-center">
+                <ReactBootstrap.Row className="row justify-content-center m-4 pt-5"><h2>I like food. How are they doing in this changing world?</h2></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center m-4">
+                        <p className="m-2">Not great. Habitat loss, disease, parasites, and pollutants threaten
+                            all varieties of pollinators.</p>
+                    </ReactBootstrap.Row>
+                </ReactBootstrap.Col>
 
-        //         <ReactBootstrap.Card>
-        //             <ReactBootstrap.Header>
-        //                 <ReactBootstrap.Toggle as={ReactBootstrap.Card.Header} eventKey="2">
-        //                     Tell me more about native bees, please.
-        //                 </ReactBootstrap.Toggle>
-        //             </ReactBootstrap.Header>
-        //             <ReactBootstrap.Accordion.Collapse eventKey="2">
-        //                 <ReactBootstrap.Card.Body>
-        //                     There are more than 3,500 native bee species in the United States.
-        //                     Colony Collapse Disorder occurs when the worker bees, those that gather
-        //                     pollen food for the hive, suddenly disappear. There are a variety of causes,
-        //                     including the overuse of agricultural neonicotinoid pesticides. Since 2006, 
-        //                     about 30% of hives are lost each winter.
-        //                 </ReactBootstrap.Card.Body>
-        //             </ReactBootstrap.Accordion.Collapse>
-        //         </ReactBootstrap.Card>
+                <ReactBootstrap.Col className="text-center">
+                <ReactBootstrap.Row className="row justify-content-center m-4 pt-5"><h2>Tell me more about native bees, please.</h2></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center m-4">
+                        <p className="m-2">There are more than 3,500 native bee species in the United States.
+                                Colony Collapse Disorder occurs when the worker bees, those that gather
+                                pollen food for the hive, suddenly disappear. There are a variety of causes,
+                                including the overuse of agricultural neonicotinoid pesticides. Since 2006, 
+                                about 30% of hives are lost each winter.</p>
+                    </ReactBootstrap.Row>
+                </ReactBootstrap.Col>
 
-        //         <ReactBootstrap.Card>
-        //             <ReactBootstrap.Header>
-        //                 <ReactBootstrap.Toggle as={ReactBootstrap.Card.Header} eventKey="3">
-        //                     Can I help?
-        //                 </ReactBootstrap.Toggle>
-        //             </ReactBootstrap.Header>
-        //             <ReactBootstrap.Accordion.Collapse eventKey="3">
-        //                 <ReactBootstrap.Card.Body>
-        //                     Absolutely! Here's where we come in.
-        //                     One of the best things you can do is to plant pollinator-friendly 
-        //                     plants native to your region in your garden or window-box.
-        //                     Start by exploring (LINK) regional plants, and sign up to collect
-        //                     your favorites in a virutal garden.
-        //                 </ReactBootstrap.Card.Body>
-        //             </ReactBootstrap.Accordion.Collapse>
-        //         </ReactBootstrap.Card>
-        // </ReactBootstrap.Accordion>
-        // )
-
+                <ReactBootstrap.Col className="text-center">
+                <ReactBootstrap.Row className="row justify-content-center m-4 pt-5"><h2>Can I help?</h2></ReactBootstrap.Row>
+                    <ReactBootstrap.Row className="row justify-content-center m-4">
+                        <p className="m-2 pb-5">Absolutely! Here's where we come in.
+                                One of the best things you can do is to plant pollinator-friendly 
+                                plants native to your region in your garden or window-box.
+                                Start by exploring regional plants, and sign up to collect
+                                your favorites in a virutal garden.</p>
+                    </ReactBootstrap.Row>
+                </ReactBootstrap.Col>
+            </ReactBootstrap.Container>
+        </React.Fragment>
+    ) 
 };

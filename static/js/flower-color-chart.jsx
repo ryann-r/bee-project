@@ -32,9 +32,9 @@ function FlowerColorChart () {
                             '#FAEDCB'
                         ],
                         data: values,
-                        borderColor: '#788977',
+                        borderColor: '#233A19',
                         borderWidth: 1,
-                        hoverBorderColor: '#233A19'
+                        hoverBorderColor: '#788977'
                     }]
                 },
                 options: {

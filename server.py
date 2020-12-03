@@ -126,7 +126,7 @@ def register():
     # check if a user is logged in, if so redirect to /garden
     current_user = session.get('user_id')
     if current_user is not None:
-        flash("You're already logged in.")
+        flash("You're already logged in!")
         return jsonify({'response': 'success'})
 
     # check if username exists in db, if so redirect to /register
