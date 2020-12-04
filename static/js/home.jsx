@@ -10,14 +10,14 @@ function Home() {
                         <span>{userId ? <h1 className="white-text">Welcome back, {fname}!</h1> : <h1 className="white-text">Welcome!</h1>}</span>
                     </ReactBootstrap.Col>
                 </ReactBootstrap.Row>
-                {/* <ReactBootstrap.Row className="d-flex flex-row-reverse">
+                <ReactBootstrap.Row className="d-flex flex-row-reverse">
                     <ReactBootstrap.Col className="align-text-end d-flex col-lg-4 col-md-4 m-2 justify-content-end">
-                        <span><h3 className="white-text lato-font">Pollinators are responsible for one in three bites of food.</h3></span>
+                        <span><h3 className="white-text lato-font">Pollinators are responsible for one in three bites of food</h3></span>
                     </ReactBootstrap.Col>
-                </ReactBootstrap.Row> */}
+                </ReactBootstrap.Row>
                 <ReactBootstrap.Row className="d-flex flex-row-reverse">
                     <ReactBootstrap.Col className="align-text-end d-flex col-lg-4 col-md-4 mt-8 m-2 justify-content-end">
-                        <span><h3 className="white-text lato-font">Support local pollinators by finding native plants for your garden or window-box!</h3></span>
+                        <span><h3 className="white-text lato-font">Support local pollinators by finding native plants for your garden or window-box</h3></span>
                     </ReactBootstrap.Col>
                 </ReactBootstrap.Row>
             </ReactBootstrap.Container>

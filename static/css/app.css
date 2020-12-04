@@ -50,6 +50,10 @@ i.fab {
     background-color: #E7E4EE !important;
 }
 
+.cream-popover {
+    background-color: #F5F3EA;
+}
+
 
 /* BACKGROUND IMG */
 .background-image {
@@ -80,7 +84,7 @@ i.fab {
     left: 16px;
 }
 
-/* CREAM BACKGROUND */
+/* CREAM BACKGROUND FOR MAP PAGE*/
 .cream-background {
     background-color: #F5F3EA;
     margin-top: #F5F3EA;

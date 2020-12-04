@@ -21,7 +21,7 @@ function App() {
         </ReactBootstrap.Row>
         );
     }
-    
+
     let {userRegion, userId, fname} = userData
     userRegion = userRegion === 'None' ? null : userRegion;
     userId = userId === 'None' ? null : userId;
@@ -100,7 +100,7 @@ function NavBar() {
             <nav>
         <ReactBootstrap.Navbar className="navbar navbar-expand-md navbar-custom">
         {/* scrolling="true" dark="true" expand="md" fixed="top" */}
-            <ReactBootstrap.Navbar.Brand href='/'>Pollinator Plants Finder</ReactBootstrap.Navbar.Brand>
+            <ReactBootstrap.Navbar.Brand href='/'>Pollinator Plant Finder</ReactBootstrap.Navbar.Brand>
             <ReactBootstrap.Navbar.Toggle aria-controls="basic-navbar-nav" />
             <ReactBootstrap.Navbar.Collapse id="basic-navbar-nav">
                 <ReactBootstrap.Nav className="mr-auto">
