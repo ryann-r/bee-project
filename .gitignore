@@ -1,3 +1,7 @@
 env
 __pychache__/
+secrets.sh.DS_Store .vscode/ __psyache__/
 secrets.sh
+.DS_Store
+.vscode/
+__pyache__/
