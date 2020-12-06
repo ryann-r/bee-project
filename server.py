@@ -1,9 +1,7 @@
 """Server for pollinator plants app."""
-import os
 from random import choice
 from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from jinja2 import StrictUndefined
-from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
 from model import db, connect_to_db, User, Plant, Garden, UserGarden
 import crud
