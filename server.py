@@ -1,6 +1,6 @@
 """Server for pollinator plants app."""
 from random import choice
-from Flask import Flask, render_template, request, flash, session, redirect, jsonify
+from flask import Flask, render_template, request, flash, session, redirect, jsonify
 from jinja2 import StrictUndefined
 from flask_login import LoginManager
 from model import db, connect_to_db, User, Plant, Garden, UserGarden
