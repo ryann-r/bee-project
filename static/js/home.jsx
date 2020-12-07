@@ -48,11 +48,9 @@ function Home() {
                 </ReactBootstrap.Row> 
                 <ReactBootstrap.Row className="row justify-content-center m-5 pt-8">
                     <a href="https://github.com/ryann-r/pollinator-plants-project" target="_blank"><span className="m-2"><i class="fab fa-github"></i></span></a>
-                    <a href="https://www.linkedin.com/in/ryann-r" target="_blank"><span className="m-2"><i class="fab fa-linkedin"></i></span></a>
+                    <a href="https://www.linkedin.com/in/ryann-r" target="_blank"><span className="m-2"><i className="fab fa-linkedin"></i></span></a>
                     </ReactBootstrap.Row>   
             </ReactBootstrap.Container>
         </React.Fragment> 
     );
 }
-
-// -lg-4 col-md-4 

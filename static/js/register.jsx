@@ -93,7 +93,7 @@ function Register() {
                     name="user_region"
                     onChange={handleChange}
                     value={formData.user_region}>
-                        <option value="" select disabled>Select State</option>
+                        <option value="" select disabled>State of Residence</option>
                         <option value="Southeast Region">Alabama</option>
                         <option value="Alaska">Alaska</option>
                         <option value="Southwest Region">Arizona</option>
